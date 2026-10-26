@@ -26,7 +26,13 @@
     "basement": "assets/rooms/basement.jpg",
     "frontdoor": "assets/rooms/frontdoor.jpg"
   },
-  "audio": {},
+  "audio": {
+    "hum": "assets/audio/hum.wav",
+    "stinger": "assets/audio/stinger.wav",
+    "breathing": "assets/audio/breathing.wav",
+    "creak": "assets/audio/creak.wav",
+    "static": "assets/audio/static.wav"
+  },
   "game": {
     "sessionCapSec": 600,
     "powerStartPct": 100,

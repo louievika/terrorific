@@ -1,0 +1,35 @@
+"""Front door (CAM 4): entrance hall, chained double-bolted door, stair, coat stand, console + mirror, chequer tile."""
+import os, sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from common import *
+o = args(); reset(); setup_render(o, exposure=-0.4)
+W, D, H = 4.4, 6.0, 3.2
+floor = use('floor', mat_tile, (0.34, 0.33, 0.29), 0.35, (0.02, 0.02, 0.02))
+wall = use('wall', mat_plaster, (0.32, 0.26, 0.18), 1.5); pan = use('panel', mat_wood, (0.11, 0.06, 0.035), 18.0)
+iron = use('iron', mat_surface, (0.05, 0.05, 0.055), 0.45, 0.9, 6.0, 0.4)
+shell(W, D, H, floor, wall, use('ceil', mat_plaster, (0.26, 0.23, 0.18), 1.9), y0=-2.4, wainscot=pan, wainscot_h=1.2, base=pan)
+fy = -2.4 + D                                                          # front-door wall
+door('front', (0.0, fy - 0.02, 0), 1.4, 2.5, use('fdw', mat_wood, (0.1, 0.055, 0.03), 18.0), use('fdf', mat_wood, (0.09, 0.05, 0.03)), axis='Y')
+for z in (0.5, 1.25, 2.0): box('fstrap', (0, fy - 0.07, z), (1.36, 0.012, 0.09), iron, bevel=0.003)
+box('chainplate', (0.5, fy - 0.07, 1.5), (0.06, 0.02, 0.2), iron); box('chain', (0.3, fy - 0.1, 1.5), (0.4, 0.012, 0.025), use('brass'))
+for z in (0.3, 2.05): box('bolt', (-0.35, fy - 0.09, z), (0.3, 0.025, 0.03), iron, bevel=0.004)
+box('fan', (0, fy - 0.03, 2.72), (1.8, 0.04, 0.3), use('fanl', mat_surface, (0.01, 0.01, 0.012), 0.2), bevel=0.005)
+for sx in (-1, 1): window_boards('side%d' % sx, (sx * 1.55, fy - 0.1, 1.5), 0.35, 1.8, axis='Y')
+# staircase up the left side with banister
+for i in range(10): box('step%d' % i, (-W / 2 + 0.6, -2.0 + i * 0.3, (0.18 * (i + 1)) / 2), (1.1, 0.3, 0.18 * (i + 1)), pan, bevel=0.008)
+for i in range(11): box('baluster', (-W / 2 + 1.2, -2.0 + i * 0.3, 0.18 * i + 0.5), (0.04, 0.04, 0.8), pan, bevel=0.003)
+box('newel', (-W / 2 + 1.2, -2.15, 0.7), (0.12, 0.12, 1.4), pan, bevel=0.01)
+# coat stand, console table with mirror, umbrella stand, runner
+cyl('coatpole', (1.5, 0.8, 0.9), 0.025, 1.8, pan, seg=10); cyl('coatbase', (1.5, 0.8, 0.04), 0.2, 0.06, pan, seg=16)
+for i in range(4): box('coathook', (1.5 + 0.1 * (1 if i % 2 else -1), 0.8 + 0.1 * (1 if i > 1 else -1), 1.75), (0.18, 0.02, 0.02), pan, rot=(0, 0, 45 + 90 * i))
+sheet_cover('coat', (1.5, 0.8, 0.95), (0.4, 0.3, 0.8), use('coatm', mat_cloth, (0.06, 0.06, 0.07)))
+table('console', (1.9, 2.4, 0), 0.4, 1.2, 0.85, pan, rot=0)
+box('mirror', (W / 2 - 0.03, 2.4, 1.7), (0.03, 0.7, 1.0), use('mirrorm', mat_surface, (0.12, 0.14, 0.14), 0.04, 1.0, 3.0, 0.1, 0.1), bevel=0.01)
+box('mirrorframe', (W / 2 - 0.02, 2.4, 1.7), (0.025, 0.82, 1.12), use('brass'), bevel=0.01)
+cyl('umbrella', (1.9, 3.2, 0.3), 0.14, 0.6, iron, seg=14)
+box('runner', (0.0, 0.5, 0.008), (1.3, 5.0, 0.016), use('carpet', mat_cloth, (0.2, 0.03, 0.03)), bevel=0)
+for i, y in enumerate((-0.2, 1.8)): frame_picture('pic%d' % i, (W / 2 - 0.03, y, 1.9), 0.55, 0.7, axis='X', face=-1)
+door('sidedoor', (W / 2 - 0.02, -1.0, 0), 0.95, 2.1, use('sdw', mat_wood, (0.1, 0.055, 0.03), 22.0), axis='Xm')
+box('clockcase', (-1.3, 2.9, 1.1), (0.45, 0.3, 2.2), pan, bevel=0.015); cyl('clockface', (-1.3, 2.74, 1.7), 0.15, 0.02, use('clockf', mat_surface, (0.4, 0.37, 0.3), 0.4), rot=(90, 0, 0), seg=24)
+lamp_cord(0.0, 0.8, H, 2.65); bulb((0.0, 0.8, 2.57), watts=360)
+camera((0, -1.2, 1.5))
+render(o)

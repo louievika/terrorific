@@ -57,7 +57,7 @@
       if (!to) { if (!opts.length) return; to = from === 'basement' ? opts[Math.floor(Math.random() * 2)] : (Math.random() < 0.8 ? opts[0] : opts[1] || opts[0]); }
       S.artRoom = to; S.moveT = rnd(S.nightCfg.moveMin, S.nightCfg.moveMax); ART.log('art ' + from + ' -> ' + to);
       A.step();
-      if (to === 'hallway') { S.attackT = S.nightCfg.attackSec; S.knockT = 2.2; A.step(); setTimeout(A.step, 300); } else S.attackT = -1;
+      if (to === 'hallway') { S.attackT = S.nightCfg.attackSec; S.knockT = 2.2; A.step(); setTimeout(A.step, 300); setTimeout(function () { A.creak(0.5); }, 900); } else S.attackT = -1;
     },
     /* night-3 rule: Art may pop up in the room you just stopped checking */
     feedLeft: function (fromFeed) {

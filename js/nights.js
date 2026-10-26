@@ -31,7 +31,7 @@
     },
     toggleDoor: function () {
       if (S.phase !== 'play' || S.powerDead || S.scareBusy || S.puzzle) return;
-      S.door = !S.door; $('btnDoor').classList.toggle('on', S.door); A.lock(); ART.ui.peekHud(2200); ART.ui.updateHud(); ART.log('door ' + S.door);
+      S.door = !S.door; $('btnDoor').classList.toggle('on', S.door); A.lock(); A.creak(); ART.ui.peekHud(2200); ART.ui.updateHud(); ART.log('door ' + S.door);
     },
     finish: function () {
       S.phase = 'lore'; ART.ui.closeMonitor(true); ART.puzzles.close(true); A.chime(); A.setLevel(0);

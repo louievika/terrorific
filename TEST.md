@@ -12,8 +12,9 @@ Runs headless Chrome at 390x844 @2x with touch emulation and prints PASS / FAIL 
 |---|---|
 | `tests/logic.js` (23) | night 1 starts from the tap; Art frozen while observed, moves when not; camera drains power faster than idle; night 3 appears in the room just checked; locked door holds; 10% forced light-out scare (3-beat) and the game continues; open door -> jumpscare -> game over; retry; power 0 -> dead -> Art attacks; nights 1-5 -> lore -> next night -> win; 10-min cap -> bad ending; no console errors |
 | `tests/ui.js` (38) | all 7 modules loaded; manifest values reach gameplay (hotspot yaw, amount, puzzle type, night length are patched in flight and observed); **no help / hint / tip / mute / quit / subtitle elements, keys or strings anywhere**; first-run auto-pan plays once and marks itself seen; door button on screen and >= 44 px, locks / unlocks; monitor lip opens by tap and by swipe-up and closes by tap; dragging right turns the view left; fuse box and door bolt panels appear when you turn to them; keypad, wires and tiles solved through the real DOM; power +25%; cooldown refuses; wrong code does not solve; close works; dead house rescued by the fuse box; bolted door holds an attack; hotspots inert while the monitor is up; puzzle registry accepts new types; no console errors |
+| `tests/audio.js` (10) | the five manifest WAVs are fetched and decoded in the tap-unlocked AudioContext; every sample-backed sound (stinger, breath, creak, static, phone, scream, lock) plays without throwing; no console errors; with every WAV forced to 404 the oscillator fallback plays, the game stays in `play`, and only the expected 404s are logged |
 
-Latest result: see `status/phase-B.md`. Screenshots from the run: `docs/phase-B/`.
+Latest result: see `status/phase-C.md`. Screenshots and renders: `docs/phase-C/` (earlier: `docs/phase-B/`).
 
 ## 2. Real iPhone only (cannot be proven headless)
 Test on an iPhone, Safari, over HTTPS (the Vercel URL).
