@@ -15,7 +15,8 @@
       "silenceMs": 500,
       "closeStep": 0.035,
       "slamAtLevel": 5
-    }
+    },
+    "breathGain": 0.15
   },
   "art": "assets/art/art.png",
   "rooms": {
@@ -31,7 +32,11 @@
     "stinger": "assets/audio/stinger.wav",
     "breathing": "assets/audio/breathing.wav",
     "creak": "assets/audio/creak.wav",
-    "static": "assets/audio/static.wav"
+    "static": "assets/audio/static.wav",
+    "mix": {
+      "_comment": "output levels (0..1). breathing was 0.8; way down in Phase E",
+      "breathing": 0.15
+    }
   },
   "game": {
     "sessionCapSec": 600,

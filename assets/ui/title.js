@@ -45,7 +45,7 @@
     A.master.connect(comp); comp.connect(ctx.destination);
     A.duck = ctx.createGain(); A.duck.connect(A.master);        // ambient bus (music + breathing) - ducked to 0 for silence beat
     A.music = ctx.createGain(); A.music.gain.value = 0.0001; A.music.connect(A.duck);
-    A.breath = ctx.createGain(); A.breath.gain.value = 1; A.breath.connect(A.duck);
+    A.breath = ctx.createGain(); A.breath.gain.value = (window.__titleBreath != null ? window.__titleBreath : 1); A.breath.connect(A.duck);
     A.sfx = ctx.createGain(); A.sfx.gain.value = 1; A.sfx.connect(A.master); // stings (not ducked)
     A.brown = noiseBuf(ctx, 3, 'brown'); A.white = noiseBuf(ctx, 2, 'white');
     A.buildDrone();
@@ -310,6 +310,7 @@
   fetch('assets/manifest.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(function (m) {
     if (m && m.title) { var t = m.title; Object.keys(t).forEach(function (k) { if (t[k] && typeof t[k] === 'object') Object.assign(cfg[k], t[k]); else cfg[k] = t[k]; }); }
     if (qs.get('fast')) { cfg.enterDelayMs = 800; cfg.scare.firstMs = 300; cfg.scare.minGapMs = cfg.scare.maxGapMs = 2500; }
+    if (typeof cfg.breathGain === 'number') { window.__titleBreath = cfg.breathGain; if (A.breath) A.breath.gain.value = cfg.breathGain; }   // manifest title.breathGain: the title breathing loop level
     applyStudio();
     return loadArt();
   }).then(function () { requestAnimationFrame(loop); });

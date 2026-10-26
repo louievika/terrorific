@@ -26,6 +26,7 @@ window.ART = window.ART || {};
     autoPan: { startSec: 3.4, durSec: 7, ampDeg: 78 },
     puzzles: { hotspots: {}, keypad: { digits: 4, memorizeMs: [0] }, wires: { count: [3] }, tiles: { size: 3, scrambles: [3] } }
   };
+  ART.MIX = { breathing: 0.15 };                                   // output levels; manifest audio.mix overrides
   ART.ROOMS = { attic: 'assets/rooms/attic.jpg' };
   ART.ART_SRC = 'assets/art/art.png';
 
@@ -37,6 +38,7 @@ window.ART = window.ART || {};
         if (m.game) Object.keys(m.game).forEach(function (k) { if (k.charAt(0) !== '_') CFG[k] = m.game[k]; });
         if (m.rooms) Object.keys(m.rooms).forEach(function (k) { ART.ROOMS[k] = m.rooms[k]; });
         if (m.art) ART.ART_SRC = m.art;
+        if (m.audio && m.audio.mix) Object.keys(m.audio.mix).forEach(function (k) { if (k.charAt(0) !== '_') ART.MIX[k] = m.audio.mix[k]; });
         ART.config.ready = true; ART.manifest = m;
       }).catch(function (e) { console.warn('manifest missing - using defaults', e); });
     }

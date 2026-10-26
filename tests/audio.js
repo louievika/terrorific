@@ -11,7 +11,7 @@ async function run(block) {
   await pg.evaluate(() => { localStorage.clear(); localStorage.setItem('art_login_seen_v1', '1'); });
   await pg.tap('#authBtn'); await sl(2500);
   const out = await pg.evaluate(() => {
-    const A = ART.A, r = {}; r.samples = ART.audio.samples().sort(); r.state = A.ctx && A.ctx.state; r.manifestKeys = Object.keys(ART.manifest.audio).sort();
+    const A = ART.A, r = {}; r.samples = ART.audio.samples().sort(); r.state = A.ctx && A.ctx.state; r.manifestKeys = Object.keys(ART.manifest.audio).filter(k => typeof ART.manifest.audio[k] === 'string').sort(); r.mix = ART.MIX.breathing; r.titleGain = ART.manifest.title.breathGain;
     try { A.sting(true); A.sting(false); A.creak(); A.breathOnce(A.ctx.currentTime + 0.1, 5); A.staticBurst(0.3); A.phoneRing(); A.scream(); A.lock(); r.threw = null; } catch (e) { r.threw = String(e); }
     r.phase = __game.S.phase; return r;
   });
@@ -23,6 +23,8 @@ async function run(block) {
   T('manifest lists 5 audio slots', a.out.manifestKeys.join() === 'breathing,creak,hum,static,stinger', a.out.manifestKeys.join());
   T('all 5 wav files fetched', Object.keys(a.hits).length === 5, Object.keys(a.hits).join());
   T('all 5 decoded into the unlocked AudioContext', a.out.samples.join() === 'breathing,creak,hum,static,stinger', a.out.samples.join());
+  T('breathing level comes from audio.mix.breathing and is way down (<=0.2)', a.out.mix > 0 && a.out.mix <= 0.2, a.out.mix);
+  T('title breathing gain is a manifest key and way down (<=0.2)', a.out.titleGain > 0 && a.out.titleGain <= 0.2, a.out.titleGain);
   T('context running after the tap', a.out.state === 'running', a.out.state);
   T('every sample-backed sound plays without throwing', a.out.threw === null, a.out.threw);
   T('no console errors (samples on)', a.errs.length === 0, a.errs.join(' | '));

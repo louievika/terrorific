@@ -23,7 +23,7 @@
   function prefetch() {
     var paths = (ART.manifest && ART.manifest.audio) || {};
     Object.keys(paths).forEach(function (k) {
-      if (raw[k]) return;
+      if (raw[k] || typeof paths[k] !== 'string') return;      // 'mix' is a levels object, not a file
       raw[k] = fetch(paths[k]).then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); }).catch(function (e) { console.warn('audio sample missing: ' + k, e); return null; });
     });
   }
@@ -48,9 +48,9 @@
     play('stinger', A.sfx, big ? 1.0 : 0.7, 0, big ? 1 : 1.06);
   };
   A.breathOnce = function (t0, dur) {
-    if (!buf.breathing || !A.ready) return orig.breathOnce.apply(A, arguments);
+    if (!buf.breathing || !A.ready) { if (A.ready) A.breath.gain.value = ART.MIX.breathing / 0.8; return orig.breathOnce.apply(A, arguments); }
     var b = buf.breathing, r = Math.max(0.75, Math.min(1.25, b.duration / dur));
-    var s = play('breathing', A.breath, 0.8, t0, r); if (s) s.stop(t0 + dur + 0.1);
+    A.breath.gain.value = 1; var s = play('breathing', A.breath, ART.MIX.breathing, t0, r); if (s) s.stop(t0 + dur + 0.1);   /* level = manifest audio.mix.breathing (was 0.8) */
   };
   A.staticBurst = function (d) {
     if (!buf.static || !A.ready) return orig.staticBurst.apply(A, arguments);
