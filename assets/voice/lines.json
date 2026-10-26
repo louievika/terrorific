@@ -1,0 +1,823 @@
+{
+ "engine": "piper-tts 1.8.0 (GPL-3.0-or-later, build tool only)",
+ "voice": "en_US-joe-medium (CC0 dataset, VITS/ONNX)",
+ "post": "ffmpeg rubberband pitch 0.78 tempo 0.88 + sub-octave layer, EQ, saturation, compressor, stone-room tail",
+ "format": "mono MP3, 22.05 kHz, ~56 kbps (decodes on iOS Safari); times are seconds from file start (includes 40 ms lead-in)",
+ "lines": [
+  {
+   "id": "intro",
+   "kind": "intro",
+   "text": "Hello. I have been waiting in the dark for you.",
+   "file": "assets/voice/intro.mp3",
+   "duration": 3.218,
+   "speech": 2.534,
+   "words": [
+    {
+     "w": "Hello.",
+     "t0": 0.08,
+     "t1": 0.502
+    },
+    {
+     "w": "I",
+     "t0": 0.739,
+     "t1": 0.95
+    },
+    {
+     "w": "have",
+     "t0": 0.95,
+     "t1": 1.082
+    },
+    {
+     "w": "been",
+     "t0": 1.082,
+     "t1": 1.307
+    },
+    {
+     "w": "waiting",
+     "t0": 1.307,
+     "t1": 1.663
+    },
+    {
+     "w": "in",
+     "t0": 1.663,
+     "t1": 1.808
+    },
+    {
+     "w": "the",
+     "t0": 1.847,
+     "t1": 1.9
+    },
+    {
+     "w": "dark",
+     "t0": 1.9,
+     "t1": 2.191
+    },
+    {
+     "w": "for",
+     "t0": 2.191,
+     "t1": 2.309
+    },
+    {
+     "w": "you.",
+     "t0": 2.349,
+     "t1": 2.534
+    }
+   ]
+  },
+  {
+   "id": "night1",
+   "kind": "night",
+   "text": "Night one. Watch the doors. I only knock once.",
+   "file": "assets/voice/night1.mp3",
+   "duration": 3.969,
+   "speech": 3.354,
+   "words": [
+    {
+     "w": "Night",
+     "t0": 0.104,
+     "t1": 0.36
+    },
+    {
+     "w": "one.",
+     "t0": 0.437,
+     "t1": 0.769
+    },
+    {
+     "w": "Watch",
+     "t0": 0.948,
+     "t1": 1.256
+    },
+    {
+     "w": "the",
+     "t0": 1.32,
+     "t1": 1.409
+    },
+    {
+     "w": "doors.",
+     "t0": 1.46,
+     "t1": 1.921
+    },
+    {
+     "w": "I",
+     "t0": 2.151,
+     "t1": 2.292
+    },
+    {
+     "w": "only",
+     "t0": 2.292,
+     "t1": 2.586
+    },
+    {
+     "w": "knock",
+     "t0": 2.586,
+     "t1": 2.829
+    },
+    {
+     "w": "once.",
+     "t0": 2.919,
+     "t1": 3.354
+    }
+   ]
+  },
+  {
+   "id": "night2",
+   "kind": "night",
+   "text": "Night two. You kept the lights on. How very kind.",
+   "file": "assets/voice/night2.mp3",
+   "duration": 4.049,
+   "speech": 3.431,
+   "words": [
+    {
+     "w": "Night",
+     "t0": 0.106,
+     "t1": 0.396
+    },
+    {
+     "w": "two.",
+     "t0": 0.462,
+     "t1": 0.792
+    },
+    {
+     "w": "You",
+     "t0": 1.003,
+     "t1": 1.161
+    },
+    {
+     "w": "kept",
+     "t0": 1.201,
+     "t1": 1.452
+    },
+    {
+     "w": "the",
+     "t0": 1.504,
+     "t1": 1.597
+    },
+    {
+     "w": "lights",
+     "t0": 1.636,
+     "t1": 1.966
+    },
+    {
+     "w": "on.",
+     "t0": 2.045,
+     "t1": 2.349
+    },
+    {
+     "w": "How",
+     "t0": 2.494,
+     "t1": 2.639
+    },
+    {
+     "w": "very",
+     "t0": 2.692,
+     "t1": 2.956
+    },
+    {
+     "w": "kind.",
+     "t0": 3.022,
+     "t1": 3.431
+    }
+   ]
+  },
+  {
+   "id": "night3",
+   "kind": "night",
+   "text": "Night three. I can hear you breathing from here.",
+   "file": "assets/voice/night3.mp3",
+   "duration": 3.416,
+   "speech": 2.731,
+   "words": [
+    {
+     "w": "Night",
+     "t0": 0.106,
+     "t1": 0.343
+    },
+    {
+     "w": "three.",
+     "t0": 0.409,
+     "t1": 0.818
+    },
+    {
+     "w": "I",
+     "t0": 1.016,
+     "t1": 1.214
+    },
+    {
+     "w": "can",
+     "t0": 1.214,
+     "t1": 1.452
+    },
+    {
+     "w": "hear",
+     "t0": 1.452,
+     "t1": 1.65
+    },
+    {
+     "w": "you",
+     "t0": 1.65,
+     "t1": 1.834
+    },
+    {
+     "w": "breathing",
+     "t0": 1.834,
+     "t1": 2.283
+    },
+    {
+     "w": "from",
+     "t0": 2.283,
+     "t1": 2.428
+    },
+    {
+     "w": "here.",
+     "t0": 2.468,
+     "t1": 2.731
+    }
+   ]
+  },
+  {
+   "id": "night4",
+   "kind": "night",
+   "text": "Night four. Nobody is coming for you. Nobody ever did.",
+   "file": "assets/voice/night4.mp3",
+   "duration": 4.706,
+   "speech": 4.142,
+   "words": [
+    {
+     "w": "Night",
+     "t0": 0.104,
+     "t1": 0.336
+    },
+    {
+     "w": "four.",
+     "t0": 0.4,
+     "t1": 0.812
+    },
+    {
+     "w": "Nobody",
+     "t0": 1.043,
+     "t1": 1.544
+    },
+    {
+     "w": "is",
+     "t0": 1.544,
+     "t1": 1.699
+    },
+    {
+     "w": "coming",
+     "t0": 1.699,
+     "t1": 2.162
+    },
+    {
+     "w": "for",
+     "t0": 2.2,
+     "t1": 2.367
+    },
+    {
+     "w": "you.",
+     "t0": 2.419,
+     "t1": 2.586
+    },
+    {
+     "w": "Nobody",
+     "t0": 2.792,
+     "t1": 3.409
+    },
+    {
+     "w": "ever",
+     "t0": 3.46,
+     "t1": 3.718
+    },
+    {
+     "w": "did.",
+     "t0": 3.795,
+     "t1": 4.142
+    }
+   ]
+  },
+  {
+   "id": "night5",
+   "kind": "night",
+   "text": "Last night. Let me show you how I smile.",
+   "file": "assets/voice/night5.mp3",
+   "duration": 3.245,
+   "speech": 2.626,
+   "words": [
+    {
+     "w": "Last",
+     "t0": 0.132,
+     "t1": 0.502
+    },
+    {
+     "w": "night.",
+     "t0": 0.555,
+     "t1": 0.924
+    },
+    {
+     "w": "Let",
+     "t0": 1.109,
+     "t1": 1.267
+    },
+    {
+     "w": "me",
+     "t0": 1.293,
+     "t1": 1.399
+    },
+    {
+     "w": "show",
+     "t0": 1.465,
+     "t1": 1.636
+    },
+    {
+     "w": "you",
+     "t0": 1.702,
+     "t1": 1.768
+    },
+    {
+     "w": "how",
+     "t0": 1.768,
+     "t1": 1.927
+    },
+    {
+     "w": "I",
+     "t0": 1.927,
+     "t1": 2.111
+    },
+    {
+     "w": "smile.",
+     "t0": 2.164,
+     "t1": 2.626
+    }
+   ]
+  },
+  {
+   "id": "taunt1",
+   "kind": "taunt",
+   "text": "Why are you hiding? I only want to play.",
+   "file": "assets/voice/taunt1.mp3",
+   "duration": 3.218,
+   "speech": 2.573,
+   "words": [
+    {
+     "w": "Why",
+     "t0": 0.119,
+     "t1": 0.33
+    },
+    {
+     "w": "are",
+     "t0": 0.33,
+     "t1": 0.475
+    },
+    {
+     "w": "you",
+     "t0": 0.475,
+     "t1": 0.634
+    },
+    {
+     "w": "hiding?",
+     "t0": 0.686,
+     "t1": 1.082
+    },
+    {
+     "w": "I",
+     "t0": 1.32,
+     "t1": 1.504
+    },
+    {
+     "w": "only",
+     "t0": 1.504,
+     "t1": 1.755
+    },
+    {
+     "w": "want",
+     "t0": 1.808,
+     "t1": 1.993
+    },
+    {
+     "w": "to",
+     "t0": 2.032,
+     "t1": 2.138
+    },
+    {
+     "w": "play.",
+     "t0": 2.217,
+     "t1": 2.573
+    }
+   ]
+  },
+  {
+   "id": "taunt2",
+   "kind": "taunt",
+   "text": "Look at me. Look at me while I smile.",
+   "file": "assets/voice/taunt2.mp3",
+   "duration": 3.007,
+   "speech": 2.388,
+   "words": [
+    {
+     "w": "Look",
+     "t0": 0.106,
+     "t1": 0.33
+    },
+    {
+     "w": "at",
+     "t0": 0.357,
+     "t1": 0.449
+    },
+    {
+     "w": "me.",
+     "t0": 0.502,
+     "t1": 0.686
+    },
+    {
+     "w": "Look",
+     "t0": 0.911,
+     "t1": 1.109
+    },
+    {
+     "w": "at",
+     "t0": 1.161,
+     "t1": 1.227
+    },
+    {
+     "w": "me",
+     "t0": 1.254,
+     "t1": 1.373
+    },
+    {
+     "w": "while",
+     "t0": 1.438,
+     "t1": 1.65
+    },
+    {
+     "w": "I",
+     "t0": 1.65,
+     "t1": 1.847
+    },
+    {
+     "w": "smile.",
+     "t0": 1.9,
+     "t1": 2.388
+    }
+   ]
+  },
+  {
+   "id": "taunt3",
+   "kind": "taunt",
+   "text": "Did you really think a door would stop me?",
+   "file": "assets/voice/taunt3.mp3",
+   "duration": 2.836,
+   "speech": 2.204,
+   "words": [
+    {
+     "w": "Did",
+     "t0": 0.08,
+     "t1": 0.238
+    },
+    {
+     "w": "you",
+     "t0": 0.264,
+     "t1": 0.343
+    },
+    {
+     "w": "really",
+     "t0": 0.343,
+     "t1": 0.7
+    },
+    {
+     "w": "think",
+     "t0": 0.7,
+     "t1": 0.977
+    },
+    {
+     "w": "a",
+     "t0": 0.977,
+     "t1": 1.122
+    },
+    {
+     "w": "door",
+     "t0": 1.175,
+     "t1": 1.412
+    },
+    {
+     "w": "would",
+     "t0": 1.465,
+     "t1": 1.689
+    },
+    {
+     "w": "stop",
+     "t0": 1.689,
+     "t1": 1.993
+    },
+    {
+     "w": "me?",
+     "t0": 2.019,
+     "t1": 2.204
+    }
+   ]
+  },
+  {
+   "id": "lore_receipt",
+   "kind": "lore",
+   "text": "Black paint, white powder, one hat. Every costume needs an audience.",
+   "file": "assets/voice/lore_receipt.mp3",
+   "duration": 5.685,
+   "speech": 5.053,
+   "words": [
+    {
+     "w": "Black",
+     "t0": 0.08,
+     "t1": 0.33
+    },
+    {
+     "w": "paint,",
+     "t0": 0.409,
+     "t1": 0.779
+    },
+    {
+     "w": "white",
+     "t0": 1.082,
+     "t1": 1.307
+    },
+    {
+     "w": "powder,",
+     "t0": 1.386,
+     "t1": 1.782
+    },
+    {
+     "w": "one",
+     "t0": 2.138,
+     "t1": 2.375
+    },
+    {
+     "w": "hat.",
+     "t0": 2.441,
+     "t1": 2.797
+    },
+    {
+     "w": "Every",
+     "t0": 2.956,
+     "t1": 3.22
+    },
+    {
+     "w": "costume",
+     "t0": 3.325,
+     "t1": 3.84
+    },
+    {
+     "w": "needs",
+     "t0": 3.906,
+     "t1": 4.183
+    },
+    {
+     "w": "an",
+     "t0": 4.222,
+     "t1": 4.341
+    },
+    {
+     "w": "audience.",
+     "t0": 4.367,
+     "t1": 5.053
+    }
+   ]
+  },
+  {
+   "id": "lore_diary",
+   "kind": "lore",
+   "text": "Little girl, you counted wrong. The thirteenth heart is waiting for you.",
+   "file": "assets/voice/lore_diary.mp3",
+   "duration": 4.524,
+   "speech": 3.853,
+   "words": [
+    {
+     "w": "Little",
+     "t0": 0.08,
+     "t1": 0.317
+    },
+    {
+     "w": "girl,",
+     "t0": 0.37,
+     "t1": 0.726
+    },
+    {
+     "w": "you",
+     "t0": 0.977,
+     "t1": 1.109
+    },
+    {
+     "w": "counted",
+     "t0": 1.135,
+     "t1": 1.557
+    },
+    {
+     "w": "wrong.",
+     "t0": 1.597,
+     "t1": 1.9
+    },
+    {
+     "w": "The",
+     "t0": 2.045,
+     "t1": 2.138
+    },
+    {
+     "w": "thirteenth",
+     "t0": 2.217,
+     "t1": 2.665
+    },
+    {
+     "w": "heart",
+     "t0": 2.705,
+     "t1": 2.916
+    },
+    {
+     "w": "is",
+     "t0": 2.969,
+     "t1": 3.048
+    },
+    {
+     "w": "waiting",
+     "t0": 3.088,
+     "t1": 3.404
+    },
+    {
+     "w": "for",
+     "t0": 3.444,
+     "t1": 3.615
+    },
+    {
+     "w": "you.",
+     "t0": 3.681,
+     "t1": 3.853
+    }
+   ]
+  },
+  {
+   "id": "lore_call",
+   "kind": "lore",
+   "text": "You should not have answered. Now I know your voice.",
+   "file": "assets/voice/lore_call.mp3",
+   "duration": 3.522,
+   "speech": 2.903,
+   "words": [
+    {
+     "w": "You",
+     "t0": 0.093,
+     "t1": 0.212
+    },
+    {
+     "w": "should",
+     "t0": 0.277,
+     "t1": 0.396
+    },
+    {
+     "w": "not",
+     "t0": 0.396,
+     "t1": 0.673
+    },
+    {
+     "w": "have",
+     "t0": 0.673,
+     "t1": 1.016
+    },
+    {
+     "w": "answered.",
+     "t0": 1.016,
+     "t1": 1.425
+    },
+    {
+     "w": "Now",
+     "t0": 1.597,
+     "t1": 1.808
+    },
+    {
+     "w": "I",
+     "t0": 1.847,
+     "t1": 2.019
+    },
+    {
+     "w": "know",
+     "t0": 2.019,
+     "t1": 2.177
+    },
+    {
+     "w": "your",
+     "t0": 2.23,
+     "t1": 2.362
+    },
+    {
+     "w": "voice.",
+     "t0": 2.428,
+     "t1": 2.903
+    }
+   ]
+  },
+  {
+   "id": "win",
+   "kind": "ending",
+   "text": "You survived. Go home. I will remember your face.",
+   "file": "assets/voice/win.mp3",
+   "duration": 4.063,
+   "speech": 3.378,
+   "words": [
+    {
+     "w": "You",
+     "t0": 0.093,
+     "t1": 0.251
+    },
+    {
+     "w": "survived.",
+     "t0": 0.33,
+     "t1": 0.871
+    },
+    {
+     "w": "Go",
+     "t0": 1.122,
+     "t1": 1.32
+    },
+    {
+     "w": "home.",
+     "t0": 1.373,
+     "t1": 1.676
+    },
+    {
+     "w": "I",
+     "t0": 1.9,
+     "t1": 2.072
+    },
+    {
+     "w": "will",
+     "t0": 2.072,
+     "t1": 2.27
+    },
+    {
+     "w": "remember",
+     "t0": 2.27,
+     "t1": 2.758
+    },
+    {
+     "w": "your",
+     "t0": 2.758,
+     "t1": 2.837
+    },
+    {
+     "w": "face.",
+     "t0": 2.903,
+     "t1": 3.378
+    }
+   ]
+  },
+  {
+   "id": "bad",
+   "kind": "ending",
+   "text": "You stayed too long. Now the house keeps you.",
+   "file": "assets/voice/bad.mp3",
+   "duration": 3.384,
+   "speech": 2.706,
+   "words": [
+    {
+     "w": "You",
+     "t0": 0.116,
+     "t1": 0.23
+    },
+    {
+     "w": "stayed",
+     "t0": 0.281,
+     "t1": 0.586
+    },
+    {
+     "w": "too",
+     "t0": 0.637,
+     "t1": 0.865
+    },
+    {
+     "w": "long.",
+     "t0": 0.903,
+     "t1": 1.272
+    },
+    {
+     "w": "Now",
+     "t0": 1.373,
+     "t1": 1.564
+    },
+    {
+     "w": "the",
+     "t0": 1.589,
+     "t1": 1.678
+    },
+    {
+     "w": "house",
+     "t0": 1.716,
+     "t1": 1.995
+    },
+    {
+     "w": "keeps",
+     "t0": 2.097,
+     "t1": 2.453
+    },
+    {
+     "w": "you.",
+     "t0": 2.491,
+     "t1": 2.706
+    }
+   ]
+  }
+ ]
+}

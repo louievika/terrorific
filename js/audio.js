@@ -67,7 +67,7 @@
     o.connect(bp); bp.connect(g); g.connect(A.duck); o.start(t); o.stop(t + 1);
   };
   ART.audio = {
-    unlockInTap: function () { A.unlock(); A.start(); prefetch(); decodeAll(); },
+    unlockInTap: function () { A.unlock(); A.start(); prefetch(); decodeAll(); if (ART.voice) ART.voice.unlock(); },
     samples: function () { return Object.keys(buf); },
     resume: function () { if (A.ctx && A.ctx.state !== 'running') A.ctx.resume(); },
     duck: function (v, tc) { A.duckTo(v, tc); },

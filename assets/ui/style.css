@@ -248,3 +248,9 @@ body.lightsout #spots{z-index:9}
 .pz-grid{display:grid;gap:10px}
 .pz-tile{aspect-ratio:1;border-radius:8px;background:#1a1b1c;border:2px solid #000;box-shadow:inset 0 0 0 2px #2d2f31;transition:background .12s,box-shadow .12s}
 .pz-tile.lit{background:#ffb347;box-shadow:0 0 18px 2px rgba(255,170,60,.7),inset 0 0 0 2px #ffd48a}
+
+/* Phase D: Art's line on the lore screens only (diegetic, word-by-word fade-in) */
+.artline{margin:14px 2px 0;min-height:0;color:#b3121c;font:italic 16px/1.5 "Bradley Hand","Segoe Script","Comic Sans MS",cursive;text-shadow:0 0 8px rgba(120,0,10,.7);letter-spacing:.02em}
+.artline.term{font:13px/1.5 ui-monospace,Menlo,monospace;font-style:normal;text-transform:uppercase;letter-spacing:.06em}
+.artline .aw{opacity:0;filter:blur(3px);transition:opacity .55s ease,filter .55s ease}
+.artline .aw.on{opacity:1;filter:none}

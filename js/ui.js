@@ -118,16 +118,29 @@
     showLore: function (L, FAST, onTimer) {
       $('loreTitle').textContent = L.title; var doc = $('loreDoc'); doc.className = 'doc ' + L.cls; doc.textContent = L.doc;
       var call = $('loreCall'); call.className = 'call'; call.innerHTML = ''; var nb = $('loreNext'); nb.classList.remove('show'); nb.style.opacity = 0.2; nb.style.pointerEvents = 'none';
+      var VO = ART.voice, f = Math.min(FAST, 6), art = $('loreArt'), narr = !!(VO && L.voice && L.art), isCall = narr && L.voiceMode === 'call', docMs = 1600 / f;
+      art.className = 'artline' + (isCall ? ' term' : ''); art.innerHTML = '';
+      /* receipt / diary: Art's line fades in word-by-word under the document, voiced; the document stays up until he has finished */
+      if (narr && !isCall) {
+        var tl = VO.timeline(L.voice, L.art), lead = 500 / f; docMs = lead + (tl.speech + 1.0) * 1000 / f;
+        onTimer(setTimeout(function () { VO.say(L.voice, {}); VO.words(art, L.voice, L.art, f); }, lead));
+      }
       ui.show('lore'); A.duckTo(0.6, 0.5);
+      function showNext() { nb.classList.add('show'); nb.style.opacity = 1; nb.style.pointerEvents = 'auto'; }
       setTimeout(function () {
         doc.classList.add('hidden'); call.classList.add('on'); A.phoneRing();
         var txt = L.call, i = 0, out = '';
         (function type() {
-          if (i >= txt.length) { nb.classList.add('show'); nb.style.opacity = 1; nb.style.pointerEvents = 'auto'; return; }
+          if (i >= txt.length) {
+            if (isCall) {                                                   // phone-call style: the line is Art cutting in on the caretaker's call
+              onTimer(setTimeout(function () { VO.say(L.voice, {}); VO.words(art, L.voice, L.art, f, showNext); }, 700 / f));
+            } else showNext();
+            return;
+          }
           if (txt.substr(i, 10) === '[[GLITCH]]') { out += '<span class="g">&#9608;&#9608;&#9608;&#9608;</span>'; i += 10; } else { var ch = txt[i++]; out += ch === '<' ? '&lt;' : ch; }
-          call.innerHTML = out; onTimer(setTimeout(type, 22 / Math.min(FAST, 6)));
+          call.innerHTML = out; onTimer(setTimeout(type, 22 / f));
         })();
-      }, 1600 / Math.min(FAST, 6));
+      }, docMs);
     },
 
     /* ---------- login terminal typing ---------- */

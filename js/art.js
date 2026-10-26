@@ -41,6 +41,7 @@
           var a = $('art'); api.reset(); api.recenter(); a.classList.add('show');   // BEAT 3: payoff
           if (kind === 'attack') { a.style.left = '50%'; a.classList.add('slam'); A.scream(); ART.ui.flash(0.9, 160); api.lightsBack(false); }
           else { a.classList.add('grow'); A.sting(kind === 'lightsout'); api.lightsBack(kind === 'lightsout'); if (kind === 'lightsout') ART.ui.flash(0.5, 140); }
+          if (ART.voice) ART.voice.taunt(kind);                          // rare: Art speaks only in the payoff, after the silence
           setTimeout(function () {
             if (gen !== S.gen) return;
             if (kind !== 'attack') { api.reset(); A.duckTo(1, 0.5); api.busy(false); if (done) done(); }

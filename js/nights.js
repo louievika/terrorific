@@ -27,6 +27,10 @@
       A.duckTo(1, 0.3); A.setLevel(n); N.save(); ART.rooms.setSky('attic'); ART.ui.resetHudBucket();
       ART.ui.show('game'); ART.puzzles.refresh(); ART.ui.center('NIGHT ' + n + '\n12 AM', 2600); ART.ui.updateHud(); ART.ui.peekHud(3200);
       if (n === 1) ART.ui.scheduleAutoPan();
+      if (ART.voice) {                                                   // Art's voice: first-ever run says hello, every other start gets that night's line
+        ART.voice.stop(); var first = false; try { first = n === 1 && !localStorage.getItem(ART.voice.VOICE_KEY); if (first) localStorage.setItem(ART.voice.VOICE_KEY, '1'); } catch (e) {}
+        ART.voice.say(first ? 'intro' : 'night' + Math.min(n, 5), { delay: first ? 2800 : 1400 });
+      }
       ART.log('night ' + n + ' start, art in ' + S.artRoom);
     },
     toggleDoor: function () {
@@ -35,18 +39,18 @@
     },
     finish: function () {
       S.phase = 'lore'; ART.ui.closeMonitor(true); ART.puzzles.close(true); A.chime(); A.setLevel(0);
-      if (S.night >= 5) { S.phase = 'win'; N.clearSave(); $('winText').textContent = CFG.text.win; setTimeout(function () { ART.ui.show('win'); }, 900); return; }
+      if (S.night >= 5) { S.phase = 'win'; N.clearSave(); $('winText').textContent = CFG.text.win; setTimeout(function () { ART.ui.show('win'); if (ART.voice) ART.voice.say('win', { delay: 900 }); }, 900); return; }
       var L = CFG.lore[S.night - 1]; S.night++; N.save();
       setTimeout(function () { ART.ui.showLore(L, ART.FAST, function (t) { callTimer = t; }); }, 900);
     },
-    skipLore: function () { clearTimeout(callTimer); $('loreDoc').classList.remove('hidden'); N.start(S.night); },
+    skipLore: function () { clearTimeout(callTimer); if (ART.voice) ART.voice.stop(); $('loreDoc').classList.remove('hidden'); N.start(S.night); },
     gameOver: function (reason) {
       if (S.phase === 'over') return; S.phase = 'over'; S.deaths++; ART.ui.closeMonitor(true); ART.puzzles.close(true); A.stopMusic();
       $('goReason').textContent = reason; ART.ui.show('gameover'); ART.art.lightsBack(false); ART.art.busy(false); ART.log('GAME OVER ' + reason);
     },
     capBad: function () {
       if (S.phase === 'bad') return; S.phase = 'bad'; ART.ui.closeMonitor(true); ART.puzzles.close(true); A.stopMusic(); A.powerDown(); N.clearSave();
-      $('badText').textContent = CFG.text.bad; ART.ui.show('bad'); ART.log('BAD END (session cap)');
+      $('badText').textContent = CFG.text.bad; ART.ui.show('bad'); if (ART.voice) ART.voice.say('bad', { delay: 900 }); ART.log('BAD END (session cap)');
     },
 
     /* Art reached the hallway and the timer ran out: a locked door (or a slid bolt) holds; otherwise he's in */
