@@ -1,0 +1,19 @@
+{
+  "_comment": "Swap any asset by dropping a file with the same name, or point a slot here. Missing optional files fall back gracefully.",
+  "version": 1,
+  "title": {
+    "image": "assets/art/art-title.png",
+    "blink": "assets/art/art-title-blink.png",
+    "animated": null
+  },
+  "art": "assets/art/art.png",
+  "rooms": {
+    "attic": "assets/rooms/attic.jpg",
+    "kitchen": "assets/rooms/kitchen.jpg",
+    "mortuary": "assets/rooms/mortuary.jpg",
+    "hallway": "assets/rooms/hallway.jpg",
+    "basement": "assets/rooms/basement.jpg",
+    "frontdoor": "assets/rooms/frontdoor.jpg"
+  },
+  "audio": {}
+}
