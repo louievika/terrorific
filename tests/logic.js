@@ -1,14 +1,14 @@
-const p=require('puppeteer-core');
+const p=require('puppeteer-core');require('fs').mkdirSync(process.argv[3]||'screenshots',{recursive:true});
 const sl=ms=>new Promise(r=>setTimeout(r,ms));
 const URL=process.argv[2]||'http://localhost:8077/game.html';
 const shotDir=process.argv[3]||'screenshots';
 (async()=>{
- const b=await p.launch({executablePath:'/usr/bin/google-chrome',headless:'new',args:['--no-sandbox','--use-gl=swiftshader','--autoplay-policy=no-user-gesture-required','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
+ const b=await p.launch({executablePath:process.env.CHROME||'/usr/bin/google-chrome',headless:'new',args:['--no-sandbox','--use-gl=swiftshader','--autoplay-policy=no-user-gesture-required','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
  const pg=await b.newPage(); await pg.setViewport({width:390,height:844,deviceScaleFactor:2,isMobile:true,hasTouch:true});
  const errs=[]; pg.on('console',m=>{if(['error','warning'].includes(m.type()))errs.push(m.type()+': '+m.text())}); pg.on('pageerror',e=>errs.push('pageerror '+e.message));
  pg.on('response',r=>{if(r.status()>=400)errs.push('HTTP '+r.status()+' '+r.url())});
  await pg.goto(URL,{waitUntil:'load'}); await sl(3500);
- await pg.evaluate(()=>localStorage.clear());
+ await pg.evaluate(()=>{localStorage.clear();localStorage.setItem('art_login_seen_v1','1')});
  await pg.tap('#authBtn'); await sl(1500);
  const R=[]; const T=(n,ok,x)=>{R.push((ok?'PASS ':'FAIL ')+n+(x?' ['+x+']':''))};
  const ev=(f,a)=>pg.evaluate(f,a);
@@ -33,10 +33,10 @@ const shotDir=process.argv[3]||'screenshots';
  T('locked door holds, Art retreats', await ev(()=>__game.S.phase==='play'&&__game.S.artRoom!=='hallway'), await ev(()=>__game.S.artRoom+' pwr '+__game.S.power.toFixed(1)));
  // light-out scare at 10%
  await ev(()=>{const g=__game;g.startNight(1);g.S.power=9.5;g.tick(0.1)});
- await sl(250); await pg.screenshot({path:shotDir+'/a-scare-beat1.png'}); console.log('dbg0',await ev(()=>JSON.stringify([__game.S.t,__game.S.artRoom,__game.S.attackT,__game.S.door,__game.S.phase])));
+ await sl(250); await pg.screenshot({path:shotDir+'/a-scare-beat1.png'}); 
  const b2=await ev(()=>({busy:__game.S.scareBusy,lo:document.body.classList.contains('lightsout')}));
  T('lights-out scare at 10%: flicker/dark beat', b2.busy&&b2.lo, JSON.stringify(b2));
- await sl(1400); console.log('dbg1',await ev(()=>JSON.stringify([__game.S.t,__game.S.artRoom,__game.S.attackT,__game.S.door,__game.S.phase]))); await pg.screenshot({path:shotDir+'/a-scare-payoff.png'});
+ await sl(1400);  await pg.screenshot({path:shotDir+'/a-scare-payoff.png'});
  await sl(1500);
  T('scare ends, game continues', await ev(()=>!__game.S.scareBusy&&__game.S.phase==='play'), await ev(()=>JSON.stringify({b:__game.S.scareBusy,ph:__game.S.phase,l:__game.S.log.slice(-4),art:__game.S.artRoom,t:__game.S.t})));
  // attack: door open
@@ -69,6 +69,6 @@ const shotDir=process.argv[3]||'screenshots';
  await ev(()=>{__game.S.session=599.9}); await sl(600);
  T('10-min cap -> bad ending', await ev(()=>__game.S.phase==='bad'));
  await pg.screenshot({path:shotDir+'/a-bad.png'});
- console.log(R.join('\n')); console.log(errs.join('\n')||'no console errors');
+ console.log(R.join('\n')); console.log(errs.join('\n')||'no console errors'); console.log('LOGIC TESTS: '+R.filter(x=>x.startsWith('PASS')).length+'/'+R.length+' pass'); process.exitCode=R.some(x=>x.startsWith('FAIL'))?1:0;
  await b.close();
 })();

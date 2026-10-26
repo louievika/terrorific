@@ -8,7 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="ART // LOGIN - title screen. Headphones recommended.">
+<meta name="description" content="ART // LOGIN - a horror game for mobile.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23000'/%3E%3Ccircle cx='8' cy='8' r='4' fill='%23c4161d'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/ui/title.css">
 </head>
@@ -16,9 +16,7 @@
 
 <!-- audio-unlock gate (first tap: AudioContext resume + silent buffer, iOS-safe) -->
 <div id="gate">
-  <div class="sign"><i></i>QUIET ON SET</div>
-  <div class="gate-main">TAP TO ENTER</div>
-  <div class="gate-sub">sound on &middot; headphones recommended</div>
+  <div class="dot"></div>
 </div>
 
 <div id="stage">
@@ -34,36 +32,13 @@
   </div>
 
   <div id="grain"></div>
-  <div id="scratch"><i></i><i></i><i></i></div>
-
-  <!-- letterbox bars with studio HUD -->
-  <div class="bar top"><div class="hud">
-    <span class="rec"><i></i>REC</span><span id="hCam">CAM A</span><span id="hFps">24 fps</span><span id="hStage">SOUNDSTAGE 2</span>
-  </div></div>
-  <div class="bar bottom"><div class="hud">
-    <span>TC <b id="hTc">01:00:00:00</b></span><span id="hSlate">SC01 TK01 A001</span><span id="hCo">VIKA SYSTEMS</span>
-  </div></div>
-
-  <!-- camera-monitor corner brackets -->
-  <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
 
   <!-- swinging bulb -->
   <div id="bulbWrap"><div id="bulb" class="bulb"><div class="cord"></div><div class="socket"></div><div class="glass"></div><div class="halo"></div></div></div>
 
-  <!-- slate-style ENTER button -->
-  <button id="enter" type="button" aria-label="Enter">
-    <span class="clap"><span class="stick"></span></span>
-    <span class="slate-title">ENTER</span>
-    <span class="slate-fields" id="enterFields">SCENE 01 &middot; TAKE 01</span>
-  </button>
+  <button id="enter" type="button" aria-label="Enter"><span>ENTER</span></button>
 </div>
 
-<!-- placeholder for next screen (login terminal comes in the next build phase) -->
-<div id="next">
-  <div class="next-main">ART // LOGIN</div>
-  <div class="next-sub">next scene: login terminal<br>(next build phase)</div>
-  <div class="next-tap">tap to return to title</div>
-</div>
 
 <script src="assets/ui/title.js"></script>
 </body>

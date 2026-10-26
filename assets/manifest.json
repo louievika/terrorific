@@ -1,23 +1,12 @@
 {
   "_comment": "Swap any asset by dropping a file with the same name, or point a slot here. Missing optional files fall back gracefully.",
-  "version": 1,
+  "version": 2,
   "title": {
     "image": "assets/art/art-title-m.jpg",
     "blink": "assets/art/art-title-blink.png",
     "animated": "assets/art/art-title.webp",
     "enterDelayMs": 3500,
     "nextUrl": "game.html",
-    "studio": {
-      "label": "ART // LOGIN",
-      "company": "VIKA SYSTEMS",
-      "stage": "SOUNDSTAGE 2",
-      "camera": "CAM A",
-      "scene": "01",
-      "take": "01",
-      "roll": "A001",
-      "fps": 24,
-      "tcStart": "01:00:00:00"
-    },
     "scare": {
       "firstMs": 2800,
       "minGapMs": 6500,
@@ -49,8 +38,8 @@
     },
     "lightsOutAtPct": 10,
     "deadAttackDelaySec": [
-      6,
-      9
+      10,
+      14
     ],
     "graph": {
       "mortuary": [
@@ -78,7 +67,7 @@
         "moveMax": 10,
         "aggro": 0.7,
         "attackSec": 10,
-        "drainMul": 1.0,
+        "drainMul": 1,
         "appearP": 0,
         "peeks": 0
       },
@@ -126,6 +115,157 @@
         "appearP": 0.3,
         "peeks": 3
       }
-    ]
+    ],
+    "clock": [
+      "12 AM",
+      "1 AM",
+      "2 AM",
+      "3 AM",
+      "4 AM",
+      "5 AM"
+    ],
+    "feeds": {
+      "hallway": {
+        "n": "CAM 1 - HALLWAY",
+        "yaw": 0,
+        "h": 110,
+        "bot": 205
+      },
+      "kitchen": {
+        "n": "CAM 2 - KITCHEN",
+        "yaw": 18,
+        "h": 190,
+        "bot": 280
+      },
+      "basement": {
+        "n": "CAM 3 - BASEMENT",
+        "yaw": -16,
+        "h": 180,
+        "bot": 285
+      },
+      "frontdoor": {
+        "n": "CAM 4 - FRONT DOOR",
+        "yaw": 4,
+        "h": 170,
+        "bot": 275
+      }
+    },
+    "lore": [
+      {
+        "title": "NIGHT 1 COMPLETE",
+        "cls": "",
+        "doc": "MILES COUNTY - NOTICE OF CONDEMNATION\n\nThe structure at 31 Halloran Lane is hereby closed to the public. Utilities to remain connected \"for inspection purposes only.\"\n\nRemote caretakers are reminded: do not enter the lower floors. Do not answer the door.\n\n- County Clerk",
+        "call": "INCOMING...  [CARETAKER LINE]\n\n\"You made it to six. Good. Most don't say that out loud.\nThe old lights buzz when HE is close. Listen for them.\nHe only moves when nobody is watching.\nSo watch.\""
+      },
+      {
+        "title": "NIGHT 2 COMPLETE",
+        "cls": "receipt",
+        "doc": "HALLORAN NOVELTY & PARTY SUPPLY\n--------------------------\n1x PIERROT HAT (BLACK)   $ 4.99\n1x WHITE GREASEPAINT     $ 3.49\n1x ROLL BUTCHER PAPER    $ 8.00\n1x MAGIC TRICK (BROKEN)  $ 2.00\n--------------------------\nCASH                    $18.48\nNO REFUNDS.\nTHANK YOU, MR. A.",
+        "call": "INCOMING...  [CARETAKER LINE]\n\n\"The camera in the kitchen keeps sticking.\nThat is not the camera.\nKeep the door locked when the hallway goes quiet.\nQuiet is the loud part.\""
+      },
+      {
+        "title": "NIGHT 3 COMPLETE",
+        "cls": "diary",
+        "doc": "dear diary,\n\ni saw him smile in the window again tonight.\nmom says the house has been empty for years.\nbut the cellar door was open and\nthere were little paper hearts on the stairs.\n\ni counted them. there are thirteen.\ni only found twelve.",
+        "call": "INCOMING...  [CARETAKER LINE]\n\n\"Did he turn up in a room you had just checked?\nThat is new. He is learning how you look.\nDon't be predictable. Don't be [[GLITCH]].\""
+      },
+      {
+        "title": "NIGHT 4 COMPLETE",
+        "cls": "",
+        "doc": "INCIDENT REPORT 0-4-1\n\nSubject observed using ordinary door hardware to create a \"show\" for no audience.\nWitness statements disagree. All witnesses agree on the sound: a small bell, once, then laughter.\n\nRecommendation: do not try to bargain.\nRecommendation: do not run.\nRecommendation: [REDACTED]",
+        "call": "INCOMING...  [CARETAKER LINE]\n\n\"One more night. The power is thin.\nWhen the lights fail, he will know first.\nIf it goes dark, do not look for him.\nHe will find YOU.\""
+      }
+    ],
+    "boot": [
+      "> MILES_HOUSE remote caretaker terminal",
+      "> link .......... ok",
+      "> cameras ........ 4 of 4",
+      "> door lock ...... armed",
+      "> power .......... 100%",
+      "> checking caretaker credentials",
+      "USER: caretaker",
+      "PASS: ********",
+      "",
+      "WARNING: subject \"ART\" is not in custody.",
+      "Session limit: 10:00. Do not exceed it."
+    ],
+    "text": {
+      "overDoor": "The door was open.",
+      "overPower": "The power died. So did the lock.",
+      "overDead": "Power failed. The lights died. He was already inside.",
+      "win": "You survived five nights.\nThe lights hum. The house is quiet.\nFor now.",
+      "bad": "SESSION LIMIT REACHED (10:00)\n\nYou lingered too long in the house.\nThe terminal logs you out.\nThe door does not."
+    },
+    "puzzles": {
+      "_comment": "type per night (index 0 = night 1): keypad | wires | tiles | any name registered with ART.puzzles.register(). Set a night to null to disable that hotspot.",
+      "hotspots": {
+        "fusebox": {
+          "yawDeg": -62,
+          "topPct": 50,
+          "effect": "power",
+          "amountPct": 25,
+          "restoreDeadPct": 15,
+          "cooldownSec": 35,
+          "types": [
+            "keypad",
+            "wires",
+            "tiles",
+            "wires",
+            "tiles"
+          ]
+        },
+        "doorbolt": {
+          "yawDeg": 62,
+          "topPct": 54,
+          "effect": "bolt",
+          "cooldownSec": 50,
+          "types": [
+            null,
+            "wires",
+            "keypad",
+            "tiles",
+            "tiles"
+          ]
+        }
+      },
+      "keypad": {
+        "digits": 4,
+        "memorizeMs": [
+          0,
+          0,
+          2500,
+          2000,
+          1500
+        ]
+      },
+      "wires": {
+        "count": [
+          3,
+          3,
+          4,
+          4,
+          5
+        ]
+      },
+      "tiles": {
+        "size": 3,
+        "scrambles": [
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    },
+    "doorButton": {
+      "yawDeg": -12,
+      "topPct": 55
+    },
+    "autoPan": {
+      "startSec": 3.4,
+      "durSec": 7,
+      "ampDeg": 78
+    }
   }
 }

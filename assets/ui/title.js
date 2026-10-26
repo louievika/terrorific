@@ -6,7 +6,6 @@
   var DEFAULTS = {
     image: 'assets/art/art-title-m.jpg', blink: 'assets/art/art-title-blink.png', animated: 'assets/art/art-title.webp',
     enterDelayMs: 3500, nextUrl: null,
-    studio: { label: 'ART // LOGIN', company: 'VIKA SYSTEMS', stage: 'SOUNDSTAGE 2', camera: 'CAM A', scene: '01', take: '01', roll: 'A001', fps: 24, tcStart: '01:00:00:00' },
     scare: { firstMs: 2800, minGapMs: 6500, maxGapMs: 11000, offMs: 1400, silenceMs: 500, closeStep: 0.035, slamAtLevel: 5 }
   };
   var cfg = JSON.parse(JSON.stringify(DEFAULTS));
@@ -189,13 +188,7 @@
   var body = document.body, bulb = $('bulb'), flashEl = $('flash'), enter = $('enter');
   var state = { started: false, canAdvance: false, advancing: false, level: 0, close: 1, closeTarget: 1, tau: 1.4 };
 
-  function applyStudio() {
-    var s = cfg.studio;
-    $('hCam').textContent = s.camera; $('hFps').textContent = s.fps + ' fps'; $('hStage').textContent = s.stage; $('hCo').textContent = s.company;
-    $('hSlate').textContent = 'SC' + s.scene + ' TK' + s.take + ' ' + s.roll;
-    $('enterFields').textContent = 'SCENE ' + s.scene + ' \u00b7 TAKE ' + s.take;
-    document.title = s.label;
-  }
+  function applyStudio() { document.title = 'ART // LOGIN'; }
 
   function loadImg(url) {
     return new Promise(function (res) {
@@ -238,12 +231,6 @@
     }
     state.close += (state.closeTarget - state.close) * (1 - Math.exp(-dt / state.tau));
     face.style.transform = 'translate3d(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px,0) rotate(' + (tilt + dr).toFixed(3) + 'deg) scale(' + (breath * state.close).toFixed(4) + ')';
-    // timecode
-    var fps = cfg.studio.fps, parts = cfg.studio.tcStart.split(':').map(Number);
-    var f = Math.floor(t * fps) + ((parts[0] * 60 + parts[1]) * 60 + parts[2]) * fps + parts[3];
-    var ff = f % fps, s = Math.floor(f / fps), ss = s % 60, mm = Math.floor(s / 60) % 60, hh = Math.floor(s / 3600);
-    var z = function (n) { return (n < 10 ? '0' : '') + n; };
-    $('hTc').textContent = z(hh) + ':' + z(mm) + ':' + z(ss) + ':' + z(ff);
     requestAnimationFrame(loop);
   }
 
@@ -295,12 +282,12 @@
 
   function advance() {
     if (state.advancing) return; state.advancing = true; clearTimeout(scareTimer);
-    enter.classList.add('clack'); A.clack();
+    A.clack();
     A.duckTo(0, 0.5);
     stage.style.transition = 'opacity 1.2s'; stage.style.opacity = 0;
     setTimeout(function () {
       if (cfg.nextUrl) { location.href = cfg.nextUrl; return; }
-      $('next').classList.add('on');
+      location.reload();
     }, 1300);
   }
 
@@ -316,7 +303,6 @@
   // pointerdown works for touch + mouse; used inside the gesture for unlock
   $('gate').addEventListener('pointerdown', onTap);
   stage.addEventListener('pointerdown', onTap);
-  $('next').addEventListener('pointerdown', resetToTitle);
   document.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
 
   window.__title = { state: state, cfg: cfg, A: A, runScare: runScare }; // debug hook

@@ -8,7 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="ART // LOGIN - a Terrifier 2-themed FNAF-style horror game for mobile. Original placeholder art and audio. MIT licensed.">
+<meta name="description" content="ART // LOGIN - a horror game for mobile. MIT licensed.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23000'/%3E%3Ccircle cx='8' cy='8' r='4' fill='%23c4161d'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/ui/style.css">
 <!-- A-Frame 1.8.0 pinned (official release URL, verified HTTP 200) -->
@@ -22,10 +22,7 @@
     <div class="term-bar"><i></i><i></i><i></i><span>MILES_HOUSE // NIGHT-SHIFT TERMINAL</span></div>
     <pre id="termText" class="term-text"></pre>
     <div class="loadwrap"><div id="loadBar"></div></div>
-    <div id="loadLabel" class="load-label">assets 0%</div>
     <button id="authBtn" class="btn big" type="button">AUTHENTICATE</button>
-    <p id="authNote" class="note">Tap to enable sound + motion sensors. Headphones recommended.</p>
-    <button id="resetBtn" class="linkbtn" type="button">reset save</button>
   </div>
 </section>
 
@@ -62,32 +59,30 @@
       <div class="hud-box"><small>NIGHT</small><b id="hudNight">1</b></div>
       <div class="hud-box"><small>CLOCK</small><b id="hudClock">12 AM</b></div>
       <div class="hud-box"><small>SESSION</small><b id="hudSession">10:00</b></div>
-      <button id="voiceBtn" class="hud-box iconbtn" type="button" aria-label="Mute / unmute sound">
-        <span id="voiceIcon">&#128266;</span>
-      </button>
     </div>
     <div class="power">
       <small>POWER</small>
       <div class="power-bar"><div id="powerFill"></div></div>
       <b id="powerPct">100%</b>
-      <span id="powerUse" class="power-use">||</span>
     </div>
   </header>
 
-  <div id="subtitle" class="layer"></div>
   <div id="centerMsg" class="layer"></div>
 
-  <!-- bottom controls -->
-  <footer id="controls">
-    <button id="btnDoor" class="btn" type="button">LOCK DOOR</button>
-    <button id="btnCam" class="btn cam" type="button">CAMERAS</button>
-  </footer>
+  <!-- diegetic controls: door button + side-wall panels are world-anchored hotspots -->
+  <div id="spots" class="layer"><button id="btnDoor" class="spot-btn door" type="button" aria-label="Door"><i class="led"></i><i class="plate"></i></button></div>
+
+  <!-- monitor lip at the bottom edge: tap or swipe up -->
+  <button id="btnCam" type="button" aria-label="Cameras"><i></i></button>
+
+  <!-- puzzle panel (opened from a wall hotspot) -->
+  <div id="puzzle"><div id="puzzleCard"><div id="puzzleBody"></div></div><button id="puzzleClose" type="button" aria-label="Close">&times;</button></div>
 
   <!-- camera monitor -->
   <div id="monitor">
     <div class="mon-top">
-      <span class="rec"><i></i>REC</span>
       <span id="feedName">CAM 1 - HALLWAY</span>
+      <span id="monStat">PWR 100%</span>
       <span id="feedTime">--:--</span>
     </div>
     <div class="mon-screen">
@@ -154,6 +149,13 @@
 </div>
 
 <script src="assets/ui/audio-engine.js"></script>
-<script src="game.js"></script>
+<script src="js/config.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/rooms.js"></script>
+<script src="js/art.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/puzzles.js"></script>
+<script src="js/nights.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
-/* ART // LOGIN title screen - studio aesthetic. MIT. */
-:root{--bar:calc(8vh + env(safe-area-inset-top,0px));--barb:calc(8vh + env(safe-area-inset-bottom,0px));
+/* ART // LOGIN title screen. MIT. */
+:root{--bar:0px;--barb:0px;
   --red:#c4161d;--bone:#e8e2d4}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 html,body{margin:0;position:fixed;inset:0;width:100%;height:100%;background:#000;color:var(--bone);overflow:hidden;
@@ -11,11 +11,7 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 #gate{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
   transition:opacity 1.2s;cursor:pointer}
 #gate.gone{opacity:0;pointer-events:none}
-.sign{display:flex;align-items:center;gap:10px;border:1px solid #5a1015;padding:8px 16px;font-size:12px;letter-spacing:.4em;color:#e33;
-  text-shadow:0 0 10px #a11}
-.sign i{width:9px;height:9px;border-radius:50%;background:#e22;box-shadow:0 0 10px #e22;animation:blink 1.4s steps(1) infinite}
-.gate-main{font-size:20px;letter-spacing:.5em;padding-left:.5em;animation:pulse 2.2s infinite}
-.gate-sub{font-size:10px;letter-spacing:.25em;color:#666;text-transform:uppercase}
+.dot{width:14px;height:14px;border-radius:50%;background:#c4161d;box-shadow:0 0 18px #c4161d;animation:blink 1.4s steps(1) infinite}
 @keyframes blink{50%{opacity:.15}}
 @keyframes pulse{50%{opacity:.3}}
 
@@ -35,31 +31,11 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 body.off #dark{opacity:.95}
 body.off #warm{opacity:0}
 
-/* film grain + scratches (cheap) */
+/* grain */
 #grain{position:absolute;inset:0;pointer-events:none;opacity:.14;mix-blend-mode:screen;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
   animation:grain .5s steps(4) infinite}
 @keyframes grain{25%{background-position:40px 20px}50%{background-position:-30px 60px}75%{background-position:70px -40px}}
-#scratch{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-#scratch i{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.35);opacity:0;animation:scr 7s infinite steps(1)}
-#scratch i:nth-child(1){left:23%}
-#scratch i:nth-child(2){left:61%;animation-duration:11s;animation-delay:2s}
-#scratch i:nth-child(3){left:84%;animation-duration:9s;animation-delay:5s}
-@keyframes scr{0%,92%{opacity:0}93%{opacity:.8}94%{opacity:0}96%{opacity:.5}97%,100%{opacity:0}}
-
-/* letterbox bars + HUD */
-.bar{position:absolute;left:0;right:0;background:#000;z-index:5;display:flex;align-items:center}
-.bar.top{top:0;height:var(--bar);padding-top:env(safe-area-inset-top,0px)}
-.bar.bottom{bottom:0;height:var(--barb);padding-bottom:env(safe-area-inset-bottom,0px)}
-.hud{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 14px;font-size:9.5px;letter-spacing:.1em;color:#9a9a9a;white-space:nowrap}
-.hud b{color:var(--bone);font-weight:400;font-variant-numeric:tabular-nums}
-.rec{display:flex;align-items:center;gap:6px;color:#ff4040;font-weight:700}
-.rec i{width:9px;height:9px;border-radius:50%;background:#ff3030;box-shadow:0 0 8px #f22;animation:blink 1s steps(1) infinite}
-.corner{position:absolute;width:22px;height:22px;z-index:6;border:0 solid rgba(255,255,255,.55);pointer-events:none}
-.corner.tl{left:12px;top:calc(var(--bar) + 12px);border-width:2px 0 0 2px}
-.corner.tr{right:12px;top:calc(var(--bar) + 12px);border-width:2px 2px 0 0}
-.corner.bl{left:12px;bottom:calc(var(--barb) + 12px);border-width:0 0 2px 2px}
-.corner.br{right:12px;bottom:calc(var(--barb) + 12px);border-width:0 2px 2px 0}
 
 /* bulb */
 #bulbWrap{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:7}
@@ -74,25 +50,9 @@ body.off #warm{opacity:0}
 .bulb.off .halo{opacity:0}
 @keyframes swing{0%,100%{transform:rotate(-5.5deg)}50%{transform:rotate(5.5deg)}}
 
-/* slate-style ENTER */
-#enter{position:absolute;left:50%;bottom:calc(var(--barb) + 22px);transform:translateX(-50%);z-index:8;width:min(70vw,260px);
-  background:#0a0a0a;border:2px solid #d8d3c6;padding:0 0 10px;opacity:0;pointer-events:none;transition:opacity 2.2s;text-align:center;cursor:pointer}
-#enter.show{opacity:.92;pointer-events:auto}
-.clap{display:block;height:20px;position:relative;margin-bottom:8px;border-bottom:2px solid #d8d3c6;
-  background:repeating-linear-gradient(115deg,#e8e2d4 0 16px,#0a0a0a 16px 32px)}
-.clap .stick{position:absolute;left:-2px;right:-2px;top:-22px;height:20px;border:2px solid #d8d3c6;transform-origin:0 100%;
-  background:repeating-linear-gradient(115deg,#0a0a0a 0 16px,#e8e2d4 16px 32px);transform:rotate(-14deg);transition:transform .08s ease-in}
-#enter.clack .stick{transform:rotate(0)}
-.slate-title{display:block;font-size:20px;letter-spacing:.7em;padding-left:.7em;color:var(--bone)}
-.slate-fields{display:block;margin-top:6px;font-size:9px;letter-spacing:.2em;color:#888}
-#enter:active .slate-title{color:#fff}
-
-/* next placeholder */
-#next{position:fixed;inset:0;z-index:60;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;cursor:pointer}
-#next.on{display:flex;animation:fin 1.2s}
-@keyframes fin{from{opacity:0}}
-.next-main{font-size:22px;letter-spacing:.4em;padding-left:.4em;color:#cfffd8;text-shadow:0 0 10px #1f8a3a}
-.next-sub{font-size:11px;letter-spacing:.2em;line-height:1.8;color:#4c9a62;text-transform:uppercase}
-.next-tap{font-size:10px;letter-spacing:.3em;color:#555;margin-top:30px;text-transform:uppercase}
+ #enter{position:absolute;left:50%;bottom:calc(8vh + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:8;min-width:220px;min-height:64px;
+  background:rgba(0,0,0,.55);border:1px solid #5a1015;color:var(--bone);font-size:18px;letter-spacing:.6em;padding:0 0 0 .6em;opacity:0;pointer-events:none;transition:opacity 2.2s}
+#enter.show{opacity:.9;pointer-events:auto}
+#enter:active{border-color:var(--red);color:#fff}
 
 @media (prefers-reduced-motion:reduce){#stage{animation:none}.bulb{animation-duration:10s}#grain{animation:none}}
