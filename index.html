@@ -8,175 +8,63 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="ART // LOGIN - a Terrifier 2-themed FNAF-style horror game for mobile. Original placeholder art and audio. MIT licensed.">
-<link rel="stylesheet" href="assets/ui/style.css">
-<!-- A-Frame 1.8.0 pinned (official release URL, verified HTTP 200) -->
-<script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+<meta name="description" content="ART // LOGIN - title screen. Headphones recommended.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23000'/%3E%3Ccircle cx='8' cy='8' r='4' fill='%23c4161d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/ui/title.css">
 </head>
 <body>
 
-<!-- ============ 1. VIKA SYSTEMS brand intro ============ -->
-<section id="intro" class="screen active" aria-label="VIKA SYSTEMS">
-  <div class="intro-logo">
-    <div class="intro-mark"><span></span><span></span><span></span></div>
-    <h1 class="glitch" data-text="VIKA SYSTEMS">VIKA SYSTEMS</h1>
-    <p class="intro-sub">PRESENTS</p>
-  </div>
-  <p class="tap-hint">tap to skip</p>
-</section>
-
-<!-- ============ 1b. TITLE screen (Art stares, bulb blinks) ============ -->
-<section id="title" class="screen" aria-label="Title">
-  <div id="titleFace">
-    <img id="titleImg" alt="" draggable="false">
-    <img id="titleBlink" alt="" draggable="false">
-  </div>
-  <div id="titleDark"></div>
-  <div class="bulb title-bulb"><div class="cord"></div><div class="socket"></div><div class="glass"></div><div class="halo"></div></div>
-  <div id="titleFlash"></div>
-  <div class="title-foot">
-    <p id="titleHint" class="tap-hint">tap to wake the speakers</p>
-    <button id="enterBtn" class="btn big enter" type="button">ENTER</button>
-  </div>
-</section>
-
-<!-- ============ 2. ART // LOGIN terminal ============ -->
-<section id="login" class="screen" aria-label="Login">
-  <div class="term">
-    <div class="term-bar"><i></i><i></i><i></i><span>MILES_HOUSE // NIGHT-SHIFT TERMINAL</span></div>
-    <pre id="termText" class="term-text"></pre>
-    <div class="loadwrap"><div id="loadBar"></div></div>
-    <div id="loadLabel" class="load-label">assets 0%</div>
-    <button id="authBtn" class="btn big" type="button">AUTHENTICATE</button>
-    <p id="authNote" class="note">Tap to enable sound + motion sensors. Headphones recommended.</p>
-    <button id="resetBtn" class="linkbtn" type="button">reset save</button>
-  </div>
-</section>
-
-<!-- ============ 3. GAME ============ -->
-<section id="game" class="screen" aria-label="Game">
-  <a-scene id="scene" embedded
-           vr-mode-ui="enabled: false"
-           loading-screen="enabled: false"
-           device-orientation-permission-ui="enabled: false"
-           renderer="antialias: false; powerPreference: high-performance"
-           background="color: #000">
-    <a-sky id="sky" src="assets/rooms/attic.jpg" material="shader: flat; color: #ffffff"></a-sky>
-    <a-entity id="rig" position="0 0 0">
-      <a-entity id="cam" camera="fov: 80" look-controls="enabled: false" wasd-controls="enabled: false" position="0 0 0"></a-entity>
-    </a-entity>
-  </a-scene>
-
-  <div id="darkness" class="layer"></div>
-  <div id="vignette" class="layer"></div>
-  <div id="grain" class="layer"></div>
-
-  <!-- swinging bulb overlay -->
-  <div id="bulbWrap" class="layer">
-    <div id="bulb" class="bulb"><div class="cord"></div><div class="socket"></div><div class="glass"></div><div class="halo"></div></div>
-  </div>
-
-  <!-- transparent Art overlay -->
-  <img id="art" alt="" draggable="false" src="assets/art/art.png">
-  <div id="flash" class="layer"></div>
-
-  <!-- HUD -->
-  <header id="hud">
-    <div class="hud-row">
-      <div class="hud-box"><small>NIGHT</small><b id="hudNight">1</b></div>
-      <div class="hud-box"><small>CLOCK</small><b id="hudClock">12 AM</b></div>
-      <div class="hud-box"><small>SESSION</small><b id="hudSession">10:00</b></div>
-      <button id="voiceBtn" class="hud-box iconbtn" type="button" aria-label="Toggle Art's voice">
-        <span id="voiceIcon">&#128266;</span>
-      </button>
-    </div>
-    <div class="power">
-      <small>POWER</small>
-      <div class="power-bar"><div id="powerFill"></div></div>
-      <b id="powerPct">100%</b>
-      <span id="powerUse" class="power-use">||</span>
-    </div>
-  </header>
-
-  <div id="subtitle" class="layer"></div>
-  <div id="centerMsg" class="layer"></div>
-
-  <!-- bottom controls -->
-  <footer id="controls">
-    <button id="btnDoor" class="btn" type="button">LOCK DOOR</button>
-    <button id="btnCam" class="btn cam" type="button">CAMERAS</button>
-  </footer>
-
-  <!-- camera monitor -->
-  <div id="monitor">
-    <div class="mon-top">
-      <span class="rec"><i></i>REC</span>
-      <span id="feedName">CAM 1 - HALLWAY</span>
-      <span id="feedTime">--:--</span>
-    </div>
-    <div class="mon-screen">
-      <canvas id="feedCanvas" width="320" height="240"></canvas>
-      <canvas id="staticCanvas" width="160" height="120"></canvas>
-      <div class="mon-scan"></div>
-      <div id="feedLost" class="feed-lost">NO SIGNAL</div>
-    </div>
-    <nav class="mon-tabs">
-      <button type="button" data-feed="hallway" class="on">1 HALL</button>
-      <button type="button" data-feed="kitchen">2 KITCHEN</button>
-      <button type="button" data-feed="basement">3 BASEMENT</button>
-      <button type="button" data-feed="frontdoor">4 FRONT DOOR</button>
-    </nav>
-  </div>
-</section>
-
-<!-- ============ 4. Lore / ending screens ============ -->
-<section id="lore" class="screen" aria-label="Lore">
-  <div class="lore-wrap">
-    <div id="loreTitle" class="lore-title">NIGHT 1 COMPLETE</div>
-    <div id="loreDoc" class="doc"></div>
-    <div id="loreCall" class="call"></div>
-    <button id="loreNext" class="btn big" type="button">CONTINUE</button>
-  </div>
-</section>
-
-<section id="gameover" class="screen" aria-label="Game over">
-  <div class="end-wrap">
-    <h2 class="glitch" data-text="HE FOUND YOU">HE FOUND YOU</h2>
-    <p id="goReason">Power failed.</p>
-    <button id="goRetry" class="btn big" type="button">RETRY NIGHT</button>
-  </div>
-</section>
-
-<section id="win" class="screen" aria-label="You survived">
-  <div class="end-wrap">
-    <h2 class="glitch" data-text="6 AM">6 AM</h2>
-    <p id="winText"></p>
-    <button id="winAgain" class="btn big" type="button">PLAY AGAIN</button>
-  </div>
-</section>
-
-<section id="bad" class="screen" aria-label="Bad ending">
-  <div class="end-wrap">
-    <h2 class="glitch" data-text="SESSION TERMINATED">SESSION TERMINATED</h2>
-    <p id="badText"></p>
-    <button id="badAgain" class="btn big" type="button">LOG IN AGAIN</button>
-  </div>
-</section>
-
-<!-- debug (?debug=1) -->
-<div id="debug" hidden>
-  <pre id="debugState"></pre>
-  <div class="dbg-btns">
-    <button type="button" id="dbgPrev">N-</button>
-    <button type="button" id="dbgNext">N+</button>
-    <button type="button" id="dbgPower">PWR 9</button>
-    <button type="button" id="dbgScare">SCARE</button>
-    <button type="button" id="dbgMove">ART&gt;</button>
-    <button type="button" id="dbgEnd">END NIGHT</button>
-    <button type="button" id="dbgCap">CAP</button>
-  </div>
+<!-- audio-unlock gate (first tap: AudioContext resume + silent buffer, iOS-safe) -->
+<div id="gate">
+  <div class="sign"><i></i>QUIET ON SET</div>
+  <div class="gate-main">TAP TO ENTER</div>
+  <div class="gate-sub">sound on &middot; headphones recommended</div>
 </div>
 
-<script src="game.js"></script>
+<div id="stage">
+  <div id="frame">
+    <div id="face">
+      <img id="artA" class="artimg" alt="" draggable="false">
+      <img id="artB" class="artimg" alt="" draggable="false">
+    </div>
+    <div id="warm"></div>
+    <div id="dark"></div>
+    <div id="vig"></div>
+    <div id="flash"></div>
+  </div>
+
+  <div id="grain"></div>
+  <div id="scratch"><i></i><i></i><i></i></div>
+
+  <!-- letterbox bars with studio HUD -->
+  <div class="bar top"><div class="hud">
+    <span class="rec"><i></i>REC</span><span id="hCam">CAM A</span><span id="hFps">24 fps</span><span id="hStage">SOUNDSTAGE 2</span>
+  </div></div>
+  <div class="bar bottom"><div class="hud">
+    <span>TC <b id="hTc">01:00:00:00</b></span><span id="hSlate">SC01 TK01 A001</span><span id="hCo">VIKA SYSTEMS</span>
+  </div></div>
+
+  <!-- camera-monitor corner brackets -->
+  <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+
+  <!-- swinging bulb -->
+  <div id="bulbWrap"><div id="bulb" class="bulb"><div class="cord"></div><div class="socket"></div><div class="glass"></div><div class="halo"></div></div></div>
+
+  <!-- slate-style ENTER button -->
+  <button id="enter" type="button" aria-label="Enter">
+    <span class="clap"><span class="stick"></span></span>
+    <span class="slate-title">ENTER</span>
+    <span class="slate-fields" id="enterFields">SCENE 01 &middot; TAKE 01</span>
+  </button>
+</div>
+
+<!-- placeholder for next screen (login terminal comes in the next build phase) -->
+<div id="next">
+  <div class="next-main">ART // LOGIN</div>
+  <div class="next-sub">next scene: login terminal<br>(next build phase)</div>
+  <div class="next-tap">tap to return to title</div>
+</div>
+
+<script src="assets/ui/title.js"></script>
 </body>
 </html>
