@@ -20,3 +20,6 @@ intro "Hello. I have been waiting in the dark for you." | night1 "Night one. Wat
 
 ## Tests
 logic 23/23, ui 38/38, audio 10/10, new `tests/voice.js` 40/40 (see TEST.md). Screenshots: `docs/phase-D/voice-lore-{1,2,3}-{mid,end}.png`.
+
+## Live check
+https://terrifier-game.vercel.app: `lines.json` + all 14 MP3 return 200 (audio/mpeg), game.html loads js/voice.js. Live: logic 23/23, ui 38/38, audio 10/10, voice 40/40 (the voice test's win/bad/lore sections freeze the running night first so a pending attack cannot end on the game-over screen).

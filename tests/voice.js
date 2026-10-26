@@ -67,10 +67,12 @@ async function open(block, fast) {
   T('taunt rate on a peek is rare (about 18%)', rare.peek > 0.08 && rare.peek < 0.3, rare.peek);
   T('taunts are rate-limited (75 s gap)', rare.gapBlocks === true);
 
-  /* win / bad */
+  /* win / bad - freeze the live night first (a pending attack would otherwise end on the game-over screen) */
+  const freeze = () => pg.evaluate(() => { const S = ART.S; S.gen++; ART.art.busy(false); S.attackT = -1; S.moveT = 1e9; S.knockT = 0; S.peeks = []; });
+  await freeze();
   await pg.evaluate(() => { ART.voice.stop(); ART.S.night = 5; ART.S.phase = 'play'; ART.nights.finish(); }); await sl(3000);
   o = await pg.evaluate(() => ({ said: ART.voice.said(), win: document.getElementById('win').classList.contains('active') })); T('win screen says the win line', o.win && o.said.pop() === 'win', JSON.stringify(o));
-  await pg.evaluate(() => { ART.voice.stop(); ART.nights.capBad(); }); await sl(2000);
+  await freeze(); await pg.evaluate(() => { ART.voice.stop(); ART.nights.capBad(); }); await sl(2000);
   o = await pg.evaluate(() => ART.voice.said()); T('bad ending says the bad line', o.pop() === 'bad');
 
   /* lore: word fade-in from timings (receipt/diary under the doc, call = hijacks the caretaker call) */
@@ -85,6 +87,7 @@ async function open(block, fast) {
     if (shot) await pg.screenshot({ path: SHOTS + '/' + shot + '-end.png' }); return Object.assign(st, seen);
   };
   for (const idx of [1, 2, 3]) {
+    await freeze();
     await pg.evaluate(i => { ART.voice.stop(); ART.S.night = 1; ART.ui.showLore(ART.CFG.lore[i], 1, () => {}); }, idx);
     const e = await poll('voice-lore-' + idx, 30000);
     T('lore ' + idx + ': words fade in progressively (hidden -> partial -> all)', e.partial && e.on === e.tot && e.tot >= 9, JSON.stringify(e));
