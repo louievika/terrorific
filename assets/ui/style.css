@@ -187,3 +187,16 @@ body.lightsout #darkness{opacity:.97}
 .dbg-btns button{font-size:10px;background:#111;border:1px solid #0a0;color:#0f0;padding:6px}
 
 @media (prefers-reduced-motion:reduce){.bulb{animation-duration:9s}#grain{animation:none}}
+
+/* ---- phase A additions ---- */
+.screen.prep{display:block;visibility:hidden;z-index:1}
+#game{touch-action:none;-webkit-user-select:none;user-select:none}
+body.dim #darkness{opacity:.5}
+body.lightsout #darkness{opacity:.97}
+#art{will-change:transform}
+#art.peek{transition:transform .5s ease-out;transform:translateX(-50%) scale(.7)}
+.iconbtn{pointer-events:auto;border:1px solid #333;background:rgba(0,0,0,.5);color:#ddd;font-size:16px}
+#hud .iconbtn{pointer-events:auto}
+#subtitle span{background:rgba(0,0,0,.55);padding:6px 10px;font-size:14px;line-height:1.4;text-align:center}
+#monitor.open ~ #controls{z-index:12}
+.mon-screen.lost canvas{opacity:.15}

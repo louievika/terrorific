@@ -1,0 +1,20 @@
+const p=require('puppeteer-core');
+const sl=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{
+ const b=await p.launch({executablePath:'/usr/bin/google-chrome',headless:'new',args:['--no-sandbox','--use-gl=swiftshader','--autoplay-policy=no-user-gesture-required','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
+ const pg=await b.newPage(); await pg.setViewport({width:390,height:844,deviceScaleFactor:2,isMobile:true,hasTouch:true});
+ const errs=[]; pg.on('console',m=>{if(['error','warning'].includes(m.type()))errs.push(m.type()+': '+m.text())}); pg.on('pageerror',e=>errs.push('pageerror '+e.message));
+ pg.on('response',r=>{if(r.status()>=400)errs.push('HTTP '+r.status()+' '+r.url())});pg.on('requestfailed',r=>errs.push('reqfail '+r.url()));
+ await pg.goto(process.argv[2]||'http://localhost:8077/game.html?debug=1',{waitUntil:'load'});
+ await sl(4000);
+ await pg.screenshot({path:'screenshots/a-login.png'});
+ console.log('ready', await pg.evaluate(()=>document.getElementById('authBtn').className));
+ await pg.tap('#authBtn'); await sl(4000);
+ console.log('state', await pg.evaluate(()=>JSON.stringify({ph:__game.S.phase,pw:__game.S.power,art:__game.S.artRoom,ctx:ArtAudio.ctx&&ArtAudio.ctx.state})));
+ await pg.screenshot({path:'screenshots/a-game.png'});
+ await pg.tap('#btnCam'); await sl(800);
+ await pg.evaluate(()=>__game.setFeed('basement'));
+ await sl(800); await pg.screenshot({path:'screenshots/a-monitor.png'});
+ console.log(errs.join('\n')||'no console errors');
+ await b.close();
+})();

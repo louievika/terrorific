@@ -9,39 +9,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000000">
 <meta name="description" content="ART // LOGIN - a Terrifier 2-themed FNAF-style horror game for mobile. Original placeholder art and audio. MIT licensed.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23000'/%3E%3Ccircle cx='8' cy='8' r='4' fill='%23c4161d'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/ui/style.css">
 <!-- A-Frame 1.8.0 pinned (official release URL, verified HTTP 200) -->
 <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
 </head>
 <body>
 
-<!-- ============ 1. VIKA SYSTEMS brand intro ============ -->
-<section id="intro" class="screen active" aria-label="VIKA SYSTEMS">
-  <div class="intro-logo">
-    <div class="intro-mark"><span></span><span></span><span></span></div>
-    <h1 class="glitch" data-text="VIKA SYSTEMS">VIKA SYSTEMS</h1>
-    <p class="intro-sub">PRESENTS</p>
-  </div>
-  <p class="tap-hint">tap to skip</p>
-</section>
-
-<!-- ============ 1b. TITLE screen (Art stares, bulb blinks) ============ -->
-<section id="title" class="screen" aria-label="Title">
-  <div id="titleFace">
-    <img id="titleImg" alt="" draggable="false">
-    <img id="titleBlink" alt="" draggable="false">
-  </div>
-  <div id="titleDark"></div>
-  <div class="bulb title-bulb"><div class="cord"></div><div class="socket"></div><div class="glass"></div><div class="halo"></div></div>
-  <div id="titleFlash"></div>
-  <div class="title-foot">
-    <p id="titleHint" class="tap-hint">tap to wake the speakers</p>
-    <button id="enterBtn" class="btn big enter" type="button">ENTER</button>
-  </div>
-</section>
-
 <!-- ============ 2. ART // LOGIN terminal ============ -->
-<section id="login" class="screen" aria-label="Login">
+<section id="login" class="screen active" aria-label="Login">
   <div class="term">
     <div class="term-bar"><i></i><i></i><i></i><span>MILES_HOUSE // NIGHT-SHIFT TERMINAL</span></div>
     <pre id="termText" class="term-text"></pre>
@@ -54,14 +30,14 @@
 </section>
 
 <!-- ============ 3. GAME ============ -->
-<section id="game" class="screen" aria-label="Game">
+<section id="game" class="screen prep" aria-label="Game">
   <a-scene id="scene" embedded
            vr-mode-ui="enabled: false"
            loading-screen="enabled: false"
            device-orientation-permission-ui="enabled: false"
            renderer="antialias: false; powerPreference: high-performance"
            background="color: #000">
-    <a-sky id="sky" src="assets/rooms/attic.jpg" material="shader: flat; color: #ffffff"></a-sky>
+    <a-sky id="sky" rotation="0 -90 0" src="assets/rooms/attic.jpg" material="shader: flat; color: #ffffff"></a-sky>
     <a-entity id="rig" position="0 0 0">
       <a-entity id="cam" camera="fov: 80" look-controls="enabled: false" wasd-controls="enabled: false" position="0 0 0"></a-entity>
     </a-entity>
@@ -86,7 +62,7 @@
       <div class="hud-box"><small>NIGHT</small><b id="hudNight">1</b></div>
       <div class="hud-box"><small>CLOCK</small><b id="hudClock">12 AM</b></div>
       <div class="hud-box"><small>SESSION</small><b id="hudSession">10:00</b></div>
-      <button id="voiceBtn" class="hud-box iconbtn" type="button" aria-label="Toggle Art's voice">
+      <button id="voiceBtn" class="hud-box iconbtn" type="button" aria-label="Mute / unmute sound">
         <span id="voiceIcon">&#128266;</span>
       </button>
     </div>
@@ -115,7 +91,7 @@
       <span id="feedTime">--:--</span>
     </div>
     <div class="mon-screen">
-      <canvas id="feedCanvas" width="320" height="240"></canvas>
+      <canvas id="feedCanvas" width="240" height="320"></canvas>
       <canvas id="staticCanvas" width="160" height="120"></canvas>
       <div class="mon-scan"></div>
       <div id="feedLost" class="feed-lost">NO SIGNAL</div>
@@ -177,6 +153,7 @@
   </div>
 </div>
 
+<script src="assets/ui/audio-engine.js"></script>
 <script src="game.js"></script>
 </body>
 </html>

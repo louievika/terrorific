@@ -6,7 +6,7 @@
     "blink": "assets/art/art-title-blink.png",
     "animated": "assets/art/art-title.webp",
     "enterDelayMs": 3500,
-    "nextUrl": null,
+    "nextUrl": "game.html",
     "studio": {
       "label": "ART // LOGIN",
       "company": "VIKA SYSTEMS",
@@ -37,5 +37,95 @@
     "basement": "assets/rooms/basement.jpg",
     "frontdoor": "assets/rooms/frontdoor.jpg"
   },
-  "audio": {}
+  "audio": {},
+  "game": {
+    "sessionCapSec": 600,
+    "powerStartPct": 100,
+    "drain": {
+      "idle": 0.28,
+      "camera": 0.85,
+      "door": 0.55,
+      "doorHitPenaltyPct": 6
+    },
+    "lightsOutAtPct": 10,
+    "deadAttackDelaySec": [
+      6,
+      9
+    ],
+    "graph": {
+      "mortuary": [
+        "basement"
+      ],
+      "basement": [
+        "kitchen",
+        "frontdoor"
+      ],
+      "kitchen": [
+        "hallway",
+        "basement"
+      ],
+      "frontdoor": [
+        "hallway",
+        "basement"
+      ],
+      "hallway": []
+    },
+    "nights": [
+      {
+        "len": 60,
+        "start": "basement",
+        "moveMin": 6,
+        "moveMax": 10,
+        "aggro": 0.7,
+        "attackSec": 10,
+        "drainMul": 1.0,
+        "appearP": 0,
+        "peeks": 0
+      },
+      {
+        "len": 70,
+        "start": "basement",
+        "moveMin": 6,
+        "moveMax": 10,
+        "aggro": 0.72,
+        "attackSec": 9,
+        "drainMul": 1.05,
+        "appearP": 0,
+        "peeks": 1
+      },
+      {
+        "len": 80,
+        "start": "kitchen",
+        "moveMin": 6,
+        "moveMax": 11,
+        "aggro": 0.7,
+        "attackSec": 8,
+        "drainMul": 1.1,
+        "appearP": 0.4,
+        "peeks": 2
+      },
+      {
+        "len": 90,
+        "start": "frontdoor",
+        "moveMin": 5,
+        "moveMax": 9,
+        "aggro": 0.75,
+        "attackSec": 7,
+        "drainMul": 1.15,
+        "appearP": 0.3,
+        "peeks": 2
+      },
+      {
+        "len": 100,
+        "start": "kitchen",
+        "moveMin": 4,
+        "moveMax": 8,
+        "aggro": 0.85,
+        "attackSec": 6,
+        "drainMul": 1.2,
+        "appearP": 0.3,
+        "peeks": 3
+      }
+    ]
+  }
 }
