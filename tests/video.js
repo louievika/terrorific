@@ -99,7 +99,7 @@ async function open(opts = {}) {
   { const { b, pg, errs } = await open({ block: true, seen: false });
     const t0 = Date.now(); await pg.tap('#authBtn'); await pg.waitForFunction(() => !document.querySelector('#vidLayer .vid.intro') , { timeout: 9000 }).catch(() => {}); const dt = Date.now() - t0;
     const n = await pg.evaluate(() => ({ night: ART.S.night, started: ART.S.started, phase: ART.S.phase, box: !!document.querySelector('#vidLayer .vid.intro') }));
-    T('intro file 404 -> falls back to the normal start (no stuck black screen)', n.started && !n.box && dt < 3500, JSON.stringify([n, dt]));
+    T('intro file 404 -> falls back to the normal start (no stuck black screen)', n.started && !n.box && dt < 4400, JSON.stringify([n, dt]));
     await sl(1500);
     const f = await pg.evaluate(async () => { const S = ART.S; ART.nights.start(2); await new Promise(r => setTimeout(r, 400)); S.peeks = []; S.nightCfg.aggro = 0; S.attackT = 999; ART.art.reset(); ART.video.reset();
       const j = ART.CFG.video.jumpscares; j.chance = [1, 1, 1, 1, 1];

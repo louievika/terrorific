@@ -779,6 +779,26 @@
       "minNight": 2,
       "w": 0.8
      }
+    ],
+    "feed": [
+     {
+      "id": "feed-face",
+      "type": "face",
+      "stab": "synth",
+      "w": 1
+     },
+     {
+      "id": "feed-face-low",
+      "type": "face",
+      "stab": "scrape",
+      "w": 0.8
+     },
+     {
+      "id": "feed-video-pop",
+      "type": "video",
+      "minNight": 2,
+      "w": 0.9
+     }
     ]
    }
   },
@@ -860,6 +880,33 @@
      }
     ]
    }
+  },
+  "feedScare": {
+   "_comment": "Camera-feed scare: while the monitor is open, Art can pop into the feed. beat 1 tracking glitch, beat 2 500 ms silence on a frozen slightly-wrong frame, beat 3 full-size face (or a video clip) + sting + shake + flash, then static. Monitor stays open and locked. None on night 1. Arrays are per night.",
+   "minNight": 2,
+   "checkSec": 6,
+   "minWatchSec": 4,
+   "chance": [
+    0,
+    0.3,
+    0.35,
+    0.4,
+    0.45
+   ],
+   "cooldownSec": [
+    0,
+    70,
+    55,
+    45,
+    40
+   ],
+   "perNightMax": [
+    0,
+    2,
+    3,
+    3,
+    4
+   ]
   }
  },
  "voice": {

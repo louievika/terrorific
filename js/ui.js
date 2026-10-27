@@ -37,13 +37,13 @@
       S.cam = true; $('monitor').classList.add('open'); $('btnCam').classList.add('on'); A.blip(); ui.setFeed(S.feed, true); ui.updateHud();
     },
     closeMonitor: function (silent) {
-      var S = ART.S;
+      var S = ART.S; if (S.scareBusy && S.feedScareOn && !silent) return;   // locked open during a camera-feed scare
       if (!S.cam) { $('monitor').classList.remove('open'); $('btnCam').classList.remove('on'); return; }
       var prev = S.feed; S.cam = false; $('monitor').classList.remove('open'); $('btnCam').classList.remove('on');
       if (!silent) { A.blip(); ART.art.feedLeft(prev); } ui.updateHud();
     },
     setFeed: function (name, initial) {
-      var S = ART.S, prev = S.feed; if (!initial && prev !== name) ART.art.feedLeft(prev); S.feed = name;
+      var S = ART.S, prev = S.feed; if (S.feedScareOn && !initial) return; if (!initial && prev !== name) ART.art.feedLeft(prev); S.feed = name;
       document.querySelectorAll('.mon-tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.feed === name); });
       $('feedName').textContent = ART.CFG.feeds[name].n; if (!initial) A.blip(); ART.rooms.staticBurst(260);
       if (S.artRoom === name) A.staticBurst(0.18);

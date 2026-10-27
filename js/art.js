@@ -84,6 +84,19 @@
     if (kind === 'attack') { a.style.left = '50%'; a.classList.add('slam'); ART.ui.flash(0.9, 160); } else { a.classList.add('grow'); if (kind === 'lightsout') ART.ui.flash(0.5, 140); }
     impact(v, kind); finish(kind === 'attack' ? 1500 : 1000);
   }
+  /* camera-feed scare payoffs (monitor stays open underneath; everything is screen-space) */
+  var FEEDPAY = {
+    face: function (v, gen, finish) {
+      var el = $('feedPop'), S = ART.S; el.className = ''; void el.offsetWidth; el.className = 'show'; ART.ui.flash(0.9, 120);
+      impact({ stab: v.stab, side: 0, to: 1 }, 'lightsout'); shake('jolt'); flashSeq([[0.7, 90], [0, 50], [0.5, 70]]);
+      setTimeout(function () { if (gen === S.gen) el.className = 'out'; }, 900);
+      setTimeout(function () { el.className = ''; }, 1150); finish(1250);
+    },
+    video: function (v, gen, finish) {
+      var S = ART.S;
+      ART.video.playScare(function () { if (gen === S.gen) finish(100); }, function () { if (gen === S.gen) { ART.log('feed video fallback -> face'); FEEDPAY.face(v, gen, finish); } });
+    }
+  };
   var api = ART.art = {
     img: null,
     run: { ok: false, im: null },
@@ -98,8 +111,44 @@
         rm.onerror = function () { api.run.ok = false; console.warn('run sheet failed - static scale-up fallback'); }; rm.src = R.sheet;
       }
     },
+    /* ---- camera-feed scare ---- */
+    feedScare: function (done, vid) {
+      S = ART.S; if (S.scareBusy || !S.cam || S.phase !== 'play') return false;
+      api.busy(true); S.feedScareOn = true; S.feedScares = (S.feedScares || 0) + 1; var gen = S.gen, D = ART.director, v = D.pick('feed', vid), mon = $('monitor'); S.lastScare = { kind: 'feed', id: v.id, type: v.type }; ART.log('scare feed ' + v.id);
+      var j = D.jitter(), end = function (keep) {
+        mon.classList.remove('tracking'); ART.rooms.freeze(false); if (!keep) S.feedScareOn = false; $('feedPop').className = '';
+      };
+      mon.classList.add('tracking'); ART.rooms.staticBurst(Math.round(900 * j)); A.buzz(0.8);                                // BEAT 1: the feed tears
+      setTimeout(function () {
+        if (gen !== S.gen) { end(); return; }
+        mon.classList.remove('tracking'); ART.rooms.freeze(true); A.duckTo(0, 0.01);                                         // BEAT 2: 500 ms silence on a frozen, slightly wrong frame
+        setTimeout(function () {
+          if (gen !== S.gen) { end(); return; }
+          ART.rooms.freeze(false); ART.ui.lockView(260);                                                                      // BEAT 3: payoff (screen-space)
+          (FEEDPAY[v.type] || FEEDPAY.face)(v, gen, function (hold) {
+            setTimeout(function () {
+              if (gen !== S.gen) { end(); return; }
+              ART.rooms.staticBurst(800); A.staticBurst && A.staticBurst(0.35); end(true); A.duckTo(1, 0.5);                      // then static
+              setTimeout(function () { S.feedScareOn = false; if (gen !== S.gen) return; api.busy(false); if (done) done(); }, 700);
+            }, hold);
+          });
+        }, 500);
+      }, Math.round(900 * j));
+      return true;
+    },
+    /* rolled from tick while the monitor is up: odds / cooldown / cap per night from manifest game.feedScare */
+    feedTick: function (dt) {
+      S = ART.S; var c = ART.CFG.feedScare, n = S.night; if (!c) return;
+      var pick = function (a) { return Array.isArray(a) ? a[Math.min(Math.max(0, n - 1), a.length - 1)] : a; };
+      if (S._feedGen !== S.gen) { S._feedGen = S.gen; S.feedWatch = 0; S.feedChk = 0; S.feedCool = 0; S.feedN = 0; }
+      if (!S.cam) { S.feedWatch = 0; return; }
+      S.feedWatch += dt; S.feedChk += dt; S.feedCool -= dt;
+      if (n < (c.minNight || 2) || S.scareBusy || S.puzzle || S.phase !== 'play' || S.feedWatch < (c.minWatchSec || 4) || S.feedCool > 0 || S.feedChk < (c.checkSec || 6)) return;
+      S.feedChk = 0; var mx = pick(c.perNightMax); if (mx != null && S.feedN >= mx) return;
+      if (Math.random() < (pick(c.chance) || 0)) { if (api.feedScare()) { S.feedN++; S.feedCool = pick(c.cooldownSec) || 0; S.feedWatch = 0; } }
+    },
     cancelRun: function () { if (api.raf) cancelAnimationFrame(api.raf); api.raf = 0; },
-    reset: function () { api.cancelRun(); if (ART.ui && ART.ui.unlockView) ART.ui.unlockView(); var r = $('artRun'); r.className = ''; r.style.transition = ''; r.style.opacity = 0; document.body.classList.remove('camshake', 'jolt', 'rattle', 'sway'); var a = $('art'); a.className = ''; a.style.transition = 'none'; a.style.left = '50%'; void a.offsetWidth; a.style.transition = ''; },
+    reset: function () { if (ART.S && !ART.S.feedScareOn) { var fp = $('feedPop'); if (fp) fp.className = ''; } api.cancelRun(); if (ART.ui && ART.ui.unlockView) ART.ui.unlockView(); var r = $('artRun'); r.className = ''; r.style.transition = ''; r.style.opacity = 0; document.body.classList.remove('camshake', 'jolt', 'rattle', 'sway'); var a = $('art'); a.className = ''; a.style.transition = 'none'; a.style.left = '50%'; void a.offsetWidth; a.style.transition = ''; },
     /* keep the overlay under Art's world position (door = yaw 0) */
     doorX: function () {
       var V = ART.V, W = innerWidth, H = innerHeight, vf = 80 * Math.PI / 180, hf = 2 * Math.atan(Math.tan(vf / 2) * (W / H));
@@ -174,6 +223,7 @@
           if (S.moveT <= 0) { if (Math.random() < c.aggro) api.move(); else S.moveT = rnd(c.moveMin, c.moveMax) * 0.6; }
         }
       }
+      api.feedTick(dt);
       if (S.peeks.length && S.t >= S.peeks[0] && !S.cam && S.phase === 'play') { S.peeks.shift(); api.scare('peek'); }
     }
   };

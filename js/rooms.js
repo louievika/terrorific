@@ -20,10 +20,12 @@
       });
     },
     setSky: function (room) { $('sky').setAttribute('src', ART.ROOMS[room] || ART.ROOMS.attic); },
+    /* camera-feed scare: hold one slightly wrong frame (Art standing where he should not be), or release it */
+    freeze: function (on) { var S = ART.S; if (on) { S.feedWrong = true; S.feedFrozen = false; ART.rooms.drawFeed(performance.now()); S.feedFrozen = true; } else { S.feedWrong = false; S.feedFrozen = false; } },
     staticBurst: function (ms) { burstUntil = performance.now() + ms; if (ART.A.staticBurst) ART.A.staticBurst(ms / 1000 * 0.8); },
     /* paint the current feed: 70-degree crop of the plate, Art sprite if present, green CCTV grade, noise */
     drawFeed: function (now) {
-      var S = ART.S;
+      var S = ART.S; if (S.feedFrozen) return;
       if (!fctx) { fcv = $('feedCanvas'); fctx = fcv.getContext('2d'); scv = $('staticCanvas'); sctx = scv.getContext('2d'); noiseData = sctx.createImageData(160, 120); }
       var f = ART.CFG.feeds[S.feed], pl = plates[S.feed], W = 240, H = 320, t = now / 1000, artImg = ART.art.img;
       fctx.globalCompositeOperation = 'source-over'; fctx.fillStyle = '#000'; fctx.fillRect(0, 0, W, H);
@@ -34,7 +36,7 @@
         if (sx + sw <= pw) fctx.drawImage(pl, sx, cy - sh / 2, sw, sh, 0, 0, W, H);
         else { var w1 = pw - sx; fctx.drawImage(pl, sx, cy - sh / 2, w1, sh, 0, 0, W * w1 / sw, H); fctx.drawImage(pl, 0, cy - sh / 2, sw - w1, sh, W * w1 / sw, 0, W * (sw - w1) / sw, H); }
       }
-      if (S.artRoom === S.feed && artImg && artImg.complete && !S.powerDead) {
+      if ((S.artRoom === S.feed || S.feedWrong) && artImg && artImg.complete && !S.powerDead) {
         var ah = f.h, aw = ah * artImg.naturalWidth / artImg.naturalHeight, ax = W / 2 + (f.yaw - pan) * (W / 70);
         var jit = Math.random() < 0.08 ? (Math.random() - 0.5) * 6 : 0;
         fctx.globalAlpha = 0.9; fctx.drawImage(artImg, ax - aw / 2 + jit, f.bot - ah, aw, ah); fctx.globalAlpha = 1;
