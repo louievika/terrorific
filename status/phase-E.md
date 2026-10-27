@@ -25,3 +25,9 @@ Payoff overlays are screen-space; `ART.ui.lockView()` eases `ART.V.yaw` to centr
 - Director: `video-pop` / `lo-video-pop` / `at-video-pop` variants (type `video`) only enter the pool when a clip is ready, off cooldown and the night's odds roll true; clip choice never repeats back-to-back. `PAYOFF.video` in `js/art.js`: beat 1 flicker, beat 2 500 ms silence, beat 3 full-screen clip + audio (screen-locked), falls back to the sprite run if it can't start in 900 ms.
 - `?fast=` (headless suites) disables video unless `&video=1`; `?novideo=1` always disables.
 - Tests: `tests/video.js` (30 checks). Screenshots: docs/phase-E/video-*.png.
+
+## Camera-feed scare, door grab, taunts, easter eggs, dog fail scare - done
+- Feed scare (`game.feedScare`), door grab (`js/grab.js`, `game.grab`), taunt sounds (`js/taunts.js`, `game.taunts`), config-driven personal easter eggs (`assets/easter-eggs.json`, `js/eggs.js`), dog fail scare (`assets/art/dog.png` from the user-supplied dog.jpg, `game.failScare`, variant `at-dog`). Details in README "Phase E additions".
+- Tests: feedscare 20, grab 18, taunts 13, eggs 16, dog 16, all in `tests/run-all.js`.
+- Audit (Oct 26, 8:30 PM CT): live site serves every manifest/HTML-referenced asset with 200 (47 paths), mp4s answer Range with 206 + Accept-Ranges, no console errors or failed requests on index.html / game.html, index 293 KB / game.html 4.5 MB transferred (load 0.7 s / 1.1 s headless on the box network), no visible "ART // LOGIN".
+- Screenshots: docs/phase-E/dog-cutout-dark-and-room.png, docs/phase-E/dog-payoff.png, feed-*.png.

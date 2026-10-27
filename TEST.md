@@ -12,11 +12,18 @@ Runs headless Chrome at 390x844 @2x with touch emulation and prints PASS / FAIL 
 |---|---|
 | `tests/logic.js` (23) | night 1 starts from the tap; Art frozen while observed, moves when not; camera drains power faster than idle; night 3 appears in the room just checked; locked door holds; 10% forced light-out scare (3-beat) and the game continues; open door -> jumpscare -> game over; retry; power 0 -> dead -> Art attacks; nights 1-5 -> lore -> next night -> win; 10-min cap -> bad ending; no console errors |
 | `tests/ui.js` (38) | all 7 modules loaded; manifest values reach gameplay (hotspot yaw, amount, puzzle type, night length are patched in flight and observed); **no help / hint / tip / mute / quit / subtitle elements, keys or strings anywhere**; first-run auto-pan plays once and marks itself seen; door button on screen and >= 44 px, locks / unlocks; monitor lip opens by tap and by swipe-up and closes by tap; dragging right turns the view left; fuse box and door bolt panels appear when you turn to them; keypad, wires and tiles solved through the real DOM; power +25%; cooldown refuses; wrong code does not solve; close works; dead house rescued by the fuse box; bolted door holds an attack; hotspots inert while the monitor is up; puzzle registry accepts new types; no console errors |
-| `tests/audio.js` (10) | the five manifest WAVs are fetched and decoded in the tap-unlocked AudioContext; every sample-backed sound (stinger, breath, creak, static, phone, scream, lock) plays without throwing; no console errors; with every WAV forced to 404 the oscillator fallback plays, the game stays in `play`, and only the expected 404s are logged |
+| `tests/audio.js` (12) | the five manifest WAVs are fetched and decoded in the tap-unlocked AudioContext; every sample-backed sound (stinger, breath, creak, static, phone, scream, lock) plays without throwing; no console errors; with every WAV forced to 404 the oscillator fallback plays, the game stays in `play`, and only the expected 404s are logged |
 | `tests/video.js` (30) | video manifest slots + files served 200 and < 1.6 MB; cold-open intro plays, first play can't be skipped, then night 1 starts under a black cover; after it is seen a tap skips; the jump-scare video variant at yaw left/right/centre: 3 beats, full-screen, released after; never the same clip twice, cooldown, per-night cap, night-1 exclusion; with every mp4 404ing the intro and the scare fall back cleanly |
 | `tests/voice.js` (40) | lines.json contract (14 lines, 5-15 words, monotonic word timings), all files fetched + decoded in the tap-unlocked context with durations matching; intro first-run only, night 1-5 openings, win / bad lines; a new night cancels a pending line; ambient ducks while he speaks; taunts only in the payoff after the 500 ms silence, none on night 1, ~18 % on a peek, 75 s gap; lore receipt / diary / call text fades in word-by-word and Continue appears; with every voice file 404 the lore text still fades in (proportional timing) and nothing throws; no mute/speaker/subtitle UI |
+| `tests/camlock.js` (114) | camera-locked jump scares: with the view hard left / hard right every payoff eases the yaw to centre, puts Art screen-space in front of the player, keeps trigger -> 500 ms silence -> payoff; also with the run sheet blocked |
+| `tests/hardpuz.js` (26) | ledger (unique deduction, misleading scraps), music box, multi-stage hotspots, burning-fuse time pressure, strikes + power drain, per-night scaling, no hand-holding text |
+| `tests/feedscare.js` (20) | camera-feed scare: 3 beats (tear, 500 ms silence, pop), monitor stays open and locked, never the same variant twice, night gates |
+| `tests/grab.js` (18) | door grab: none on night 1, press/lift, win and lose both resolve with 500 ms silence, lose uses the face pop, state resets per night |
+| `tests/taunts.js` (13) | whisper / low laugh / mocking creak: never on night 1, never during a scare or grab, gap and no-repeat rules |
+| `tests/eggs.js` (16) | easter-egg JSON contract, disabled examples, `?eggs=1` preview, once-only seen flag, plain-text rendering |
+| `tests/dog.js` (16) | dog fail scare: asset <= 250 KB, failScare weights, no repeat, off in test mode, 3 beats with >= 495 ms silence, small-to-full-screen lunge in ~0.4 s, position:fixed, cleanup, lethal flow to the fail screen, 404 falls back to the Art run |
 
-Latest result: see `status/phase-C.md`. Screenshots and renders: `docs/phase-C/` (earlier: `docs/phase-B/`).
+Latest result: see `status/phase-E.md`. Screenshots and renders: `docs/phase-E/` (earlier: `docs/phase-C/`, `docs/phase-B/`).
 
 ## 2. Real iPhone only (cannot be proven headless)
 Test on an iPhone, Safari, over HTTPS (the Vercel URL).
@@ -38,3 +45,7 @@ Test on an iPhone, Safari, over HTTPS (the Vercel URL).
 
 ## 3. Manual smoke (30 s)
 Title -> ENTER -> AUTHENTICATE -> night 1 -> lock the door -> flip the monitor -> flip it down -> turn to the left wall -> solve the fuse box -> let power die -> rescue it.
+- [ ] Door grab: mashing / holding on the door feels fair; the door jitter and LED read clearly; haptics are a no-op on iPhone (Safari has no `navigator.vibrate`).
+- [ ] Dog fail scare: the photo cut-out looks clean at device scale, the lunge is fast but not a dropped frame, snarl and barks are loud enough without clipping.
+- [ ] Taunt whispers / low laugh / mocking creak: audible but not louder than the stingers.
+- [ ] Camera-feed scare while the monitor is open: no gap between tear, silence and pop on a real GPU.
