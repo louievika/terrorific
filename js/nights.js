@@ -18,7 +18,7 @@
 
     start: function (n) {
       ART.ui.unlockView();
-      S.gen++; if (ART.video) { ART.video.stop(); } S.night = n; S.nightCfg = CFG.nights[n - 1] || CFG.nights[CFG.nights.length - 1]; var c = S.nightCfg;
+      S.gen++; if (ART.video) { ART.video.stop(); } if (ART.grab) ART.grab.reset(); if (ART.taunts) ART.taunts.reset(); S.night = n; S.nightCfg = CFG.nights[n - 1] || CFG.nights[CFG.nights.length - 1]; var c = S.nightCfg;
       S.t = 0; S.len = c.len; S.power = CFG.powerStartPct; S.cam = false; S.door = false; S.bolt = false; S.cool = { fusebox: 0, doorbolt: 0 }; S.powerDead = false; S.deadT = -1; S.lo10 = false;
       S.artRoom = c.start; S.attackT = -1; S.knockT = 0; S.phase = 'play'; S.moveT = rnd(c.moveMin, c.moveMax);
       ART.puzzles.close(true); ART.art.busy(false);
@@ -32,14 +32,14 @@
         ART.voice.stop(); var first = false; try { first = n === 1 && !localStorage.getItem(ART.voice.VOICE_KEY); if (first) localStorage.setItem(ART.voice.VOICE_KEY, '1'); } catch (e) {}
         ART.voice.say(first ? 'intro' : 'night' + Math.min(n, 5), { delay: first ? 2800 : 1400 });
       }
-      ART.log('night ' + n + ' start, art in ' + S.artRoom);
+      ART.log('night ' + n + ' start, art in ' + S.artRoom); if (ART.eggs) ART.eggs.emit('nightStart', { night: n });
     },
     toggleDoor: function () {
       if (S.phase !== 'play' || S.powerDead || S.scareBusy || S.puzzle) return;
       S.door = !S.door; $('btnDoor').classList.toggle('on', S.door); A.lock(); A.creak(); ART.ui.peekHud(2200); ART.ui.updateHud(); ART.log('door ' + S.door);
     },
     finish: function () {
-      S.phase = 'lore'; ART.ui.closeMonitor(true); ART.puzzles.close(true); A.chime(); A.setLevel(0);
+      S.phase = 'lore'; ART.ui.closeMonitor(true); ART.puzzles.close(true); A.chime(); A.setLevel(0); if (ART.grab) ART.grab.reset(); if (ART.eggs) ART.eggs.emit(S.night >= 5 ? 'win' : 'nightEnd', { night: S.night });
       if (S.night >= 5) { S.phase = 'win'; N.clearSave(); $('winText').textContent = CFG.text.win; setTimeout(function () { ART.ui.show('win'); if (ART.voice) ART.voice.say('win', { delay: 900 }); }, 900); return; }
       var L = CFG.lore[S.night - 1]; S.night++; N.save();
       setTimeout(function () { ART.ui.showLore(L, ART.FAST, function (t) { callTimer = t; }); }, 900);
@@ -47,7 +47,7 @@
     skipLore: function () { clearTimeout(callTimer); if (ART.voice) ART.voice.stop(); $('loreDoc').classList.remove('hidden'); N.start(S.night); },
     gameOver: function (reason) {
       if (S.phase === 'over') return; S.phase = 'over'; S.deaths++; ART.ui.unlockView(); ART.ui.closeMonitor(true); ART.puzzles.close(true); A.stopMusic();
-      $('goReason').textContent = reason; ART.ui.show('gameover'); ART.art.lightsBack(false); ART.art.busy(false); ART.log('GAME OVER ' + reason);
+      $('goReason').textContent = reason; ART.ui.show('gameover'); ART.art.lightsBack(false); ART.art.busy(false); if (ART.grab) ART.grab.reset(); if (ART.eggs) ART.eggs.emit('gameOver', { night: S.night }); ART.log('GAME OVER ' + reason);
     },
     capBad: function () {
       if (S.phase === 'bad') return; S.phase = 'bad'; ART.ui.closeMonitor(true); ART.puzzles.close(true); A.stopMusic(); A.powerDown(); N.clearSave();

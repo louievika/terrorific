@@ -1,0 +1,47 @@
+{
+  "_readme": "PERSONAL EASTER EGGS for Terrorific. Edit this file to add, change or remove moments; no code changes needed. Reload the page to see edits. Add ?eggs=1 to the game URL to preview EVERY egg (including disabled ones) on every trigger, ignoring chance / once. Set the top-level \"enabled\" to false to switch the whole system off.",
+  "_schema": {
+    "enabled": "bool. Master switch. Default true.",
+    "eggs[].id": "string. Unique. Used to remember that a player has already seen it (localStorage key terrorific_eggs_seen_v1).",
+    "eggs[].enabled": "bool. false = skipped (unless ?eggs=1 preview). Default true.",
+    "eggs[].once": "bool. true (default) = shown only the first time ever on this device; false = may repeat (still at most once per night).",
+    "eggs[].chance": "0..1. Odds when the trigger matches. Omit for always.",
+    "eggs[].delayMs": "ms to wait after the trigger before showing. Default 600 (0 for atSec).",
+    "eggs[].trigger.event": "one of: nightStart | nightEnd | atSec | scare | grabWin | grabLose | gameOver | win",
+    "eggs[].trigger.night": "a night number or a list, e.g. 2 or [2,3,5]. Omit for any night.",
+    "eggs[].trigger.sec": "for event atSec: seconds into the night (game time) when it fires.",
+    "eggs[].trigger.kind": "for event scare: peek | lightsout | attack | feed. Omit for any.",
+    "eggs[].trigger.minDeaths": "for gameOver or any event: only after at least this many deaths this session.",
+    "eggs[].effect.type": "text (a line of text over the scene). More types can be added in js/eggs.js show().",
+    "eggs[].effect.text": "the words to show. Plain text only (no HTML).",
+    "eggs[].effect.style": "plain | scrawl (red, slanted) | whisper (small, pale).",
+    "eggs[].effect.pos": "bottom (default) | top | center.",
+    "eggs[].effect.ms": "how long it stays, default 3600.",
+    "eggs[].sound": "optional. A synthesized taunt to play with it: whisper | lowLaugh | mockCreak.",
+    "eggs[].soundVol": "optional 0..1, default 0.8."
+  },
+  "enabled": true,
+  "eggs": [
+    {
+      "id": "example-night2-start",
+      "enabled": false,
+      "_note": "EXAMPLE PLACEHOLDER. Neutral sample text. Replace the text and set enabled to true.",
+      "once": true,
+      "chance": 1,
+      "delayMs": 5000,
+      "trigger": { "event": "nightStart", "night": 2 },
+      "effect": { "type": "text", "text": "[EXAMPLE EGG 1] Your personal line goes here.", "style": "whisper", "pos": "bottom", "ms": 4200 },
+      "sound": "whisper"
+    },
+    {
+      "id": "example-after-scare",
+      "enabled": false,
+      "_note": "EXAMPLE PLACEHOLDER. Neutral sample text. Replace the text and set enabled to true.",
+      "once": true,
+      "chance": 0.5,
+      "delayMs": 1800,
+      "trigger": { "event": "scare", "night": [3, 4, 5], "kind": "peek" },
+      "effect": { "type": "text", "text": "[EXAMPLE EGG 2] Another personal line goes here.", "style": "scrawl", "pos": "center", "ms": 3200 }
+    }
+  ]
+}

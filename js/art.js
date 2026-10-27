@@ -147,6 +147,8 @@
       S.feedChk = 0; var mx = pick(c.perNightMax); if (mx != null && S.feedN >= mx) return;
       if (Math.random() < (pick(c.chance) || 0)) { if (api.feedScare()) { S.feedN++; S.feedCool = pick(c.cooldownSec) || 0; S.feedWatch = 0; } }
     },
+    /* screen-space full-size face pop (also used by the door-grab loss payoff) */
+    facePop: function (v, gen, finish) { FEEDPAY.face(v || { stab: 'synth' }, gen, finish); },
     cancelRun: function () { if (api.raf) cancelAnimationFrame(api.raf); api.raf = 0; },
     reset: function () { if (ART.S && !ART.S.feedScareOn) { var fp = $('feedPop'); if (fp) fp.className = ''; } api.cancelRun(); if (ART.ui && ART.ui.unlockView) ART.ui.unlockView(); var r = $('artRun'); r.className = ''; r.style.transition = ''; r.style.opacity = 0; document.body.classList.remove('camshake', 'jolt', 'rattle', 'sway'); var a = $('art'); a.className = ''; a.style.transition = 'none'; a.style.left = '50%'; void a.offsetWidth; a.style.transition = ''; },
     /* keep the overlay under Art's world position (door = yaw 0) */
@@ -176,7 +178,7 @@
       var finish = function (hold) {
         setTimeout(function () {
           if (gen !== S.gen) return;
-          if (kind !== 'attack') { api.reset(); A.duckTo(1, 0.5); api.busy(false); D.after(kind, v); if (done) done(); }
+          if (kind !== 'attack') { api.reset(); A.duckTo(1, 0.5); api.busy(false); D.after(kind, v); if (ART.eggs) ART.eggs.emit('scare', { kind: kind, id: v.id }); if (done) done(); }
           else if (done) done();
         }, hold);
       };

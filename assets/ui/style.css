@@ -345,3 +345,17 @@ body.camshake.sway #scene{animation:cs-sway .6s ease-out}
 #monitor.tracking .mon-screen::before{content:"";position:absolute;left:0;right:0;height:14%;z-index:2;background:linear-gradient(transparent,rgba(210,255,225,.55),transparent);animation:trkbar .8s linear infinite}
 @keyframes trk{0%{transform:translate(0,0) skewX(0)}50%{transform:translate(-3%,2%) skewX(-6deg)}100%{transform:translate(2%,-1%) skewX(4deg)}}
 @keyframes trkbar{from{top:-15%}to{top:105%}}
+
+/* ===== door grab ===== */
+body.grabbing #btnDoor{animation:gdoor .07s steps(2) infinite}
+body.grabbing #scene{animation:gscene .09s steps(2) infinite}
+.spot-btn.door.grab .led{border-color:#e02a2a;box-shadow:0 0 30px 10px rgba(230,30,30,.7),inset 0 0 16px rgba(230,30,30,.6);animation:glow .22s ease-in-out infinite}
+@keyframes gdoor{0%{translate:calc(var(--gj,1)*-4px) 0}50%{translate:calc(var(--gj,1)*4px) calc(var(--gj,1)*2px)}100%{translate:calc(var(--gj,1)*-2px) calc(var(--gj,1)*-2px)}}
+@keyframes gscene{0%{translate:calc(var(--gj,1)*-2.5px) 0}50%{translate:calc(var(--gj,1)*2.5px) calc(var(--gj,1)*1.5px)}100%{translate:calc(var(--gj,1)*-1px) calc(var(--gj,1)*-1.5px)}}
+/* ===== personal easter eggs ===== */
+#eggText{position:fixed;left:8%;right:8%;z-index:95;text-align:center;pointer-events:none;opacity:0;font:600 15px/1.45 "Courier New",ui-monospace,monospace;letter-spacing:.08em;color:#c9b8a8;text-shadow:0 0 8px rgba(0,0,0,.9)}
+#eggText.bottom{bottom:17%}#eggText.top{top:16%}#eggText.center{top:44%}
+#eggText.on{animation:eggin var(--egg-ms,3600ms) ease-in-out forwards}
+#eggText.scrawl{color:#a31616;font-style:italic;letter-spacing:.14em;text-shadow:0 0 10px rgba(120,0,0,.8)}
+#eggText.whisper{opacity:0;font-size:13px;color:#8fa39a;letter-spacing:.2em}
+@keyframes eggin{0%{opacity:0}12%{opacity:.9}18%{opacity:.35}24%{opacity:.9}80%{opacity:.85}100%{opacity:0}}

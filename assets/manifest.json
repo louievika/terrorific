@@ -907,6 +907,111 @@
     3,
     4
    ]
+  },
+  "grab": {
+   "_comment": "DOOR GRAB: with the door shut, Art can grab it from outside. Hold or mash to push back (no HUD meter: jitter, scraping, haptics, door LED). Win = door slams, Art backs off. Lose / timeout = door wrenched open + face fills the screen. 3 beats: build, 500 ms silence, payoff. Arrays are per night; none on night 1.",
+   "enabled": true,
+   "minNight": 2,
+   "minT": 12,
+   "checkSec": 8,
+   "chance": [
+    0,
+    0.3,
+    0.4,
+    0.5,
+    0.6
+   ],
+   "cooldownSec": [
+    0,
+    90,
+    70,
+    55,
+    45
+   ],
+   "perNightMax": [
+    0,
+    1,
+    2,
+    2,
+    3
+   ],
+   "startProgress": 0.32,
+   "pullPerSec": [
+    0,
+    0.2,
+    0.28,
+    0.34,
+    0.4
+   ],
+   "tapGain": 0.08,
+   "holdPerSec": 0.1,
+   "limitSec": [
+    0,
+    8,
+    7.5,
+    7,
+    6.5
+   ],
+   "losePowerPct": 4
+  },
+  "taunts": {
+   "_comment": "Original synthesized taunt sounds (no samples): whisper, low laugh, mocking creak. From night 2, in the quiet between scares only. Arrays are per night.",
+   "enabled": true,
+   "minNight": 2,
+   "quietAfterScareSec": 8,
+   "gapSec": [
+    [
+     0,
+     0
+    ],
+    [
+     34,
+     55
+    ],
+    [
+     28,
+     46
+    ],
+    [
+     24,
+     40
+    ],
+    [
+     20,
+     34
+    ]
+   ],
+   "chance": [
+    0,
+    0.75,
+    0.8,
+    0.85,
+    0.9
+   ],
+   "perNightMax": [
+    0,
+    3,
+    4,
+    5,
+    6
+   ],
+   "kinds": [
+    {
+     "id": "whisper",
+     "w": 1,
+     "vol": 0.8
+    },
+    {
+     "id": "lowLaugh",
+     "w": 0.55,
+     "vol": 0.7
+    },
+    {
+     "id": "mockCreak",
+     "w": 0.8,
+     "vol": 0.9
+    }
+   ]
   }
  },
  "voice": {

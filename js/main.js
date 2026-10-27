@@ -9,7 +9,7 @@
     ART.ui.autoTick(raw); ART.ui.updateView();
     if (S.phase === 'play' || S.phase === 'dying') { ART.art.recenter(); ART.ui.updateSpots(); }
     if (S.cam) { feedAcc += raw; if (feedAcc > 0.05) { feedAcc = 0; ART.rooms.drawFeed(now); } }
-    if (S.phase === 'play') ART.nights.tick(dt);
+    if (S.phase === 'play') { ART.nights.tick(dt); ART.grab.tick(dt); ART.taunts.tick(dt); ART.eggs.tick(dt); }
     if (S.phase !== 'login' && S.phase !== 'over' && S.phase !== 'win' && S.phase !== 'bad') { S.session += dt; if (S.session >= ART.CFG.sessionCapSec) ART.nights.capBad(); }
     hudAcc += raw; if (hudAcc > 0.15) { hudAcc = 0; ART.ui.updateHud(); }
   }
@@ -40,6 +40,7 @@
 
   function init() {
     S = ART.S;
+    ART.eggs.load();
     ART.config.load().then(function () {
       wire(); S.night = ART.nights.loadSave(); ART.ui.typeBoot(S.night);
       var sceneReady = false, assetsReady = false, check = function () { if (sceneReady && assetsReady) { $('authBtn').classList.add('ready'); } };
