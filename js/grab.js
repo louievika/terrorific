@@ -26,7 +26,7 @@
         setTimeout(function () { release(gen); if (ART.eggs) ART.eggs.emit('grabWin'); }, 700);
       } else {
         S.door = false; $('btnDoor').classList.remove('on'); A.grabSlam(false); ART.ui.updateHud(); S.power = Math.max(0, S.power - ((c && c.losePowerPct) || 0));
-        ART.art.facePop({ stab: 'scrape' }, gen, function (hold) { setTimeout(function () { release(gen); if (ART.eggs) ART.eggs.emit('grabLose'); }, hold); });
+        ART.art.facePop({ stab: 'scrape' }, gen, function (hold) { setTimeout(function () { release(gen); if (ART.eggs) ART.eggs.emit('grabLose'); if (ART.dogEgg) ART.dogEgg.mistake('grabLose'); }, hold); });
       }
     }, 500);
   }

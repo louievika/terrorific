@@ -69,16 +69,18 @@
   };
 
   /* ---- scheduler ---- */
-  /* DOG fail-scare sounds (original synthesis, no samples): a throat growl (detuned saws, ~26 Hz amplitude chop, two formants, rasp noise) and sharp barks (falling saw + noise burst through a formant) */
-  A.dogSnarl = function (o) {
-    if (!ok()) return 0; o = o || {}; var c = A.ctx, t = c.currentTime + 0.01, dur = o.dur || 0.95, vol = (o.vol == null ? 1 : o.vol) * 0.55, out = c.createGain(), f1 = c.createBiquadFilter(), f2 = c.createBiquadFilter(), am = c.createGain(), lfo = c.createOscillator(), lg = c.createGain();
-    f1.type = 'bandpass'; f1.frequency.value = 520; f1.Q.value = 2.2; f2.type = 'peaking'; f2.frequency.value = 1450; f2.Q.value = 2; f2.gain.value = 9;
-    am.gain.value = 0.55; lfo.type = 'sine'; lfo.frequency.value = 24 + Math.random() * 6; lg.gain.value = 0.45; lfo.connect(lg); lg.connect(am.gain);
-    env(out, t, 0.12, vol, dur); out.gain.setValueAtTime(vol, t + dur * 0.7); out.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    [58, 59.7, 117].forEach(function (f, i) { var s = c.createOscillator(), g = c.createGain(); s.type = 'sawtooth'; s.frequency.setValueAtTime(f, t); s.frequency.linearRampToValueAtTime(f * 1.22, t + dur); g.gain.value = i === 2 ? 0.25 : 0.6; s.connect(g); g.connect(f1); g.connect(f2); s.start(t); s.stop(t + dur + 0.05); });
-    f1.connect(am); f2.connect(am); am.connect(out);
-    var n = c.createBufferSource(), nf = c.createBiquadFilter(), ng = c.createGain(); n.buffer = A.brown || A.white; n.loop = true; nf.type = 'highpass'; nf.frequency.value = 1700; ng.gain.value = 0.33; n.connect(nf); nf.connect(ng); ng.connect(am); n.start(t); n.stop(t + dur + 0.05);
-    lfo.start(t); lfo.stop(t + dur + 0.05); out.connect(o.bus || A.sfx); return dur;
+  /* DOG easter-egg sounds (original synthesis, no samples): sharp yap (falling saw + noise burst through a formant) and a snickering yap-laugh made of rising-pitch yips */
+  A.dogSnicker = function (o) {       // mocking "heh-heh-heh-heh": 5 short staccato yips, pitch wobbling up then sagging, fading out
+    if (!ok()) return 0; o = o || {}; var c = A.ctx, t0 = c.currentTime + 0.01, vol = (o.vol == null ? 1 : o.vol) * 0.34, n = 5, gap = 0.105, out = c.createGain();
+    out.gain.value = 1; out.connect(o.bus || A.sfx);
+    for (var i = 0; i < n; i++) {
+      var t = t0 + i * gap, f = 880 + 260 * Math.sin(i * 1.3) + (i < 3 ? i * 90 : -(i - 2) * 110), g = c.createGain(), bp = c.createBiquadFilter(), s = c.createOscillator(), s2 = c.createOscillator(), nz = c.createBufferSource(), ng = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = f * 1.6; bp.Q.value = 2.2; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol * (1 - i * 0.13), t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.075);
+      s.type = 'sawtooth'; s.frequency.setValueAtTime(f * 1.15, t); s.frequency.exponentialRampToValueAtTime(f * 0.8, t + 0.07); s2.type = 'square'; s2.frequency.setValueAtTime(f * 0.5, t); s2.frequency.exponentialRampToValueAtTime(f * 0.4, t + 0.07);
+      nz.buffer = A.white; ng.gain.value = 0.25; nz.connect(ng); ng.connect(bp); s.connect(bp); s2.connect(bp); bp.connect(g); g.connect(out);
+      s.start(t); s2.start(t); nz.start(t); s.stop(t + 0.09); s2.stop(t + 0.09); nz.stop(t + 0.09);
+    }
+    return n * gap;
   };
   A.dogBark = function (o) {
     if (!ok()) return 0; o = o || {}; var c = A.ctx, t = c.currentTime + (o.at || 0) + 0.005, vol = (o.vol == null ? 1 : o.vol) * 0.5, g = c.createGain(), f = c.createBiquadFilter(), s = c.createOscillator(), s2 = c.createOscillator(), n = c.createBufferSource(), nf = c.createBiquadFilter(), ng = c.createGain(), r = o.rate || (0.9 + Math.random() * 0.25);

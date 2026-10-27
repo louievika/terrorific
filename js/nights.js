@@ -18,7 +18,7 @@
 
     start: function (n) {
       ART.ui.unlockView();
-      S.gen++; if (ART.video) { ART.video.stop(); } if (ART.grab) ART.grab.reset(); if (ART.taunts) ART.taunts.reset(); S.night = n; S.nightCfg = CFG.nights[n - 1] || CFG.nights[CFG.nights.length - 1]; var c = S.nightCfg;
+      S.gen++; if (ART.video) { ART.video.stop(); } if (ART.grab) ART.grab.reset(); if (ART.taunts) ART.taunts.reset(); if (ART.dogEgg) ART.dogEgg.reset(); S.night = n; S.nightCfg = CFG.nights[n - 1] || CFG.nights[CFG.nights.length - 1]; var c = S.nightCfg;
       S.t = 0; S.len = c.len; S.power = CFG.powerStartPct; S.cam = false; S.door = false; S.bolt = false; S.cool = { fusebox: 0, doorbolt: 0 }; S.powerDead = false; S.deadT = -1; S.lo10 = false;
       S.artRoom = c.start; S.attackT = -1; S.knockT = 0; S.phase = 'play'; S.moveT = rnd(c.moveMin, c.moveMax);
       ART.puzzles.close(true); ART.art.busy(false);
@@ -35,6 +35,7 @@
       ART.log('night ' + n + ' start, art in ' + S.artRoom); if (ART.eggs) ART.eggs.emit('nightStart', { night: n });
     },
     toggleDoor: function () {
+      if (S.phase === 'play' && S.powerDead && !S.scareBusy && !S.puzzle && ART.dogEgg) ART.dogEgg.mistake('doorFail');
       if (S.phase !== 'play' || S.powerDead || S.scareBusy || S.puzzle) return;
       S.door = !S.door; $('btnDoor').classList.toggle('on', S.door); A.lock(); A.creak(); ART.ui.peekHud(2200); ART.ui.updateHud(); ART.log('door ' + S.door);
     },
@@ -47,7 +48,7 @@
     skipLore: function () { clearTimeout(callTimer); if (ART.voice) ART.voice.stop(); $('loreDoc').classList.remove('hidden'); N.start(S.night); },
     gameOver: function (reason) {
       if (S.phase === 'over') return; S.phase = 'over'; S.deaths++; ART.ui.unlockView(); ART.ui.closeMonitor(true); ART.puzzles.close(true); A.stopMusic();
-      $('goReason').textContent = reason; ART.ui.show('gameover'); ART.art.lightsBack(false); ART.art.busy(false); if (ART.grab) ART.grab.reset(); if (ART.eggs) ART.eggs.emit('gameOver', { night: S.night }); ART.log('GAME OVER ' + reason);
+      $('goReason').textContent = reason; ART.ui.show('gameover'); ART.art.lightsBack(false); ART.art.busy(false); if (ART.grab) ART.grab.reset(); if (ART.eggs) ART.eggs.emit('gameOver', { night: S.night }); ART.log('GAME OVER ' + reason); if (ART.dogEgg) setTimeout(function () { ART.dogEgg.mistake('caught'); }, 900);
     },
     capBad: function () {
       if (S.phase === 'bad') return; S.phase = 'bad'; ART.ui.closeMonitor(true); ART.puzzles.close(true); A.stopMusic(); A.powerDown(); N.clearSave();

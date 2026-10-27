@@ -18,7 +18,18 @@
     "eggs[].effect.pos": "bottom (default) | top | center.",
     "eggs[].effect.ms": "how long it stays, default 3600.",
     "eggs[].sound": "optional. A synthesized taunt to play with it: whisper | lowLaugh | mockCreak.",
-    "eggs[].soundVol": "optional 0..1, default 0.8."
+    "eggs[].soundVol": "optional 0..1, default 0.8.",
+    "dogEgg.enabled": "bool. Master switch for the dog mock egg.",
+    "dogEgg.chance": "0..1 odds per eligible mistake (default 1/12 = 0.0833).",
+    "dogEgg.cooldownSec": "min seconds (real time) between two dog pops.",
+    "dogEgg.maxPerNight": "cap per night. The dog also never appears on two eligible mistakes in a row.",
+    "dogEgg.minNight": "first night it may appear.",
+    "dogEgg.pos": "bottom-right | bottom-left | bottom-center.",
+    "dogEgg.widthPct": "dog width as a fraction of the screen width (0.2-0.6).",
+    "dogEgg.holdMs": "how long it stays on screen (default 1200).",
+    "dogEgg.silenceMs": "the pre-payoff silence (keep at 500).",
+    "dogEgg.sound": "snicker: the synthesized yap-laugh; vol 0..1.",
+    "dogEgg.triggers": "which mistakes count: puzzleWrong (wrong puzzle input = a strike), puzzleFail (strikes or time ran out), doorFail (pressed the door with the power dead), grabLose (lost the door grab), caught (the game over screen)."
   },
   "enabled": true,
   "eggs": [
@@ -29,8 +40,17 @@
       "once": true,
       "chance": 1,
       "delayMs": 5000,
-      "trigger": { "event": "nightStart", "night": 2 },
-      "effect": { "type": "text", "text": "[EXAMPLE EGG 1] Your personal line goes here.", "style": "whisper", "pos": "bottom", "ms": 4200 },
+      "trigger": {
+        "event": "nightStart",
+        "night": 2
+      },
+      "effect": {
+        "type": "text",
+        "text": "[EXAMPLE EGG 1] Your personal line goes here.",
+        "style": "whisper",
+        "pos": "bottom",
+        "ms": 4200
+      },
       "sound": "whisper"
     },
     {
@@ -40,8 +60,47 @@
       "once": true,
       "chance": 0.5,
       "delayMs": 1800,
-      "trigger": { "event": "scare", "night": [3, 4, 5], "kind": "peek" },
-      "effect": { "type": "text", "text": "[EXAMPLE EGG 2] Another personal line goes here.", "style": "scrawl", "pos": "center", "ms": 3200 }
+      "trigger": {
+        "event": "scare",
+        "night": [
+          3,
+          4,
+          5
+        ],
+        "kind": "peek"
+      },
+      "effect": {
+        "type": "text",
+        "text": "[EXAMPLE EGG 2] Another personal line goes here.",
+        "style": "scrawl",
+        "pos": "center",
+        "ms": 3200
+      }
     }
-  ]
+  ],
+  "dogEgg": {
+    "_comment": "The dog PICTURE (assets/art/dog.png, user-supplied photo) is a rare MOCKING easter egg, not a fail scare: after a mistake it pops in small and cheeky, snickers, stays ~holdMs, then leaves. 3 beats: the mistake cue, 500 ms silence, the pop. Never twice in a row, cooldown, per-night cap. Falls back to nothing (no pop) if the image fails.",
+    "enabled": true,
+    "chance": 0.0833,
+    "cooldownSec": 120,
+    "maxPerNight": 1,
+    "minNight": 1,
+    "triggers": {
+      "puzzleWrong": true,
+      "puzzleFail": true,
+      "doorFail": true,
+      "grabLose": true,
+      "caught": true
+    },
+    "pos": "bottom-right",
+    "widthPct": 0.42,
+    "holdMs": 1200,
+    "popMs": 260,
+    "silenceMs": 500,
+    "sound": {
+      "snicker": true,
+      "vol": 0.85
+    },
+    "asset": "assets/art/dog.png"
+  }
 }

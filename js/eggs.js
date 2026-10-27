@@ -11,9 +11,10 @@
   E = ART.eggs = {
     shown: [], preview: Q.get('eggs') === '1',
     load: function () {
-      return fetch('assets/easter-eggs.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) { data = j; ready = true; return j; }).catch(function (e) { data = null; ready = false; console.warn('easter-eggs.json missing/invalid - none active', e); });
+      return fetch('assets/easter-eggs.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) { data = j; ready = true; if (ART.dogEgg) ART.dogEgg.load(); return j; }).catch(function (e) { data = null; ready = false; console.warn('easter-eggs.json missing/invalid - none active', e); });
     },
     setData: function (j) { data = j; ready = !!j; },
+    dogCfg: function () { return (data && data.dogEgg) || null; },
     list: function () { return (data && data.eggs) || []; },
     resetSeen: function () { seen = {}; save(); fired = {}; nightSeen = {}; E.shown = []; },
     /* show the egg's effect now (no trigger checks) */

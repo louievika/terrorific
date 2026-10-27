@@ -26,8 +26,8 @@ Payoff overlays are screen-space; `ART.ui.lockView()` eases `ART.V.yaw` to centr
 - `?fast=` (headless suites) disables video unless `&video=1`; `?novideo=1` always disables.
 - Tests: `tests/video.js` (30 checks). Screenshots: docs/phase-E/video-*.png.
 
-## Camera-feed scare, door grab, taunts, easter eggs, dog fail scare - done
-- Feed scare (`game.feedScare`), door grab (`js/grab.js`, `game.grab`), taunt sounds (`js/taunts.js`, `game.taunts`), config-driven personal easter eggs (`assets/easter-eggs.json`, `js/eggs.js`), dog fail scare (`assets/art/dog.png` from the user-supplied dog.jpg, `game.failScare`, variant `at-dog`). Details in README "Phase E additions".
-- Tests: feedscare 20, grab 18, taunts 13, eggs 16, dog 16, all in `tests/run-all.js`.
+## Camera-feed scare, door grab, taunts, easter eggs, dog mocking egg - done
+- Feed scare (`game.feedScare`), door grab (`js/grab.js`, `game.grab`), taunt sounds (`js/taunts.js`, `game.taunts`), config-driven personal easter eggs (`assets/easter-eggs.json`, `js/eggs.js`), dog mocking Easter egg (`js/dogegg.js`, `assets/art/dog.png` from the user-supplied dog.jpg; config `dogEgg` in `assets/easter-eggs.json`; pops small bottom-right after a mistake with a synthesized snicker, ~1.2 s, 3 beats, never twice in a row; no lunge). Empty disabled `video.dogAttack` slot reserved for Louie's later dog video.
+- Tests: feedscare 20, grab 18, taunts 13, eggs 16, dog 21, all in `tests/run-all.js`.
 - Audit (Oct 26, 8:30 PM CT): live site serves every manifest/HTML-referenced asset with 200 (47 paths), mp4s answer Range with 206 + Accept-Ranges, no console errors or failed requests on index.html / game.html, index 293 KB / game.html 4.5 MB transferred (load 0.7 s / 1.1 s headless on the box network), no visible "ART // LOGIN".
-- Screenshots: docs/phase-E/dog-cutout-dark-and-room.png, docs/phase-E/dog-payoff.png, feed-*.png.
+- Screenshots: docs/phase-E/dog-cutout-dark-and-room.png, docs/phase-E/dog-egg-payoff.png, feed-*.png.

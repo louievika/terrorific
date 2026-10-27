@@ -21,7 +21,7 @@ Runs headless Chrome at 390x844 @2x with touch emulation and prints PASS / FAIL 
 | `tests/grab.js` (18) | door grab: none on night 1, press/lift, win and lose both resolve with 500 ms silence, lose uses the face pop, state resets per night |
 | `tests/taunts.js` (13) | whisper / low laugh / mocking creak: never on night 1, never during a scare or grab, gap and no-repeat rules |
 | `tests/eggs.js` (16) | easter-egg JSON contract, disabled examples, `?eggs=1` preview, once-only seen flag, plain-text rendering |
-| `tests/dog.js` (16) | dog fail scare: asset <= 250 KB, failScare weights, no repeat, off in test mode, 3 beats with >= 495 ms silence, small-to-full-screen lunge in ~0.4 s, position:fixed, cleanup, lethal flow to the fail screen, 404 falls back to the Art run |
+| `tests/dog.js` (21) | dog mocking egg: asset <= 250 KB, config schema, hooks (puzzleWrong/puzzleFail/doorFail/grabLose/caught), rare odds + never twice in a row, cooldown and per-night cap, off in test mode, 3 beats with >= 495 ms silence, small corner pop (not full screen), ~1.2 s stay then leaves, cleanup, no lunge/fail-scare, empty `video.dogAttack` slot, 404 falls back to nothing |
 
 Latest result: see `status/phase-E.md`. Screenshots and renders: `docs/phase-E/` (earlier: `docs/phase-C/`, `docs/phase-B/`).
 
@@ -46,6 +46,6 @@ Test on an iPhone, Safari, over HTTPS (the Vercel URL).
 ## 3. Manual smoke (30 s)
 Title -> ENTER -> AUTHENTICATE -> night 1 -> lock the door -> flip the monitor -> flip it down -> turn to the left wall -> solve the fuse box -> let power die -> rescue it.
 - [ ] Door grab: mashing / holding on the door feels fair; the door jitter and LED read clearly; haptics are a no-op on iPhone (Safari has no `navigator.vibrate`).
-- [ ] Dog fail scare: the photo cut-out looks clean at device scale, the lunge is fast but not a dropped frame, snarl and barks are loud enough without clipping.
+- [ ] Dog Easter egg: the photo cut-out looks clean at device scale in the bottom-right corner, the snicker is audible but not harsh, and it feels cheeky rather than startling (set `dogEgg.chance` to 1 to preview).
 - [ ] Taunt whispers / low laugh / mocking creak: audible but not louder than the stingers.
 - [ ] Camera-feed scare while the monitor is open: no gap between tear, silence and pop on a real GPU.

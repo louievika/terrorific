@@ -29,7 +29,7 @@
       P.close(true); A.pzFail(); ART.ui.flash(0.45, 120); S.cool[id] = Math.max(S.cool[id] || 0, (h.cooldownSec || 30) * 0.6); S.puzzleFails = (S.puzzleFails || 0) + 1;
       S.power = Math.max(0.5, S.power - (P.limit(id, S.night, 'wrongPowerPct') || 0) * 2); ART.log('puzzle FAILED ' + id + ' (' + why + ')');
       if (S.night >= 2 && P.limit(id, S.night, 'failScare')) S.peeks.unshift(S.t + 1.8 + Math.random() * 1.6);
-      ART.ui.updateHud(); P.refresh();
+      ART.ui.updateHud(); P.refresh(); if (ART.dogEgg) ART.dogEgg.mistake('puzzleFail');
     },
 
     /* ---------- hotspots: build the two panels, place them on the side walls ---------- */
@@ -64,7 +64,7 @@
       var api = {
         tap: function () { A.pzTap(); },
         failed: function () {
-          A.pzBad(); $('puzzle').classList.add('bad'); setTimeout(function () { $('puzzle').classList.remove('bad'); }, 450); rec.strikes++;
+          A.pzBad(); $('puzzle').classList.add('bad'); setTimeout(function () { $('puzzle').classList.remove('bad'); }, 450); rec.strikes++; if (ART.dogEgg) ART.dogEgg.mistake('puzzleWrong');
           if (wp) { S.power = Math.max(0.5, S.power - wp); ART.ui.updateHud(); }
           if (maxStrikes && rec.strikes >= maxStrikes) setTimeout(function () { if (S.puzzle === rec) P.fail(id, 'strikes'); }, 380);
         },

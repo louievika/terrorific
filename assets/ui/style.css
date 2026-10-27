@@ -360,18 +360,11 @@ body.grabbing #scene{animation:gscene .09s steps(2) infinite}
 #eggText.whisper{opacity:0;font-size:13px;color:#8fa39a;letter-spacing:.2em}
 @keyframes eggin{0%{opacity:0}12%{opacity:.9}18%{opacity:.35}24%{opacity:.9}80%{opacity:.85}100%{opacity:0}}
 
-/* ===== dog fail scare (screen-locked; individual transform properties so animations compose) ===== */
-#dogLayer{position:fixed;inset:0;z-index:14;pointer-events:none;visibility:hidden;overflow:hidden}
-#dogLayer.go,#dogLayer.out{visibility:visible}
-#dogVeil{position:absolute;inset:0;background:radial-gradient(ellipse at 45% 50%,#1a0505 0%,#050000 75%);opacity:0}
-#dogImg{position:absolute;left:-14%;bottom:-6%;height:112%;width:auto;max-width:none;transform-origin:42% 52%;scale:var(--dg-from,.1);opacity:0;filter:contrast(1.08) saturate(1.05)}
-#dogLayer.go #dogVeil{animation:dgveil var(--dg-ms,400ms) ease-in forwards}
-#dogLayer.go #dogImg{animation:dglunge var(--dg-ms,400ms) cubic-bezier(.55,.05,.95,.45) forwards,dgjit .07s steps(2) calc(var(--dg-ms,400ms)*.88) infinite}
-#dogLayer.hit #dogVeil{box-shadow:inset 0 0 120px 30px rgba(150,0,0,.55)}
-#dogLayer.out{animation:dgout .2s linear forwards}
-@keyframes dglunge{0%{scale:var(--dg-from,.1);opacity:.0;translate:3% 6%}12%{opacity:1}100%{scale:1.04;opacity:1;translate:0 0}}
-@keyframes dgveil{to{opacity:var(--dg-veil,.88)}}
-@keyframes dgjit{0%{translate:-6px 3px}50%{translate:7px -4px}100%{translate:-3px -5px}}
-@keyframes dgout{to{opacity:0}}
-#dogLayer.out #dogImg{opacity:1;scale:1.04;translate:0 0}
-#dogLayer.out #dogVeil{opacity:var(--dg-veil,.88)}
+/* ===== dog easter egg: a small cheeky mocking pop (individual transform properties so the animations compose) ===== */
+#dogPop{position:fixed;z-index:94;pointer-events:none;visibility:hidden;width:calc(var(--dw,.42)*100vw);height:auto;bottom:calc(var(--sab,0px) - 2%);transform-origin:50% 100%;-webkit-mask-image:linear-gradient(to bottom,#000 74%,transparent 98%),linear-gradient(to right,transparent 0,#000 14%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to bottom,#000 74%,transparent 98%),linear-gradient(to right,transparent 0,#000 14%);mask-composite:intersect;filter:drop-shadow(0 6px 10px rgba(0,0,0,.75)) contrast(1.05)}
+#dogPop.bottom-right{right:2%}#dogPop.bottom-left{left:2%}#dogPop.bottom-center{left:calc(50% - var(--dw,.42)*50vw)}
+#dogPop.go{visibility:visible;animation:dgin var(--dp,260ms) cubic-bezier(.2,1.4,.4,1) both,dgbob .42s ease-in-out var(--dp,260ms) infinite alternate}
+#dogPop.out{visibility:visible;animation:dgout .2s ease-in both}
+@keyframes dgin{from{translate:0 70%;scale:.7;opacity:0}to{translate:0 0;scale:1;opacity:1}}
+@keyframes dgbob{from{rotate:-7deg;translate:0 0}to{rotate:6deg;translate:0 -2.5%}}
+@keyframes dgout{from{translate:0 0;opacity:1}to{translate:0 60%;opacity:0}}
