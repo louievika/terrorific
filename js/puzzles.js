@@ -1,4 +1,4 @@
-/* ART // LOGIN - puzzles.js (MIT). Swappable puzzle functions + the two in-world hotspots that use them.
+/* Terrorific - puzzles.js (MIT). Swappable puzzle functions + the two in-world hotspots that use them.
    A puzzle is a function  fn(root, opts, api) -> ctl  registered with ART.puzzles.register(name, fn).
      root : DOM element to build into          opts : {night, ...manifest options for that type}
      api  : { solved(), failed(), tap() }       ctl  : { destroy(), solution() }   (solution() is for the self-tests)
@@ -18,7 +18,19 @@
       Object.keys(src).forEach(function (k) { var v = src[k]; o[k] = Array.isArray(v) ? v[Math.min(i, v.length - 1)] : v; });
       return o;
     },
-    typeFor: function (id, night) { var h = ART.CFG.puzzles.hotspots[id]; return h && h.types ? (h.types[Math.min(night - 1, h.types.length - 1)] || null) : null; },
+    /* a night's entry in hotspots[id].types is a type name, null (disabled) or an ARRAY of types = a multi-stage puzzle (solve them in order) */
+    stagesFor: function (id, night) { var h = ART.CFG.puzzles.hotspots[id], t = h && h.types ? h.types[Math.min(night - 1, h.types.length - 1)] : null; return t == null ? [] : (Array.isArray(t) ? t : [t]); },
+    typeFor: function (id, night) { return P.stagesFor(id, night)[0] || null; },
+    /* per-night numbers from the manifest hotspot: timeSec (0 = untimed), strikes (wrong answers allowed, 0 = unlimited), wrongPowerPct */
+    limit: function (id, night, key) { var v = (ART.CFG.puzzles.hotspots[id] || {})[key]; return Array.isArray(v) ? v[Math.min(night - 1, v.length - 1)] : (v || 0); },
+    /* the panel bites back: Art is coming. Lockout cooldown, power drain, a stab, and a real scare shortly after (never on night 1) */
+    fail: function (id, why) {
+      var S = ART.S, h = ART.CFG.puzzles.hotspots[id] || {}; if (S.phase !== 'play') return;
+      P.close(true); A.pzFail(); ART.ui.flash(0.45, 120); S.cool[id] = Math.max(S.cool[id] || 0, (h.cooldownSec || 30) * 0.6); S.puzzleFails = (S.puzzleFails || 0) + 1;
+      S.power = Math.max(0.5, S.power - (P.limit(id, S.night, 'wrongPowerPct') || 0) * 2); ART.log('puzzle FAILED ' + id + ' (' + why + ')');
+      if (S.night >= 2 && P.limit(id, S.night, 'failScare')) S.peeks.unshift(S.t + 1.8 + Math.random() * 1.6);
+      ART.ui.updateHud(); P.refresh();
+    },
 
     /* ---------- hotspots: build the two panels, place them on the side walls ---------- */
     init: function () {
@@ -47,22 +59,41 @@
       if (S.phase !== 'play' || S.scareBusy || S.puzzle || S.cam) return false;
       var type = P.typeFor(id, S.night); if (!type || !reg[type]) return false;
       if (S.cool[id] > 0 || (id === 'doorbolt' && S.bolt)) { A.pzBad(); return false; }
-      var root = $('puzzleBody'); root.innerHTML = ''; root.className = 'pz-' + type;
-      var ctl, done = false;
+      var root = $('puzzleBody'), stages = P.stagesFor(id, S.night), card = $('puzzleCard'), lim = P.limit(id, S.night, 'timeSec'), maxStrikes = P.limit(id, S.night, 'strikes'), wp = P.limit(id, S.night, 'wrongPowerPct');
+      var done = false, si = 0, rec = { id: id, type: type, ctl: null, strikes: 0, stage: 0, stages: stages.length, t0: performance.now(), limit: lim * 1000, iv: 0, fuse: null };
       var api = {
         tap: function () { A.pzTap(); },
-        failed: function () { A.pzBad(); $('puzzle').classList.add('bad'); setTimeout(function () { $('puzzle').classList.remove('bad'); }, 450); },
+        failed: function () {
+          A.pzBad(); $('puzzle').classList.add('bad'); setTimeout(function () { $('puzzle').classList.remove('bad'); }, 450); rec.strikes++;
+          if (wp) { S.power = Math.max(0.5, S.power - wp); ART.ui.updateHud(); }
+          if (maxStrikes && rec.strikes >= maxStrikes) setTimeout(function () { if (S.puzzle === rec) P.fail(id, 'strikes'); }, 380);
+        },
         solved: function () {
-          if (done) return; done = true; A.pzOk(); $('puzzle').classList.add('good');
-          setTimeout(function () { P.close(true); P.apply(id); }, 520);
+          if (done) return; A.pzOk(); $('puzzle').classList.add('good');
+          if (si + 1 < stages.length) { si++; setTimeout(function () { if (S.puzzle !== rec) return; $('puzzle').classList.remove('good'); stage(); }, 520); return; }
+          done = true; clearInterval(rec.iv); setTimeout(function () { P.close(true); P.apply(id); }, 520);
         }
       };
-      ctl = P.create(type, root, P.opts(type, S.night), api);
-      S.puzzle = { id: id, type: type, ctl: ctl }; $('puzzle').classList.add('open'); ART.log('puzzle open ' + id + ':' + type); return true;
+      function stage() {
+        try { if (rec.ctl) rec.ctl.destroy(); } catch (e) {}
+        root.innerHTML = ''; root.className = 'pz-' + stages[si]; rec.type = stages[si]; rec.stage = si;
+        var o = P.opts(stages[si], S.night); o.stage = si; o.stages = stages.length; rec.ctl = P.create(stages[si], root, o, api);
+      }
+      S.puzzle = rec; stage();
+      if (lim > 0) {   // time pressure: a burning fuse, no numbers; footsteps close in over the last third; running out = Art arrives
+        rec.fuse = mk('i', 'pz-fuse'); card.appendChild(rec.fuse); var lastStep = 0;
+        rec.iv = setInterval(function () {
+          if (S.puzzle !== rec) { clearInterval(rec.iv); return; }
+          var f = Math.min(1, (performance.now() - rec.t0) / rec.limit); rec.fuse.style.setProperty('--burn', (100 - f * 100).toFixed(1) + '%'); rec.fuse.classList.toggle('hot', f > 0.66);
+          if (f > 0.62 && performance.now() - lastStep > 1500 - 900 * f) { lastStep = performance.now(); A.footfall(0.18 + 0.5 * f); }
+          if (f >= 1) { clearInterval(rec.iv); P.fail(id, 'time'); }
+        }, 100);
+      }
+      $('puzzle').classList.add('open'); ART.log('puzzle open ' + id + ':' + stages.join('>') + (lim ? ' ' + lim + 's' : '')); return true;
     },
     close: function (silent) {
       var S = ART.S; if (!S.puzzle) { $('puzzle').classList.remove('open', 'good', 'bad'); return; }
-      try { S.puzzle.ctl.destroy(); } catch (e) {}
+      try { S.puzzle.ctl.destroy(); } catch (e) {} clearInterval(S.puzzle.iv); if (S.puzzle.fuse && S.puzzle.fuse.parentNode) S.puzzle.fuse.parentNode.removeChild(S.puzzle.fuse);
       S.puzzle = null; $('puzzle').classList.remove('open', 'good', 'bad'); $('puzzleBody').innerHTML = ''; if (!silent) A.pzTap();
     },
     /* the gameplay effect of a solved hotspot */
@@ -155,6 +186,119 @@
       destroy: function () {},
       solution: function () { var need = {}; scr.forEach(function (c) { need[c] = 1; }); Object.keys(user).forEach(function (c) { if (user[c]) need[c] = (need[c] || 0) ^ 1; }); return Object.keys(need).filter(function (c) { return need[c]; }).map(Number); }
     };
+  });
+
+  /* ================= LEDGER: deduce the code from torn lore fragments =================
+     The true fragments are generated from the secret and brute-force-checked so that they pin down exactly one code.
+     Misleading fragments (the distorted caretaker call) contradict the secret; some true ones are redundant noise.
+     Nothing tells the player which scrap lies. Wording lives in manifest puzzles.ledgerText (original text), with built-in defaults. */
+  var LEDGER_DEF = {
+    ord: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth'],
+    sources: {
+      diary:   { head: "VICKY'S DIARY \u2014 OCT 30", wrap: "He kept whispering that {c}. I wrote it down so I wouldn't forget." },
+      invoice: { head: 'FUNERAL HOME RECEIPT #0831', wrap: 'Scribbled in the margin: {c}. Paid in cash. Nobody asked why.' },
+      flyer:   { head: 'TRICK-OR-TREAT FLYER (TORN)', wrap: 'Over the candy, in marker: {c}!' },
+      tally:   { head: 'PUMPKIN TALLY CARD', wrap: 'Chalked small: {c}.' },
+      call:    { head: 'CARETAKER ON THE LINE (BAD CONNECTION)', wrap: '...kssh... listen close, {c}... kssh... don\'t let him...' }
+    },
+    reliable: ['diary', 'invoice', 'flyer', 'tally'], liar: 'call'
+  };
+  P.register('ledger', function (root, o, api) {
+    var T = ART.CFG.puzzles.ledgerText || {}, ORD = T.ord || LEDGER_DEF.ord, SRC = T.sources || LEDGER_DEF.sources, REL = T.reliable || LEDGER_DEF.reliable, LIAR = T.liar || LEDGER_DEF.liar;
+    var n = Math.max(3, Math.min(5, o.digits || 4)), liars = o.liars || 0, extra = o.extra || 0, minClues = o.minClues || 3, kinds = o.kinds || ['is', 'notis', 'sum', 'diff', 'parity', 'greater'];
+    function rnd(k) { return Math.floor(Math.random() * k); }
+    function pickPos(not) { var i; do { i = rnd(n); } while (i === not); return i; }
+    var digs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], secret = [], i;
+    for (i = 0; i < n; i++) secret.push(digs.splice(rnd(digs.length), 1)[0]);
+    var codes = [];   // every distinct-digit code of length n
+    (function build(pre, used) { if (pre.length === n) { codes.push(pre.slice()); return; } for (var d = 0; d < 10; d++) if (!used[d]) { used[d] = 1; pre.push(d); build(pre, used); pre.pop(); used[d] = 0; } })([], {});
+    function core(c) {
+      var a = ORD[c.i], b = ORD[c.j];
+      return { is: 'the ' + a + ' number was ' + c.v, notis: 'the ' + a + ' number was never ' + c.v, sum: 'the ' + a + ' and the ' + b + ' add up to ' + c.v,
+        diff: 'the ' + a + ' is ' + c.v + ' more than the ' + b, parity: 'the ' + a + ' number is ' + (c.v ? 'odd' : 'even'), greater: 'the ' + a + ' number is bigger than the ' + b }[c.k];
+    }
+    function mkClue(k, s) {   // a clue of kind k with random params, evaluated against the secret-like code s (true if s given and satisfies)
+      var c = { k: k, i: rnd(n) }; c.j = pickPos(c.i);
+      if (k === 'is') c.v = s ? s[c.i] : rnd(10);
+      else if (k === 'notis') { c.v = s ? s[c.i] : rnd(10); if (s) { do { c.v = rnd(10); } while (c.v === s[c.i]); } }
+      else if (k === 'sum') c.v = s ? s[c.i] + s[c.j] : rnd(19);
+      else if (k === 'diff') { if (s && s[c.i] < s[c.j]) { var t = c.i; c.i = c.j; c.j = t; } c.v = s ? s[c.i] - s[c.j] : rnd(9) + 1; }
+      else if (k === 'parity') c.v = s ? s[c.i] % 2 : rnd(2);
+      c.ok = function (code) {
+        switch (c.k) { case 'is': return code[c.i] === c.v; case 'notis': return code[c.i] !== c.v; case 'sum': return code[c.i] + code[c.j] === c.v;
+          case 'diff': return code[c.i] - code[c.j] === c.v; case 'parity': return code[c.i] % 2 === c.v; default: return code[c.i] > code[c.j]; }
+      };
+      return c;
+    }
+    var clues = [], pool = codes, tries = 0;
+    while (pool.length > 1 && tries++ < 200) {
+      var c = mkClue(kinds[rnd(kinds.length)], secret); if (!c.ok(secret)) continue;
+      var np = pool.filter(c.ok); if (np.length < pool.length && np.length >= 1) { clues.push(c); pool = np; }
+    }
+    while (pool.length > 1) { var cx = mkClue('is', secret); pool = pool.filter(cx.ok); clues.push(cx); }
+    for (var pass = 0; pass < 2; pass++) clues.slice().sort(function () { return Math.random() - 0.5; }).forEach(function (c) {   // prune clues the others already imply
+      if (clues.length <= minClues) return; var rest = clues.filter(function (x) { return x !== c; });
+      if (codes.filter(function (cd) { return rest.every(function (x) { return x.ok(cd); }); }).length === 1) clues = rest;
+    });
+    clues.forEach(function (c) { c.src = REL[rnd(REL.length)]; c.lie = false; });
+    var all = clues.slice(), guard = 0, redundant = 0, tk;
+    while (redundant < extra && guard++ < 80) { tk = mkClue(kinds[rnd(kinds.length)], secret); if (tk.ok(secret)) { tk.src = REL[rnd(REL.length)]; tk.lie = false; all.push(tk); redundant++; } }
+    var lied = 0; guard = 0;
+    while (lied < liars && guard++ < 400) { tk = mkClue(kinds[rnd(kinds.length)], null); if (!tk.ok(secret)) { tk.src = LIAR; tk.lie = true; all.push(tk); lied++; } }
+    if (liars > 0) { guard = 0; while (guard++ < 80) { tk = mkClue(kinds[rnd(kinds.length)], secret); if (tk.ok(secret)) { tk.src = LIAR; tk.lie = false; all.push(tk); break; } } }   // the liar also tells one truth
+    all.sort(function () { return Math.random() - 0.5; });
+    var wrap = mk('div', 'pz-ledger'), desk = mk('div', 'pz-scraps'), disp = mk('div', 'pz-disp'), pad = mk('div', 'pz-pad pz-pad-s'), entered = '';
+    all.forEach(function (c, ix) {
+      var d = SRC[c.src] || LEDGER_DEF.sources.diary, sc = mk('div', 'pz-scrap s-' + c.src); sc.style.setProperty('--r', ((ix * 37) % 7 - 3) * 0.55 + 'deg'); sc.dataset.src = c.src;
+      sc.appendChild(mk('b', null, d.head)); sc.appendChild(mk('p', null, d.wrap.replace('{c}', core(c)).replace(/^./, function (m) { return m.toUpperCase(); }))); desk.appendChild(sc);
+    });
+    function paint() { disp.textContent = (entered + '_'.repeat(n - entered.length)).split('').join(' '); }
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', ''].forEach(function (k) {
+      if (k === '') { pad.appendChild(mk('span')); return; }
+      var b = mk('button', 'pz-key', k === 'C' ? '\u00d7' : k); b.type = 'button'; b.dataset.k = k;
+      b.addEventListener('click', function () {
+        api.tap(); if (k === 'C') { entered = ''; paint(); return; } if (entered.length >= n) return; entered += k; paint();
+        if (entered.length === n) { if (entered === secret.join('')) api.solved(); else { api.failed(); disp.classList.add('bad'); setTimeout(function () { entered = ''; paint(); disp.classList.remove('bad'); }, 480); } }
+      });
+      pad.appendChild(b);
+    });
+    wrap.appendChild(desk); wrap.appendChild(disp); wrap.appendChild(pad); root.appendChild(wrap); paint();
+    var truth = all.filter(function (c) { return !c.lie; });
+    return {
+      destroy: function () {}, solution: function () { return secret.join(''); },
+      info: function () { return { scraps: all.length, liars: all.filter(function (c) { return c.lie; }).length, consistent: codes.filter(function (cd) { return truth.every(function (c) { return c.ok(cd); }); }).length, secret: secret.join('') }; }
+    };
+  });
+
+  /* ================= MUSIC BOX: repeat the growing tune; pads reshuffle every round, later nights play in the dark ================= */
+  P.register('musicbox', function (root, o, api) {
+    var hz = [293.7, 349.2, 415.3, 466.2, 554.4, 622.3], col = ['#6fbf4a', '#d6307f', '#e0962a', '#3fa6b8', '#8a5fd0', '#d8d0b8'];
+    var np = Math.max(3, Math.min(6, o.pads || 4)), len = Math.max(3, o.length || 5), step = o.stepMs || 560, silent = !!o.silent, seq = [], i, round = 1, pos = 0, tm = [], alive = true;
+    for (i = 0; i < len; i++) { var v; do { v = Math.floor(Math.random() * np); } while (i && v === seq[i - 1] && Math.random() < 0.7); seq.push(v); }
+    var grid = mk('div', 'pz-mbgrid'), btn = [], order = []; for (i = 0; i < np; i++) order.push(i);
+    function layout() { if (o.shuffle !== false) for (var a = np - 1; a > 0; a--) { var b = Math.floor(Math.random() * (a + 1)), t = order[a]; order[a] = order[b]; order[b] = t; } order.forEach(function (n, slot) { btn[n].style.order = slot; }); }
+    function lit(n, ms) { btn[n].classList.add('on'); A.note(hz[n], { vol: 0.42, dur: 0.8, pan: (n / (np - 1) - 0.5) * 0.7 }); setTimeout(function () { btn[n].classList.remove('on'); }, ms || 260); }
+    function later(fn, ms) { var t = setTimeout(fn, ms); tm.push(t); }
+    function play() {
+      grid.classList.remove('in'); pos = 0;
+      for (var k = 0; k < round; k++) (function (k) { later(function () { if (!alive) return; if (silent) A.note(hz[seq[k]], { vol: 0.42, dur: 0.8, pan: (seq[k] / (np - 1) - 0.5) * 0.7 }); else lit(seq[k], step * 0.6); }, 700 + k * step); })(k);
+      later(function () { if (alive) grid.classList.add('in'); }, 700 + round * step);
+    }
+    for (i = 0; i < np; i++) (function (n) {
+      var b = mk('button', 'pz-mb'); b.type = 'button'; b.dataset.n = n; b.style.setProperty('--c', col[n]); btn.push(b);
+      b.addEventListener('click', function () {
+        if (!grid.classList.contains('in')) return; lit(n, 220);
+        if (n !== seq[pos]) { grid.classList.remove('in'); api.failed(); later(play, 900); return; }
+        pos++; if (pos === round) {
+          grid.classList.remove('in');
+          if (round === len) { later(api.solved, 250); return; }
+          round++; later(function () { layout(); play(); }, 600);
+        }
+      });
+      grid.appendChild(b);
+    })(i);
+    root.appendChild(grid); layout(); play();
+    return { destroy: function () { alive = false; tm.forEach(clearTimeout); }, solution: function () { return seq.slice(); }, state: function () { return { round: round, pos: pos, len: len, ready: grid.classList.contains('in') }; } };
   });
 
   document.addEventListener('DOMContentLoaded', function () { var c = $('puzzleClose'); if (c) c.addEventListener('click', function () { P.close(); }); });

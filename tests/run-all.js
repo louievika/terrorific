@@ -3,7 +3,7 @@
 const { spawnSync } = require('child_process');
 const url = process.argv[2] || 'http://localhost:8077/game.html', shots = process.argv[3] || '/tmp/art-shots';
 let bad = 0;
-for (const f of ['logic.js', 'ui.js', 'audio.js', 'voice.js']) {
+for (const f of ['logic.js', 'ui.js', 'audio.js', 'voice.js', 'camlock.js', 'hardpuz.js']) {
   console.log('\n=== tests/' + f + ' ===');
   const r = spawnSync('node', [__dirname + '/' + f, url, shots], { stdio: 'inherit' }); if (r.status) bad++;
 }
