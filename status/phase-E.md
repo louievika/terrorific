@@ -17,3 +17,11 @@ Payoff overlays are screen-space; `ART.ui.lockView()` eases `ART.V.yaw` to centr
 - Night 1 stays gentle (untimed, no strikes, single stage). Night 5: 5-digit ledger with 2 misleading scraps, 4 stages, 185 s, 3 strikes.
 - Horror theme: stained-paper UI, rust/blood glow, garbled caretaker scrap, wet-crunch failure (`A.pzFail`), music-box notes (`A.note`). Screenshots: docs/phase-E/f-puzzle-*.png.
 - Tests: `tests/hardpuz.js` (26 checks). Rename note: user-facing name is now "Terrorific".
+
+## Supplied video clips (Louie 7:14 PM) - done
+- `assets/video/{intro,scare-b,scare-c}.mp4` + posters: ffmpeg re-encode of Louie's three clips (H.264 main + AAC, 480x804, 24 fps, faststart, 1.16-1.49 MB each). User-supplied, labelled in README; sources stay out of the repo.
+- `js/video.js` (new) + `game.video` in the manifest: `intro` (cold-open, `when: night1|always|never`, fade from black, grade/grain overlay, first play unskippable, tap-to-skip afterwards via localStorage, 4.5 s watchdog), `perNight` (optional short replay of the intro at the start of later nights, off by default), `jumpscares` (clips, per-night `chance` and `perNightMax`, `cooldownSec`, `minNight`, `kinds`, volume, duck level).
+- iOS: elements are created and unlocked (one muted play/pause) inside the AUTHENTICATE tap, audio routed through the tap-unlocked AudioContext, `playsinline`, `preload=auto`, intro `play()` called synchronously in the tap.
+- Director: `video-pop` / `lo-video-pop` / `at-video-pop` variants (type `video`) only enter the pool when a clip is ready, off cooldown and the night's odds roll true; clip choice never repeats back-to-back. `PAYOFF.video` in `js/art.js`: beat 1 flicker, beat 2 500 ms silence, beat 3 full-screen clip + audio (screen-locked), falls back to the sprite run if it can't start in 900 ms.
+- `?fast=` (headless suites) disables video unless `&video=1`; `?novideo=1` always disables.
+- Tests: `tests/video.js` (30 checks). Screenshots: docs/phase-E/video-*.png.

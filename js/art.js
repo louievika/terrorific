@@ -26,10 +26,10 @@
       api.lightsBack(kind === 'lightsout'); el.classList.remove('fade', 'sil'); el.style.opacity = 1; ART.log('run ' + v.id);
       (function step(now) {
         if (gen !== S.gen) return;
-        var p = Math.min(1, (now - t0) / dur), e = Math.pow(p, ease);
+        var p = Math.max(0, Math.min(1, (now - t0) / dur)), e = Math.pow(p, ease);
         var sc = lerp(v.from, v.to, e), x = W / 2 + Math.max(-W * 0.5, Math.min(W * 0.5, api.doorX() - W / 2)) * Math.pow(1 - p, 2) + (v.side || 0) * W * 0.5 * Math.pow(p, 1.25) * (1 - p), y = -floorFar * (1 - Math.pow(p, 1.5));
         el.style.left = x + 'px'; el.style.transform = 'translate3d(-50%,' + y.toFixed(1) + 'px,0) scale(' + (sc * flip).toFixed(3) + ',' + sc.toFixed(3) + ')';
-        var fi = (f0 + Math.floor((now - t0) * R.fps / 1000)) % R.frames;
+        var fi = (f0 + Math.floor(Math.max(0, now - t0) * R.fps / 1000)) % R.frames;
         if (fi !== lastF) {
           lastF = fi; el.style.backgroundPosition = ((fi % R.cols) / (R.cols - 1) * 100) + '% ' + (Math.floor(fi / R.cols) / (rows - 1) * 100) + '%';
           if ((R.footfallFrames || [0, 6]).indexOf(fi) >= 0) A.footfall(0.2 + 0.8 * e);
@@ -64,6 +64,14 @@
       var S = ART.S, pan = Math.random() < 0.5 ? -1 : 1; api.lightsBack(false);
       for (var i = 0; i < 5; i++) (function (i) { setTimeout(function () { if (gen === S.gen) A.footfall(0.3 + i * 0.12); }, i * 360); })(i);
       setTimeout(function () { if (gen === S.gen) { impact({ stab: v.stab, side: pan * 0.7, to: 0.5 }, kind); ART.ui.flash(0.15, 60); } }, 1900); finish(2200);
+    },
+    /* supplied video clip, full-screen and screen-locked (beat 3 = clip + its audio). No clip / won't play -> the sprite run instead. */
+    video: function (v, kind, gen, finish) {
+      var S = ART.S, fb = function () {
+        if (gen !== S.gen) return; ART.log('video fallback -> sprite');
+        PAYOFF.run({ id: v.id + '-fb', type: 'run', from: 0.05, to: kind === 'peek' ? 0.8 : 1.6, ms: 900, side: 0, stop: kind === 'peek', stab: 'synth' }, kind, gen, finish);
+      };
+      ART.video.playScare(function () { if (gen === S.gen) finish(120); }, fb);
     },
     /* knocking at the door, then nothing */
     knock: function (v, kind, gen, finish) { api.lightsBack(false); A.knock(3); setTimeout(function () { if (gen === ART.S.gen) A.creak(0.4); }, 1300); finish(1900); },

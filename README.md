@@ -13,7 +13,8 @@ A Terrifier 2-themed, FNAF-style horror game for iPhone Safari (touch + gyroscop
 ## Assets and licenses
 - `assets/art/art-title.png` / `art-title-source.jpg`: **user-supplied reference image (not original art)** kept as a placeholder until final assets arrive. Swap it by replacing the file, then run `python3 scripts/make_title_assets.py` to rebuild the derived files (`art-title-m.jpg`, `art-title-blink.png`, `art-title.webp`). Eye/jaw regions in that script are tuned to the current image.
 - All code, UI, and synthesized audio: MIT (original).
-- No Terrifier audio/video is used.
+- `assets/video/*.mp4` (+ posters): **user-supplied by Louie** (3 portrait Art clips, re-encoded by ffmpeg to H.264/AAC ~480x804, each under 1.5 MB): `intro.mp4` = cold-open after AUTHENTICATE, `scare-b.mp4` and `scare-c.mp4` = jump-scare payoffs. They are swappable: drop a file in `assets/video/` and edit `game.video` in `assets/manifest.json` (slots, volumes, per-night odds, cooldowns). Delete the files and the game falls back to the sprite scares.
+- No other Terrifier audio/video is used; all other renders and audio are original.
 
 ## Run locally
 `python3 -m http.server 8000` then open `http://localhost:8000/` (use HTTPS in production: iOS requires it for motion sensors).

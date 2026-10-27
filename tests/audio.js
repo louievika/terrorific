@@ -7,7 +7,7 @@ async function run(block) {
   const errs = []; pg.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); pg.on('pageerror', e => errs.push('pageerror ' + e.message));
   const hits = {}; await pg.setRequestInterception(true);
   pg.on('request', r => { if (/assets\/audio\//.test(r.url())) { hits[r.url().split('/').pop()] = 1; if (block) return r.respond({ status: 404, body: 'nope' }); } r.continue(); });
-  await pg.goto(URL, { waitUntil: 'load' }); await sl(3500);
+  await pg.goto(URL + '?novideo=1', { waitUntil: 'load' }); await sl(3500);
   await pg.evaluate(() => { localStorage.clear(); localStorage.setItem('art_login_seen_v1', '1'); });
   await pg.tap('#authBtn'); await sl(2500);
   const out = await pg.evaluate(() => {

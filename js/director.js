@@ -10,7 +10,7 @@
     reset: function () { hist = []; lastId = {}; counter = 0; },
     pool: function (kind) {
       var all = ((cfg().variants || {})[kind]) || [], n = ART.S ? ART.S.night : 1;
-      return all.filter(function (v) { return (v.minNight || 1) <= n && (v.maxNight || 99) >= n; });
+      return all.filter(function (v) { return (v.minNight || 1) <= n && (v.maxNight || 99) >= n && (v.type !== 'video' || (ART.video && ART.video.can(kind))); });   // video variants only when a clip is ready, off cooldown and the night's odds say so
     },
     /* weight: base * recency (variants not used for a while come back up); the previous pick is excluded outright */
     pick: function (kind, forceId) {

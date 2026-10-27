@@ -8,7 +8,7 @@ async function open(block, fast) {
   const errs = []; pg.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); pg.on('pageerror', e => errs.push('pageerror ' + e.message));
   const hits = {}; await pg.setRequestInterception(true);
   pg.on('request', r => { const u = r.url(); if (/assets\/voice\//.test(u)) { hits[u.split('/').pop()] = 1; if (block) return r.respond({ status: 404, body: 'nope' }); } r.continue(); });
-  await pg.goto(URL0 + (fast ? '?fast=' + fast : ''), { waitUntil: 'load' }); await sl(3000);
+  await pg.goto(URL0 + (fast ? '?fast=' + fast : '?novideo=1'), { waitUntil: 'load' }); await sl(3000);
   await pg.evaluate(() => { localStorage.clear(); localStorage.setItem('art_login_seen_v1', '1'); });
   return { b, pg, errs, hits };
 }

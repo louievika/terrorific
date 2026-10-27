@@ -616,6 +616,12 @@
       "type": "fakeout",
       "minNight": 2,
       "w": 0.8
+     },
+     {
+      "id": "video-pop",
+      "type": "video",
+      "minNight": 2,
+      "w": 0.7
      }
     ],
     "lightsout": [
@@ -695,6 +701,12 @@
        ]
       ],
       "shake": "jolt"
+     },
+     {
+      "id": "lo-video-pop",
+      "type": "video",
+      "minNight": 2,
+      "w": 0.8
      }
     ],
     "attack": [
@@ -760,6 +772,91 @@
       "shake": "sway",
       "ease": 2.8,
       "slam": true
+     },
+     {
+      "id": "at-video-pop",
+      "type": "video",
+      "minNight": 2,
+      "w": 0.8
+     }
+    ]
+   }
+  },
+  "video": {
+   "_comment": "Supplied portrait clips (user-supplied by Louie, swappable: drop a file in assets/video/ and edit this block). intro = cold-open after the AUTHENTICATE tap. jumpscares.clips = extra full-screen payoff variant for the director (never the same clip twice in a row). Arrays are per night (clamped). If a file fails, the sprite scares play instead.",
+   "enabled": true,
+   "intro": {
+    "src": "assets/video/intro.mp4",
+    "poster": "assets/video/intro-poster.jpg",
+    "volume": 0.9,
+    "when": "night1",
+    "fadeInMs": 700,
+    "fadeOutMs": 700,
+    "holdBlackMs": 450,
+    "failMs": 4500,
+    "skipAfterSeen": true,
+    "seenKey": "terrorific_intro_seen_v1",
+    "grade": {
+     "vignette": 0.6,
+     "grain": 0.12
+    }
+   },
+   "perNight": {
+    "enabled": false,
+    "nights": [
+     2,
+     3,
+     4,
+     5
+    ],
+    "startSec": 2.0,
+    "durSec": 2.4,
+    "volume": 0.5,
+    "delaySec": 6
+   },
+   "jumpscares": {
+    "volume": 1.0,
+    "minNight": 2,
+    "kinds": [
+     "peek",
+     "lightsout",
+     "attack",
+     "feed"
+    ],
+    "chance": [
+     0,
+     0.5,
+     0.6,
+     0.7,
+     0.8
+    ],
+    "cooldownSec": 70,
+    "perNightMax": [
+     0,
+     1,
+     2,
+     2,
+     3
+    ],
+    "duckTo": 0.1,
+    "holdAfterMs": 200,
+    "startFailMs": 900,
+    "clips": [
+     {
+      "id": "clip-b",
+      "src": "assets/video/scare-b.mp4",
+      "poster": "assets/video/scare-b-poster.jpg",
+      "durSec": 5,
+      "weight": 1,
+      "minNight": 2
+     },
+     {
+      "id": "clip-c",
+      "src": "assets/video/scare-c.mp4",
+      "poster": "assets/video/scare-c-poster.jpg",
+      "durSec": 5,
+      "weight": 1,
+      "minNight": 2
      }
     ]
    }

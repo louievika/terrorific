@@ -8,7 +8,7 @@ process.on('unhandledRejection', e => { console.log((global.__R||[]).join('\n'))
   /* ---------- A. manifest-driven: patch the manifest in flight and see the game change ---------- */
   {
     const { b, pg, errs } = await launch({ manifest: j => { j.game.puzzles.hotspots.fusebox.yawDeg = -40; j.game.puzzles.hotspots.fusebox.amountPct = 33; j.game.nights[0].len = 11; j.game.puzzles.hotspots.fusebox.types = ['tiles', 'tiles', 'tiles', 'tiles', 'tiles']; } });
-    await pg.goto(URL, { waitUntil: 'load' }); await sl(3000);
+    await pg.goto(URL + '?novideo=1', { waitUntil: 'load' }); await sl(3000);
     const m = await pg.evaluate(() => ({ mods: ['config', 'rooms', 'art', 'audio', 'ui', 'nights', 'puzzles'].map(k => !!window.ART[k]), yaw: ART.CFG.puzzles.hotspots.fusebox.yawDeg, amt: ART.CFG.puzzles.hotspots.fusebox.amountPct, nights: ART.CFG.clock && ART.CFG.clock.nightSeconds }));
     T('all 7 modules loaded on window.ART', m.mods.every(Boolean), JSON.stringify(m.mods));
     T('manifest value reaches CFG (hotspot yaw / amount)', m.yaw === -40 && m.amt === 33, JSON.stringify(m));
@@ -20,7 +20,7 @@ process.on('unhandledRejection', e => { console.log((global.__R||[]).join('\n'))
   }
   /* ---------- B. default manifest ---------- */
   const { b, pg, errs } = await launch();
-  await pg.goto(URL, { waitUntil: 'load' }); await sl(3000);
+  await pg.goto(URL + '?novideo=1', { waitUntil: 'load' }); await sl(3000);
   const ev = (f, a) => pg.evaluate(f, a);
   await pg.screenshot({ path: shotDir + '/b-login.png' });
   await pg.tap('#authBtn'); await sl(1800);

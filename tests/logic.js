@@ -7,7 +7,7 @@ const shotDir=process.argv[3]||'screenshots';
  const pg=await b.newPage(); await pg.setViewport({width:390,height:844,deviceScaleFactor:2,isMobile:true,hasTouch:true});
  const errs=[]; pg.on('console',m=>{if(['error','warning'].includes(m.type()))errs.push(m.type()+': '+m.text())}); pg.on('pageerror',e=>errs.push('pageerror '+e.message));
  pg.on('response',r=>{if(r.status()>=400)errs.push('HTTP '+r.status()+' '+r.url())});
- await pg.goto(URL,{waitUntil:'load'}); await sl(3500);
+ await pg.goto(URL+'?novideo=1',{waitUntil:'load'}); await sl(3500);
  await pg.evaluate(()=>{localStorage.clear();localStorage.setItem('art_login_seen_v1','1')});
  await pg.tap('#authBtn'); await sl(1500);
  const R=[]; const T=(n,ok,x)=>{R.push((ok?'PASS ':'FAIL ')+n+(x?' ['+x+']':''))};

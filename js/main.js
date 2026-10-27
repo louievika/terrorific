@@ -5,7 +5,7 @@
 
   function frame(now) {
     requestAnimationFrame(frame);
-    var raw = Math.min(0.1, (now - last) / 1000); last = now; var dt = raw * ART.FAST;
+    var raw = Math.max(0, Math.min(0.1, (now - last) / 1000)); last = now; var dt = raw * ART.FAST;
     ART.ui.autoTick(raw); ART.ui.updateView();
     if (S.phase === 'play' || S.phase === 'dying') { ART.art.recenter(); ART.ui.updateSpots(); }
     if (S.cam) { feedAcc += raw; if (feedAcc > 0.05) { feedAcc = 0; ART.rooms.drawFeed(now); } }
@@ -23,7 +23,10 @@
     if (perm && perm.then) perm.then(function (r) { if (r === 'granted') ART.ui.enableGyro(); else ART.log('motion denied'); }).catch(function () { ART.log('motion perm error'); });
     else if (DOE) ART.ui.enableGyro();
     S.session = 0; S.started = true; S.deaths = 0; $('termText').textContent += '\nACCESS GRANTED\n';
-    setTimeout(function () { ART.nights.start(S.night); }, 700);
+    var go = function () { ART.nights.start(S.night); };
+    if (ART.video) { try { ART.video.prepare(); } catch (e) { console.warn('video prepare', e); } }   // create + unlock the clips inside this tap
+    var introOn = false; try { introOn = ART.video && ART.video.playIntro(go); } catch (e) { console.warn('intro', e); introOn = false; }
+    if (!introOn) setTimeout(go, 700);
   }
 
   function wire() {
