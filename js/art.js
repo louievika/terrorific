@@ -73,6 +73,18 @@
       };
       ART.video.playScare(function () { if (gen === S.gen) finish(120); }, fb);
     },
+    /* FAIL-STATE: the dog (user-supplied photo cutout) lunges from small to full screen in ~0.4 s, screen-locked; original synthesized snarl + barks. Image missing -> Art's attack run. */
+    dog: function (v, kind, gen, finish) {
+      var S = ART.S, c = (ART.CFG.failScare && ART.CFG.failScare.dog) || {}, L = $('dogLayer');
+      if (!api.dogReady()) { ART.log('dog fallback -> art run'); var at = ((ART.CFG.scares.variants || {}).attack || []).filter(function (x) { return x.type === 'run'; })[0] || { id: 'at-fb', type: 'run', from: 0.05, to: 3, ms: 1000, side: 0, stab: 'synth', slam: true };
+        return PAYOFF.run(at, kind, gen, finish); }
+      var lunge = c.lungeMs || 400; api.lightsBack(false); L.style.setProperty('--dg-ms', lunge + 'ms'); L.style.setProperty('--dg-from', c.startScale || 0.1); L.style.setProperty('--dg-veil', c.veil == null ? 0.88 : c.veil);
+      L.className = ''; void L.offsetWidth; L.className = 'go'; ART.log('dog lunge');
+      A.dogSnarl({ dur: (c.snarlMs || 950) / 1000, vol: 0.9 });
+      setTimeout(function () { if (gen !== S.gen) return; A.scream(); A.sting(true, { rate: 0.8, pan: 0 }); for (var i = 0; i < (c.barks == null ? 2 : c.barks); i++) A.dogBark({ at: i * 0.24, vol: 1 }); ART.ui.flash(0.85, 130); shake(c.shake || 'rattle'); flashSeq([[0.6, 80], [0, 50], [0.45, 70]]); L.classList.add('hit'); }, Math.round(lunge * 0.88));
+      setTimeout(function () { if (gen === S.gen) { L.className = 'out'; } }, lunge + (c.holdMs || 1000)); setTimeout(function () { L.className = ''; }, lunge + (c.holdMs || 1000) + 220);
+      finish(lunge + (c.holdMs || 1000) + 120);
+    },
     /* knocking at the door, then nothing */
     knock: function (v, kind, gen, finish) { api.lightsBack(false); A.knock(3); setTimeout(function () { if (gen === ART.S.gen) A.creak(0.4); }, 1300); finish(1900); },
     /* FAKE-OUT: beats 1-2 only. Lights return, nothing came. The director queues a real scare soon after. */
@@ -99,11 +111,17 @@
   };
   var api = ART.art = {
     img: null,
+    dog: { ok: false, im: null },
+    /* the user-supplied dog cutout (assets/art/dog.png): background load, never blocks the title. Off in headless suites (?fast / ?novideo) unless ?dog=1; ?nodog=1 always off. */
+    dogEnabled: function () { var q = location.search, c = ART.CFG.failScare && ART.CFG.failScare.dog; if (!c || c.enabled === false || /[?&]nodog=1/.test(q)) return false; if (/[?&]dog=1/.test(q)) return true; return !/[?&](fast|novideo)=/.test(q); },
+    dogReady: function () { return api.dogEnabled() && api.dog.ok; },
+    dogLoad: function () { var c = ART.CFG.failScare && ART.CFG.failScare.dog; if (!c || !api.dogEnabled() || api.dog.im) return; var im = new Image(); api.dog.im = im; im.onload = function () { api.dog.ok = true; $('dogImg').src = c.asset; ART.log('dog ready'); }; im.onerror = function () { api.dog.ok = false; console.warn('dog image failed - Art fail scare used'); }; im.src = c.asset; },
     run: { ok: false, im: null },
     preload: function (progress, done) {
       var im = new Image(); api.img = im;
       im.onload = function () { progress(); done(true); }; im.onerror = function () { progress(); done(false); }; im.src = ART.ART_SRC;
       $('art').src = ART.ART_SRC;
+      api.dogLoad();
       var R = ART.ART_RUN;                                           // run sheet loads in the background: never blocks the title/login, falls back to the static scale-up
       if (R && R.sheet) {
         var rm = new Image(); api.run.im = rm; rm.onload = function () { api.run.ok = true; var e = $('artRun'); e.style.backgroundImage = 'url(' + R.sheet + ')';
@@ -150,7 +168,7 @@
     /* screen-space full-size face pop (also used by the door-grab loss payoff) */
     facePop: function (v, gen, finish) { FEEDPAY.face(v || { stab: 'synth' }, gen, finish); },
     cancelRun: function () { if (api.raf) cancelAnimationFrame(api.raf); api.raf = 0; },
-    reset: function () { if (ART.S && !ART.S.feedScareOn) { var fp = $('feedPop'); if (fp) fp.className = ''; } api.cancelRun(); if (ART.ui && ART.ui.unlockView) ART.ui.unlockView(); var r = $('artRun'); r.className = ''; r.style.transition = ''; r.style.opacity = 0; document.body.classList.remove('camshake', 'jolt', 'rattle', 'sway'); var a = $('art'); a.className = ''; a.style.transition = 'none'; a.style.left = '50%'; void a.offsetWidth; a.style.transition = ''; },
+    reset: function () { var dl = $('dogLayer'); if (dl) dl.className = ''; if (ART.S && !ART.S.feedScareOn) { var fp = $('feedPop'); if (fp) fp.className = ''; } api.cancelRun(); if (ART.ui && ART.ui.unlockView) ART.ui.unlockView(); var r = $('artRun'); r.className = ''; r.style.transition = ''; r.style.opacity = 0; document.body.classList.remove('camshake', 'jolt', 'rattle', 'sway'); var a = $('art'); a.className = ''; a.style.transition = 'none'; a.style.left = '50%'; void a.offsetWidth; a.style.transition = ''; },
     /* keep the overlay under Art's world position (door = yaw 0) */
     doorX: function () {
       var V = ART.V, W = innerWidth, H = innerHeight, vf = 80 * Math.PI / 180, hf = 2 * Math.atan(Math.tan(vf / 2) * (W / H));

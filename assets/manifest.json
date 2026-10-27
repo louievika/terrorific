@@ -778,6 +778,12 @@
       "type": "video",
       "minNight": 2,
       "w": 0.8
+     },
+     {
+      "id": "at-dog",
+      "type": "dog",
+      "minNight": 1,
+      "w": 1
      }
     ],
     "feed": [
@@ -1012,6 +1018,24 @@
      "vol": 0.9
     }
    ]
+  },
+  "failScare": {
+   "_comment": "FAIL-STATE scare mix. weights = relative odds of each family when Art catches you (art = the run/video/silhouette variants, dog = the user-supplied dog photo). The director never repeats the previous variant. dog.* tunes the dog payoff; if the image fails to load the Art run plays instead.",
+   "weights": {
+    "art": 1,
+    "dog": 0.9
+   },
+   "dog": {
+    "enabled": true,
+    "asset": "assets/art/dog.png",
+    "lungeMs": 400,
+    "startScale": 0.1,
+    "holdMs": 1000,
+    "snarlMs": 950,
+    "barks": 2,
+    "veil": 0.88,
+    "shake": "rattle"
+   }
   }
  },
  "voice": {

@@ -69,6 +69,25 @@
   };
 
   /* ---- scheduler ---- */
+  /* DOG fail-scare sounds (original synthesis, no samples): a throat growl (detuned saws, ~26 Hz amplitude chop, two formants, rasp noise) and sharp barks (falling saw + noise burst through a formant) */
+  A.dogSnarl = function (o) {
+    if (!ok()) return 0; o = o || {}; var c = A.ctx, t = c.currentTime + 0.01, dur = o.dur || 0.95, vol = (o.vol == null ? 1 : o.vol) * 0.55, out = c.createGain(), f1 = c.createBiquadFilter(), f2 = c.createBiquadFilter(), am = c.createGain(), lfo = c.createOscillator(), lg = c.createGain();
+    f1.type = 'bandpass'; f1.frequency.value = 520; f1.Q.value = 2.2; f2.type = 'peaking'; f2.frequency.value = 1450; f2.Q.value = 2; f2.gain.value = 9;
+    am.gain.value = 0.55; lfo.type = 'sine'; lfo.frequency.value = 24 + Math.random() * 6; lg.gain.value = 0.45; lfo.connect(lg); lg.connect(am.gain);
+    env(out, t, 0.12, vol, dur); out.gain.setValueAtTime(vol, t + dur * 0.7); out.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    [58, 59.7, 117].forEach(function (f, i) { var s = c.createOscillator(), g = c.createGain(); s.type = 'sawtooth'; s.frequency.setValueAtTime(f, t); s.frequency.linearRampToValueAtTime(f * 1.22, t + dur); g.gain.value = i === 2 ? 0.25 : 0.6; s.connect(g); g.connect(f1); g.connect(f2); s.start(t); s.stop(t + dur + 0.05); });
+    f1.connect(am); f2.connect(am); am.connect(out);
+    var n = c.createBufferSource(), nf = c.createBiquadFilter(), ng = c.createGain(); n.buffer = A.brown || A.white; n.loop = true; nf.type = 'highpass'; nf.frequency.value = 1700; ng.gain.value = 0.33; n.connect(nf); nf.connect(ng); ng.connect(am); n.start(t); n.stop(t + dur + 0.05);
+    lfo.start(t); lfo.stop(t + dur + 0.05); out.connect(o.bus || A.sfx); return dur;
+  };
+  A.dogBark = function (o) {
+    if (!ok()) return 0; o = o || {}; var c = A.ctx, t = c.currentTime + (o.at || 0) + 0.005, vol = (o.vol == null ? 1 : o.vol) * 0.5, g = c.createGain(), f = c.createBiquadFilter(), s = c.createOscillator(), s2 = c.createOscillator(), n = c.createBufferSource(), nf = c.createBiquadFilter(), ng = c.createGain(), r = o.rate || (0.9 + Math.random() * 0.25);
+    f.type = 'bandpass'; f.frequency.value = 1050 * r; f.Q.value = 1.4; env(g, t, 0.008, vol, 0.16);
+    s.type = 'sawtooth'; s.frequency.setValueAtTime(760 * r, t); s.frequency.exponentialRampToValueAtTime(300 * r, t + 0.15); s2.type = 'square'; s2.frequency.setValueAtTime(380 * r, t); s2.frequency.exponentialRampToValueAtTime(150 * r, t + 0.15);
+    n.buffer = A.white; nf.type = 'bandpass'; nf.frequency.value = 1500; nf.Q.value = 0.8; ng.gain.value = 0.5; n.connect(nf); nf.connect(ng); ng.connect(f); s.connect(f); s2.connect(f); f.connect(g); g.connect(o.bus || A.sfx);
+    s.start(t); s2.start(t); n.start(t); s.stop(t + 0.2); s2.stop(t + 0.2); n.stop(t + 0.2); return 0.16;
+  };
+
   var T = ART.taunts = {
     cfg: function () { return ART.CFG.taunts || null; },
     last: '', n: 0, log: [],
