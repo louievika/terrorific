@@ -159,25 +159,33 @@
     "n": "CAM 1 - HALLWAY",
     "yaw": 0,
     "h": 110,
-    "bot": 205
+    "bot": 205,
+    "bodyH": 0.62,
+    "bodyBot": 0.8
    },
    "kitchen": {
     "n": "CAM 2 - KITCHEN",
     "yaw": 18,
     "h": 190,
-    "bot": 280
+    "bot": 280,
+    "bodyH": 0.9,
+    "bodyBot": 0.97
    },
    "basement": {
     "n": "CAM 3 - BASEMENT",
     "yaw": -16,
     "h": 180,
-    "bot": 285
+    "bot": 285,
+    "bodyH": 0.93,
+    "bodyBot": 0.98
    },
    "frontdoor": {
     "n": "CAM 4 - FRONT DOOR",
     "yaw": 4,
     "h": 170,
-    "bot": 275
+    "bot": 275,
+    "bodyH": 0.84,
+    "bodyBot": 0.96
    }
   },
   "lore": [
@@ -1031,6 +1039,154 @@
    "_comment": "Camera framing. fov = vertical field of view in degrees (80 was far too zoomed in on a portrait phone; 105 shows the room). refFov = the lens hotspot topPct values were authored for (they are re-projected to the new fov).",
    "fov": 105,
    "refFov": 80
+  },
+  "feedMedia": {
+   "_comment": "Camera-monitor content. clips = Louie's supplied footage (clip-A/B/C and art-clip-1.gif) re-encoded small as muted looping playsinline videos (feed-*.mp4/.webm) with a poster still each (the fallback when video cannot play). cams = which clips may surface on which camera. surface = per-night timing (seconds, [min,max] ranges): firstAfterSec after the night starts / a camera is opened, afterSwitchSec after switching cameras, everySec between surfacings, showSec how long one stays. treatment = the CRT / static / tracking-glitch look. body = the FULL-BODY Art silhouette (assets/art/art-body.png, built by scripts/make_art_body.py) drawn INSTEAD of the room plate whenever Art is on that camera (per-camera bodyH/bodyBot are fractions of the feed height under game.feeds). The feed-scare payoff clip (with sound) is game.video.jumpscares + scares.variants.feed.",
+   "enabled": true,
+   "video": true,
+   "clips": {
+    "a": {
+     "src": "assets/video/feed-a.mp4",
+     "poster": "assets/video/feed-a-poster.jpg",
+     "focusX": 0.5,
+     "focusY": 0.28
+    },
+    "b": {
+     "src": "assets/video/feed-b.mp4",
+     "poster": "assets/video/feed-b-poster.jpg",
+     "focusX": 0.5,
+     "focusY": 0.3
+    },
+    "c": {
+     "src": "assets/video/feed-c.mp4",
+     "poster": "assets/video/feed-c-poster.jpg",
+     "focusX": 0.5,
+     "focusY": 0.3
+    },
+    "gif": {
+     "src": "assets/video/feed-gif.mp4",
+     "webm": "assets/video/feed-gif.webm",
+     "poster": "assets/video/feed-gif-poster.jpg",
+     "focusX": 0.5,
+     "focusY": 0.5
+    }
+   },
+   "cams": {
+    "hallway": [
+     "gif",
+     "a"
+    ],
+    "kitchen": [
+     "b",
+     "gif"
+    ],
+    "basement": [
+     "c",
+     "a"
+    ],
+    "frontdoor": [
+     "gif",
+     "b",
+     "c"
+    ]
+   },
+   "surface": {
+    "firstAfterSec": [
+     [
+      2,
+      4
+     ],
+     [
+      3,
+      5
+     ],
+     [
+      3,
+      6
+     ],
+     [
+      4,
+      7
+     ],
+     [
+      4,
+      8
+     ]
+    ],
+    "afterSwitchSec": [
+     2,
+     4
+    ],
+    "everySec": [
+     [
+      9,
+      14
+     ],
+     [
+      10,
+      16
+     ],
+     [
+      10,
+      17
+     ],
+     [
+      11,
+      18
+     ],
+     [
+      12,
+      20
+     ]
+    ],
+    "showSec": [
+     [
+      3.5,
+      5
+     ],
+     [
+      3.5,
+      5
+     ],
+     [
+      3,
+      4.5
+     ],
+     [
+      3,
+      4.5
+     ],
+     [
+      2.5,
+      4
+     ]
+    ]
+   },
+   "treatment": {
+    "tint": "rgb(170,255,205)",
+    "bands": [
+     1,
+     4
+    ],
+    "bandMs": 140,
+    "shiftPx": 26,
+    "chroma": 2,
+    "rollP": 0.02,
+    "barSec": 5,
+    "barAlpha": 0.14
+   },
+   "body": {
+    "src": "assets/art/art-body.png"
+   },
+   "bg": {
+    "top": "#0a2228",
+    "mid": "#041014",
+    "bottom": "#010304"
+   },
+   "glow": 0.2,
+   "swayPx": 1.6,
+   "bodyAlpha": 0.96,
+   "artTint": "rgb(150,255,205)"
   }
  },
  "voice": {

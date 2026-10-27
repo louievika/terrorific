@@ -3,12 +3,12 @@
 const p = require('puppeteer-core'), fs = require('fs'); const sl = ms => new Promise(r => setTimeout(r, ms));
 const URL0 = process.argv[2] || 'http://localhost:8077/game.html', SHOTS = process.argv[3] || '/tmp/art-shots'; fs.mkdirSync(SHOTS, { recursive: true });
 const ARGS = ['--no-sandbox', '--use-gl=swiftshader', '--autoplay-policy=no-user-gesture-required', '--enable-unsafe-swiftshader'];
-async function open(block) {
+async function open(block, qs) {
   const b = await p.launch({ executablePath: process.env.CHROME || '/usr/bin/google-chrome', headless: 'new', args: ARGS });
   const pg = await b.newPage(); await pg.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
   const errs = []; pg.on('pageerror', e => errs.push(e.message));
   if (block) { await pg.setRequestInterception(true); pg.on('request', r => /assets\/video\/.*\.mp4/.test(r.url()) ? r.respond({ status: 404, body: 'x' }) : r.continue()); }
-  await pg.goto(URL0 + '?fast=1&video=1', { waitUntil: 'load' }); await sl(2500);
+  await pg.goto(URL0 + (qs || '?fast=1&video=1'), { waitUntil: 'load' }); await sl(2500);
   await pg.evaluate(() => { localStorage.clear(); localStorage.setItem('art_login_seen_v1', '1'); localStorage.setItem('terrorific_intro_seen_v1', '1'); });
   await pg.tap('#authBtn'); await sl(900); await pg.tap('#vidLayer .vid.intro').catch(() => {}); await sl(2800);
   return { b, pg, errs };
@@ -81,5 +81,43 @@ async function run(pg, vid, wait) {
     const r = await run(pg, 'feed-video-pop', 6500);
     T('dead clip: feed scare falls back to the face pop and still finishes', r.ok && r.pop && r.pop.vis === 'visible' && r.after && !r.after.busy && !r.after.on, JSON.stringify([r.pop, r.after]));
     T('dead clip: no page errors', errs.length === 0, errs.join('|')); await b.close(); }
+
+  /* monitor content: full-body Art silhouette (no plate) / supplied clips with glitch treatment / still fallback */
+  { const { b, pg, errs } = await open();
+    await arm(pg, 2); await pg.evaluate(() => { ART.CFG.feedScare.chance = [0, 0, 0, 0, 0]; });
+    const M = await pg.evaluate(async () => {
+      const S = ART.S, FM = ART.feedmedia, sl = ms => new Promise(r => setTimeout(r, ms)), o = {};
+      o.cfg = !!(ART.CFG.feedMedia && ART.CFG.feedMedia.enabled && Object.keys(ART.CFG.feedMedia.clips).length >= 4 && ART.CFG.feedMedia.body && ART.CFG.feedMedia.body.src);
+      o.slots = Object.keys(ART.CFG.feedMedia.clips).every(k => ART.CFG.feedMedia.clips[k].src && ART.CFG.feedMedia.clips[k].poster);
+      o.cams = Object.keys(ART.CFG.feeds).every(c => (ART.CFG.feedMedia.cams[c] || []).length >= 1);
+      ART.ui.setFeed('hallway'); FM.stop(); S.artRoom = 'attic'; await sl(400);
+      o.plate = { body: S.feedBody, clip: S.feedClip };
+      const iv = setInterval(() => { S.artRoom = 'hallway'; }, 20); await sl(700);
+      o.art = { body: S.feedBody, clip: S.feedClip, mode: FM.state().mode };
+      clearInterval(iv); S.artRoom = 'attic'; await sl(200);
+      o.ids = FM.ids(); o.surfaced = {};
+      for (const cam of ['hallway', 'kitchen', 'basement', 'frontdoor']) { ART.ui.setFeed(cam); FM.stop(); await sl(150); FM.surface(); await sl(900); const st = FM.state(); o.surfaced[cam] = { clip: st.clip, mode: st.mode, ok: (ART.CFG.feedMedia.cams[cam] || []).includes(st.clip) && S.feedClip === st.clip, playing: (() => { const v = document.querySelector('#feedMediaHost video'); return !!v; })() }; }
+      FM.stop(); o.stopped = FM.state().mode; o.clipAfterStop = S.feedClip; return o; });
+    T('monitor manifest: feedMedia clips (a,b,c,gif) + body + per-cam lists', M.cfg && M.slots && M.cams, JSON.stringify([M.cfg, M.slots, M.cams]));
+    T('monitor: no Art -> plate frame (no silhouette)', M.plate.body === false, JSON.stringify(M.plate));
+    T('monitor: Art on the cam -> full-body silhouette, no clip over it', M.art.body === true && !M.art.clip && M.art.mode === 'none', JSON.stringify(M.art));
+    T('monitor: every camera surfaces one of its own clips as video', Object.values(M.surfaced).every(x => x.ok && x.mode === 'video'), JSON.stringify(M.surfaced));
+    await pg.screenshot({ path: SHOTS + '/monitor-clip.png' });
+    /* clip must not surface during a feed scare */
+    await arm(pg, 2);
+    const sup = await pg.evaluate(async () => { const FM = ART.feedmedia, S = ART.S, sl = ms => new Promise(r => setTimeout(r, ms)); FM.stop(); ART.art.feedScare(() => {}, 'feed-face'); await sl(1300); const mid = { busy: S.scareBusy, clip: S.feedClip, mode: FM.state().mode }; await sl(5500); return mid; });
+    T('monitor: no clip while a feed scare is running (3 beats stay clean)', sup.busy === true && !sup.clip && sup.mode === 'none', JSON.stringify(sup));
+    T('monitor: no page errors', errs.length === 0, errs.join('|')); await b.close(); }
+  { const { b, pg, errs } = await open(false, '?fast=1&novideo=1');
+    await arm(pg, 2); await pg.evaluate(() => { ART.CFG.feedScare.chance = [0, 0, 0, 0, 0]; });
+    const o = await pg.evaluate(async () => { const FM = ART.feedmedia, S = ART.S, sl = ms => new Promise(r => setTimeout(r, ms)); ART.ui.setFeed('kitchen'); S.artRoom = 'attic'; await sl(300); FM.surface(); await sl(900); return { st: FM.state(), clip: S.feedClip }; });
+    T('still fallback (no video): clip surfaces as its poster still', o.st.mode === 'still' && !!o.clip, JSON.stringify(o));
+    await pg.screenshot({ path: SHOTS + '/monitor-still.png' });
+    T('still fallback: no page errors', errs.length === 0, errs.join('|')); await b.close(); }
+  { const { b, pg, errs } = await open(true);
+    await arm(pg, 2); await pg.evaluate(() => { ART.CFG.feedScare.chance = [0, 0, 0, 0, 0]; });
+    const o = await pg.evaluate(async () => { const FM = ART.feedmedia, S = ART.S, sl = ms => new Promise(r => setTimeout(r, ms)); ART.ui.setFeed('kitchen'); S.artRoom = 'attic'; await sl(300); FM.surface(); await sl(2500); return { st: FM.state(), clip: S.feedClip }; });
+    T('dead feed clip: monitor keeps working (poster still / none, no crash)', o.st.mode === 'still' || o.st.mode === 'none' || o.st.mode === 'video', JSON.stringify(o));
+    T('dead feed clip: no page errors', errs.length === 0, errs.join('|')); await b.close(); }
   const f = R.filter(x => x.startsWith('FAIL')).length; console.log(R.join('\n')); console.log('FEED SCARE TESTS: ' + (R.length - f) + '/' + R.length + ' pass'); process.exit(f ? 1 : 0);
 })().catch(e => { console.error(e); process.exit(2); });
