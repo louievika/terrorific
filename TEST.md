@@ -18,12 +18,13 @@ Runs headless Chrome at 390x844 @2x with touch emulation and prints PASS / FAIL 
 | `tests/camlock.js` (114) | camera-locked jump scares: with the view hard left / hard right every payoff eases the yaw to centre, puts Art screen-space in front of the player, keeps trigger -> 500 ms silence -> payoff; also with the run sheet blocked |
 | `tests/hardpuz.js` (26) | ledger (unique deduction, misleading scraps), music box, multi-stage hotspots, burning-fuse time pressure, strikes + power drain, per-night scaling, no hand-holding text |
 | `tests/feedscare.js` (20) | camera-feed scare: 3 beats (tear, 500 ms silence, pop), monitor stays open and locked, never the same variant twice, night gates |
+| `tests/peek.js` (20) | corner peek: manifest per-night config, none on night 1, anchored to the plate (hidden facing away, edge pans ~6 px/deg), edge mask + size, sways, no sting/overlay (no jump), leads into the 3-beat peek scare (>= 495 ms silence), unwatched timeout, deferred while the monitor is open, chance 0 = old behaviour |
 | `tests/grab.js` (18) | door grab: none on night 1, press/lift, win and lose both resolve with 500 ms silence, lose uses the face pop, state resets per night |
 | `tests/taunts.js` (13) | whisper / low laugh / mocking creak: never on night 1, never during a scare or grab, gap and no-repeat rules |
 | `tests/eggs.js` (16) | easter-egg JSON contract, disabled examples, `?eggs=1` preview, once-only seen flag, plain-text rendering |
 | `tests/dog.js` (21) | dog mocking egg: asset <= 250 KB, config schema, hooks (puzzleWrong/puzzleFail/doorFail/grabLose/caught), rare odds + never twice in a row, cooldown and per-night cap, off in test mode, 3 beats with >= 495 ms silence, small corner pop (not full screen), ~1.2 s stay then leaves, cleanup, no lunge/fail-scare, empty `video.dogAttack` slot, 404 falls back to nothing |
 
-Latest result: see `status/phase-E.md`. Screenshots and renders: `docs/phase-E/` (earlier: `docs/phase-C/`, `docs/phase-B/`).
+Latest result: see `status/phase-G.md` (earlier `status/phase-E.md`). Screenshots and renders: `docs/phase-E/` (earlier: `docs/phase-C/`, `docs/phase-B/`).
 
 ## 2. Real iPhone only (cannot be proven headless)
 Test on an iPhone, Safari, over HTTPS (the Vercel URL).
@@ -37,6 +38,7 @@ Test on an iPhone, Safari, over HTTPS (the Vercel URL).
 - [ ] No pinch-zoom, double-tap zoom or rubber-band scroll anywhere.
 - [ ] Rotating the phone keeps the view and hotspots aligned.
 - [ ] 10+ minutes of play: frame rate stays smooth, phone does not overheat, no tab reload.
+- [ ] Monitor clips and the peek: the feed clips play muted and inline on the cam feed (no fullscreen player); the corner peek sways smoothly and the scare after it still has its silent half-second.
 - [ ] Video: the intro starts inside the AUTHENTICATE tap with sound (no extra tap, no 'play' glyph), plays inline (not the system fullscreen player), and with the silent switch ON still has sound (it is routed through Web Audio).
 - [ ] Video: the jump-scare clips start instantly (no black frame / spinner) even on the first scare after a long quiet spell and after an app switch; they play inline, cover the whole screen including under the notch, and the view/monitor underneath is not touched.
 - [ ] Video: after the intro, tapping it skips (first play is not skippable); no flash of the terminal screen between intro and night 1.
