@@ -4,7 +4,7 @@
   var $ = function (id) { return document.getElementById(id); };
   var qs = new URLSearchParams(location.search);
   var DEFAULTS = {
-    image: 'assets/art/art-title-m.jpg', blink: 'assets/art/art-title-blink.png', animated: 'assets/art/art-title.webp',
+    video: 'assets/video/title-loop.mp4', poster: 'assets/video/title-poster.jpg', fit: 'contain', posY: 46, scale: 1, breathAmp: 0.03,
     enterDelayMs: 3500, nextUrl: null,
     scare: { firstMs: 2800, minGapMs: 6500, maxGapMs: 11000, offMs: 1400, silenceMs: 500, closeStep: 0.035, slamAtLevel: 5 }
   };
@@ -197,13 +197,17 @@
     });
   }
 
+  /* Title Art = the user-supplied clip (muted, looping, inline) over its poster still. contain, not cover: the whole figure is always in frame (manifest title.fit / posY / scale). */
   function loadArt() {
-    return Promise.all([loadImg(cfg.animated), loadImg(cfg.image), loadImg(cfg.blink)]).then(function (r) {
-      var anim = r[0], still = r[1], blink = r[2];
-      if (anim) { artA.src = anim; state.mode = 'animated'; }
-      else if (still) { artA.src = still; state.mode = 'static'; if (blink) { artB.src = blink; state.blinkOverlay = true; } }
-      else { artA.src = 'assets/art/art-title.png'; state.mode = 'png'; } // master file fallback
-      return new Promise(function (res) { artA.complete ? res() : (artA.onload = artA.onerror = res); });
+    var v = $('artV'); document.documentElement.style.setProperty('--fit', cfg.fit || 'contain'); document.documentElement.style.setProperty('--posy', (cfg.posY == null ? 46 : cfg.posY) + '%');
+    return loadImg(cfg.poster).then(function (p) {
+      if (p) { artA.src = p; state.mode = 'poster'; } else artA.style.display = 'none';
+      if (!cfg.video) return;
+      v.muted = true; v.defaultMuted = true; v.setAttribute('muted', ''); v.src = cfg.video;
+      var ok = function () { if (state.videoOn) return; state.videoOn = true; state.mode = 'video'; v.classList.add('on'); };
+      v.addEventListener('playing', ok); v.addEventListener('error', function () { state.videoOn = false; v.classList.remove('on'); });
+      var go = function () { var q = v.play(); if (q && q.catch) q.catch(function () {}); };
+      go(); document.addEventListener('pointerdown', function () { if (v.paused) go(); }, { once: false });   // iOS low-power mode: start on the first touch
     });
   }
 
@@ -214,7 +218,7 @@
     var period = 4.2 + 0.5 * Math.sin(t * 0.13) + 0.25 * Math.sin(t * 0.41);
     anim.phase += dt * Math.PI * 2 / period;
     var b = (1 - Math.cos(anim.phase)) / 2; b = Math.pow(b, 1.25);
-    var breath = 1 + 0.08 * b;
+    var breath = (cfg.scale || 1) * (1 + (cfg.breathAmp == null ? 0.03 : cfg.breathAmp) * b);
     var tilt = 1.1 * Math.sin(t * 0.31) + 0.5 * Math.sin(t * 0.73 + 1.0);
     var dx = 0, dy = 0, dr = 0;
     if (t > anim.nextTwitch) {
@@ -224,10 +228,6 @@
     if (anim.tw) {
       var p = (t - anim.tw.s) / anim.tw.d;
       if (p >= 1) anim.tw = null; else { var k = Math.sin(p * Math.PI); dx = anim.tw.x * k; dy = anim.tw.y * k; dr = anim.tw.r * k; }
-    }
-    if (state.blinkOverlay) {
-      if (t > anim.nextBlink) { anim.blinkUntil = t + rnd(0.16, 0.24); anim.nextBlink = t + rnd(2.6, 4.6) + (Math.random() < 0.25 ? -2 : 0); }
-      artB.style.opacity = t < anim.blinkUntil ? 1 : 0;
     }
     state.close += (state.closeTarget - state.close) * (1 - Math.exp(-dt / state.tau));
     face.style.transform = 'translate3d(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px,0) rotate(' + (tilt + dr).toFixed(3) + 'deg) scale(' + (breath * state.close).toFixed(4) + ')';

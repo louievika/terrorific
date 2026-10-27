@@ -11,7 +11,7 @@ A Terrifier 2-themed, FNAF-style horror game for iPhone Safari (touch + gyroscop
 - iOS Safari: AudioContext created/resumed inside the first tap; silent buffer played; `navigator.audioSession` set to `playback` when available.
 
 ## Assets and licenses
-- `assets/art/art-title.png` / `art-title-source.jpg`: **user-supplied reference image (not original art)** kept as a placeholder until final assets arrive. Swap it by replacing the file, then run `python3 scripts/make_title_assets.py` to rebuild the derived files (`art-title-m.jpg`, `art-title-blink.png`, `art-title.webp`). Eye/jaw regions in that script are tuned to the current image.
+- **Title-screen Art is user-supplied footage (Louie)**: `assets/video/title-loop.mp4` (+ `title-poster.jpg`) is the first 3 s of his supplied `clip-C.mp4`, played forward then reverse as a muted inline loop (ffmpeg, ~350 KB). It is shown with `object-fit: contain` so the whole figure is in frame (never cropped). Slots in `assets/manifest.json` -> `title` (`video`, `poster`, `fit`, `posY`, `scale`, `breathAmp`). If the video fails the poster still shows. The old synthesized `art-title*` images are removed.
 - All code, UI, and synthesized audio: MIT (original).
 - `assets/video/*.mp4` (+ posters): **user-supplied by Louie** (3 portrait Art clips, re-encoded by ffmpeg to H.264/AAC ~480x804, each under 1.5 MB): `intro.mp4` = cold-open after AUTHENTICATE, `scare-b.mp4` and `scare-c.mp4` = jump-scare payoffs. They are swappable: drop a file in `assets/video/` and edit `game.video` in `assets/manifest.json` (slots, volumes, per-night odds, cooldowns). Delete the files and the game falls back to the sprite scares.
 - No other Terrifier audio/video is used; all other renders and audio are original.

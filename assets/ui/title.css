@@ -21,11 +21,12 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 @keyframes weave{0%{transform:translate(0,0)}17%{transform:translate(.6px,-.5px)}34%{transform:translate(-.5px,.4px)}52%{transform:translate(.4px,.6px)}71%{transform:translate(-.6px,-.3px)}88%{transform:translate(.3px,.2px)}}
 #frame{position:absolute;left:0;right:0;top:var(--bar);bottom:var(--barb);overflow:hidden;background:#050505}
 #face{position:absolute;inset:0;transform-origin:50% 44%;will-change:transform}
-.artimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 38%;display:block}
-#artB{opacity:0}
+.artimg{position:absolute;left:50%;top:var(--posy,46%);height:min(100%,calc(100vw * 804 / 480));aspect-ratio:480/804;transform:translate(-50%,-50%);object-fit:var(--fit,contain);display:block;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 7%,#000 80%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 7%,#000 80%,transparent 100%)}
+#artV{opacity:0;transition:opacity .8s}#artV.on{opacity:1}
 #warm{position:absolute;inset:0;background:radial-gradient(ellipse 85% 60% at 50% 0%,rgba(255,176,80,.30),rgba(255,140,40,.06) 60%,transparent 80%);
   mix-blend-mode:soft-light;opacity:1;transition:opacity .05s}
-#dark{position:absolute;inset:0;background:#000;opacity:.38;transition:opacity .06s}
+#dark{position:absolute;inset:0;background:#000;opacity:.2;transition:opacity .06s}
 #vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,transparent 38%,rgba(0,0,0,.82) 100%)}
 #flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
 body.off #dark{opacity:.95}
