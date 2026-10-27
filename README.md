@@ -1,4 +1,4 @@
-# ART // LOGIN
+# Terrorific
 
 A Terrifier 2-themed, FNAF-style horror game for iPhone Safari (touch + gyroscope), built with plain HTML/JS and [A-Frame](https://aframe.io) 1.8.0. MIT licensed.
 

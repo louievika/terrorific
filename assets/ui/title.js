@@ -1,4 +1,4 @@
-/* ART // LOGIN - title screen. MIT. All audio is synthesized here (original, no samples). */
+/* Terrorific - title screen. MIT. All audio is synthesized here (original, no samples). */
 (function () {
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
@@ -188,7 +188,7 @@
   var body = document.body, bulb = $('bulb'), flashEl = $('flash'), enter = $('enter');
   var state = { started: false, canAdvance: false, advancing: false, level: 0, close: 1, closeTarget: 1, tau: 1.4 };
 
-  function applyStudio() { document.title = 'ART // LOGIN'; }
+  function applyStudio() { document.title = 'Terrorific'; }
 
   function loadImg(url) {
     return new Promise(function (res) {
