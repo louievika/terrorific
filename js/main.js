@@ -46,7 +46,7 @@
       var sceneReady = false, assetsReady = false, check = function () { if (sceneReady && assetsReady) { $('authBtn').classList.add('ready'); } };
       var sc = $('scene'), total = ART.rooms.urls().length + 1, n = 0;
       ART.rooms.setSky('attic');
-      var onScene = function () { try { ART.ui.initView(); } catch (e) { console.error(e); } sceneReady = true; check(); };
+      var onScene = function () { try { ART.ui.applyFov(); ART.ui.initView(); } catch (e) { console.error(e); } sceneReady = true; check(); };
       if (sc.hasLoaded) onScene(); else sc.addEventListener('loaded', onScene);
       var prog = function () { n++; $('loadBar').style.width = Math.round(n / total * 100) + '%'; }, left = 2, fin = function () { if (--left === 0) { assetsReady = true; check(); } };
       ART.rooms.preload(prog, fin); ART.art.preload(prog, fin);

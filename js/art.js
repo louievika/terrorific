@@ -153,7 +153,7 @@
     reset: function () { if (ART.dogEgg) ART.dogEgg.reset(); if (ART.S && !ART.S.feedScareOn) { var fp = $('feedPop'); if (fp) fp.className = ''; } api.cancelRun(); if (ART.ui && ART.ui.unlockView) ART.ui.unlockView(); var r = $('artRun'); r.className = ''; r.style.transition = ''; r.style.opacity = 0; document.body.classList.remove('camshake', 'jolt', 'rattle', 'sway'); var a = $('art'); a.className = ''; a.style.transition = 'none'; a.style.left = '50%'; void a.offsetWidth; a.style.transition = ''; },
     /* keep the overlay under Art's world position (door = yaw 0) */
     doorX: function () {
-      var V = ART.V, W = innerWidth, H = innerHeight, vf = 80 * Math.PI / 180, hf = 2 * Math.atan(Math.tan(vf / 2) * (W / H));
+      var V = ART.V, W = innerWidth, H = innerHeight, vf = ART.ui.fov() * Math.PI / 180, hf = 2 * Math.atan(Math.tan(vf / 2) * (W / H));
       var off = Math.abs(V.yaw) < 1.4 ? (W / 2) * Math.tan(V.yaw) / Math.tan(hf / 2) : 99999;
       return W / 2 + off;
     },

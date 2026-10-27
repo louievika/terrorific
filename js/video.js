@@ -31,7 +31,7 @@
       cs.forEach(function (cl) {
         if (!cl.src) return; var e = mkEl(cl.src, cl.poster), rec = { id: cl.id || cl.src, src: cl.src, el: e, ok: false, failed: false, dur: cl.durSec || 5, w: cl.weight == null ? 1 : cl.weight, minNight: cl.minNight || 1, vol: cl.volume };
         e.addEventListener('canplay', function () { rec.ok = true; }); e.addEventListener('error', function () { rec.failed = true; rec.ok = false; ART.log('video clip failed ' + rec.id); });
-        e.style.display = 'none'; box.appendChild(e); clips.push(rec); route(e, (rec.vol == null ? (j.volume == null ? 1 : j.volume) : rec.vol)); unlock(e); e.load();
+        e.style.display = 'none'; e.style.objectFit = j.fit || 'cover'; box.appendChild(e); clips.push(rec); route(e, (rec.vol == null ? (j.volume == null ? 1 : j.volume) : rec.vol)); unlock(e); e.load();
       });
       st.ready = true;
     },
@@ -45,7 +45,7 @@
       var i = cfg().intro; if (!V.introWanted()) return false; V.prepare();
       var box = document.createElement('div'), e = mkEl(i.src, i.poster), grade = document.createElement('i'), finished = false, started = false, seen = false, t0 = performance.now(), fadeIn = i.fadeInMs == null ? 700 : i.fadeInMs, fadeOut = i.fadeOutMs == null ? 700 : i.fadeOutMs;
       box.className = 'vid intro'; grade.className = 'vid-grade'; grade.style.setProperty('--vig', (i.grade && i.grade.vignette != null) ? i.grade.vignette : 0.6); grade.style.setProperty('--grain', (i.grade && i.grade.grain != null) ? i.grade.grain : 0.12);
-      e.style.opacity = 0; e.style.transition = 'opacity ' + fadeIn + 'ms ease'; box.appendChild(e); box.appendChild(grade); layer.appendChild(box); box.classList.add('show'); intro.el = e; intro.box = box;
+      e.style.objectFit = i.fit || 'contain'; e.style.opacity = 0; e.style.transition = 'opacity ' + fadeIn + 'ms ease'; box.appendChild(e); box.appendChild(grade); layer.appendChild(box); box.classList.add('show'); intro.el = e; intro.box = box;
       try { seen = localStorage.getItem(i.seenKey || 'terrorific_intro_seen_v1') === '1'; } catch (x) {}
       route(e, i.volume == null ? 0.9 : i.volume);
       function end(natural) {

@@ -23,6 +23,7 @@ window.ART = window.ART || {};
     feeds: { hallway: { n: 'CAM 1', yaw: 0, h: 110, bot: 205 } },
     lore: [], boot: ['> terminal ready'], text: {},
     doorButton: { yawDeg: -17, topPct: 55 },
+    view: { fov: 105, refFov: 80 },
     autoPan: { startSec: 3.4, durSec: 7, ampDeg: 78 },
     puzzles: { hotspots: {}, keypad: { digits: 4, memorizeMs: [0] }, wires: { count: [3] }, tiles: { size: 3, scrambles: [3] } }
   };

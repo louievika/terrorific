@@ -823,7 +823,8 @@
     "grade": {
      "vignette": 0.6,
      "grain": 0.12
-    }
+    },
+    "fit": "contain"
    },
    "perNight": {
     "enabled": false,
@@ -882,7 +883,8 @@
       "weight": 1,
       "minNight": 2
      }
-    ]
+    ],
+    "fit": "cover"
    },
    "dogAttack": {
     "_comment": "EMPTY SLOT for Louie's separate 'dog attack' VIDEO (not the dog picture). Disabled until the file exists: drop it at src, set enabled true and wire a variant. Nothing reads this block yet.",
@@ -1024,6 +1026,11 @@
      "vol": 0.9
     }
    ]
+  },
+  "view": {
+   "_comment": "Camera framing. fov = vertical field of view in degrees (80 was far too zoomed in on a portrait phone; 105 shows the room). refFov = the lens hotspot topPct values were authored for (they are re-projected to the new fov).",
+   "fov": 105,
+   "refFov": 80
   }
  },
  "voice": {

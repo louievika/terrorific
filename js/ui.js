@@ -7,6 +7,9 @@
   var cam = null, THREE = null, spots = [], hudTimer, cmTimer, hudBucket = -1;
 
   var ui = ART.ui = {
+    /* vertical camera FOV in degrees, from manifest game.view.fov (wider = more of the room visible, less zoomed-in) */
+    fov: function () { var v = ART.CFG.view; return (v && v.fov) || 80; },
+    applyFov: function () { var c = $('cam'); if (c) c.setAttribute('camera', 'fov', ui.fov()); },
     show: function (id) {
       ['login', 'game', 'lore', 'gameover', 'win', 'bad'].forEach(function (k) { $(k).classList.toggle('active', k === id); });
       $('game').classList.remove('prep');
@@ -56,12 +59,12 @@
     },
     spots: function () { return spots; },
     updateSpots: function () {
-      var W = innerWidth, H = innerHeight, hf = 2 * Math.atan(Math.tan(40 * Math.PI / 180) * (W / H)), th = Math.tan(hf / 2);
+      var W = innerWidth, H = innerHeight, hf = 2 * Math.atan(Math.tan(ui.fov() * Math.PI / 360) * (W / H)), th = Math.tan(hf / 2), vk = Math.tan((ART.CFG.view.refFov || 80) * Math.PI / 360) / Math.tan(ui.fov() * Math.PI / 360);   // vk: hotspot top% was authored for refFov; re-project for the wider lens
       for (var i = 0; i < spots.length; i++) {
         var s = spots[i], rel = V.yaw - s.yaw, vis = !s.hidden && Math.abs(rel) < hf / 2 + 0.25;
         if (!vis) { if (s.shown !== false) { s.el.style.visibility = 'hidden'; s.shown = false; } continue; }
         var x = W / 2 + (W / 2) * Math.tan(rel) / th;
-        s.el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + (H * s.topPct / 100).toFixed(1) + 'px,0) translate(-50%,-50%)';
+        s.el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + (H * (50 + (s.topPct - 50) * vk) / 100).toFixed(1) + 'px,0) translate(-50%,-50%)';
         if (s.shown !== true) { s.el.style.visibility = 'visible'; s.shown = true; }
       }
     },
