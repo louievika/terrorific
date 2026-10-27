@@ -18,7 +18,7 @@
 
     start: function (n) {
       ART.ui.unlockView();
-      S.gen++; if (ART.video) { ART.video.stop(); } if (ART.grab) ART.grab.reset(); if (ART.taunts) ART.taunts.reset(); if (ART.dogEgg) ART.dogEgg.reset(); S.night = n; S.nightCfg = CFG.nights[n - 1] || CFG.nights[CFG.nights.length - 1]; var c = S.nightCfg;
+      S.gen++; if (ART.video) { ART.video.stop(); } if (ART.grab) ART.grab.reset(); if (ART.taunts) ART.taunts.reset(); if (ART.dogEgg) ART.dogEgg.reset(); if (ART.peek) ART.peek.reset(); S.night = n; S.nightCfg = CFG.nights[n - 1] || CFG.nights[CFG.nights.length - 1]; var c = S.nightCfg;
       S.t = 0; S.len = c.len; S.power = CFG.powerStartPct; S.cam = false; S.door = false; S.bolt = false; S.cool = { fusebox: 0, doorbolt: 0 }; S.powerDead = false; S.deadT = -1; S.lo10 = false;
       S.artRoom = c.start; S.attackT = -1; S.knockT = 0; S.phase = 'play'; S.moveT = rnd(c.moveMin, c.moveMax);
       ART.puzzles.close(true); ART.art.busy(false);

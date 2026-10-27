@@ -7,7 +7,7 @@
     requestAnimationFrame(frame);
     var raw = Math.max(0, Math.min(0.1, (now - last) / 1000)); last = now; var dt = raw * ART.FAST;
     ART.ui.autoTick(raw); ART.ui.updateView();
-    if (S.phase === 'play' || S.phase === 'dying') { ART.art.recenter(); ART.ui.updateSpots(); }
+    if (S.phase === 'play' || S.phase === 'dying') { ART.art.recenter(); ART.ui.updateSpots(); if (ART.peek) ART.peek.update(); }
     if (S.cam) { feedAcc += raw; if (feedAcc > 0.05) { feedAcc = 0; ART.rooms.drawFeed(now); } }
     if (S.phase === 'play') { ART.nights.tick(dt); ART.grab.tick(dt); ART.taunts.tick(dt); ART.eggs.tick(dt); }
     if (S.phase !== 'login' && S.phase !== 'over' && S.phase !== 'win' && S.phase !== 'bad') { S.session += dt; if (S.session >= ART.CFG.sessionCapSec) ART.nights.capBad(); }

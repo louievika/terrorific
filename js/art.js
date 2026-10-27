@@ -226,7 +226,7 @@
         }
       }
       api.feedTick(dt);
-      if (S.peeks.length && S.t >= S.peeks[0] && !S.cam && S.phase === 'play') { S.peeks.shift(); api.scare('peek'); }
+      if (S.peeks.length && S.t >= S.peeks[0] && !S.cam && S.phase === 'play' && !S.scareBusy && !(ART.peek && ART.peek.active())) { S.peeks.shift(); if (!(ART.peek && ART.peek.start(function () { api.scare('peek'); }))) api.scare('peek'); }
     }
   };
   ART.threeBeat = api.scare;   // kept for the debug/test hook

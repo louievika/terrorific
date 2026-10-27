@@ -1187,6 +1187,111 @@
    "swayPx": 1.6,
    "bodyAlpha": 0.96,
    "artTint": "rgb(150,255,205)"
+  },
+  "peek": {
+   "_comment": "Corner/hallway PEEK: before a peek scare, Art stands half-hidden behind a corner edge of the room plate (js/peek.js), swaying and leaning toward the player, no jump. He is projected from plate yaw/elevation so he pans with the sky; an edge mask hides his far side. When the player has watched him holdSec (or has not looked for waitSec) he is cut and the normal 3-beat peek scare runs (director picks the variant). Per-night arrays are indexed by night. spots: yawDeg = plate yaw of the corner edge (+ = left of the door, same as doorButton), side = which side of the edge he shows on, floorDeg/headDeg = plate elevation of his feet / head top, show = fraction of his width past the edge.",
+   "enabled": true,
+   "src": "assets/art/art-peek.png",
+   "chance": [
+    0,
+    0.7,
+    0.8,
+    0.9,
+    1
+   ],
+   "nights": [
+    [],
+    [
+     "partR"
+    ],
+    [
+     "partR",
+     "partL"
+    ],
+    [
+     "partR",
+     "partL"
+    ],
+    [
+     "partR",
+     "partL"
+    ]
+   ],
+   "holdSec": [
+    [
+     2.5,
+     3.5
+    ],
+    [
+     2.5,
+     3.5
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     1.8,
+     2.8
+    ],
+    [
+     1.5,
+     2.5
+    ]
+   ],
+   "waitSec": [
+    [
+     16,
+     20
+    ],
+    [
+     16,
+     20
+    ],
+    [
+     14,
+     18
+    ],
+    [
+     12,
+     16
+    ],
+    [
+     10,
+     14
+    ]
+   ],
+   "nearestP": 0.7,
+   "emergeMs": 900,
+   "noticeSec": 1.2,
+   "leanOut": 0.07,
+   "swayHz": 0.8,
+   "swayFrac": 0.02,
+   "leanDeg": 5,
+   "shadeFrac": 0.35,
+   "shadeAlpha": 0.75,
+   "filter": "sepia(.55) saturate(1.15) brightness(.7) contrast(1.1)",
+   "cue": true,
+   "spots": [
+    {
+     "id": "partR",
+     "yawDeg": 104.6,
+     "side": "right",
+     "floorDeg": -24,
+     "headDeg": 20,
+     "show": 0.45,
+     "note": "right edge of the tall wooden partition, left-behind of the door"
+    },
+    {
+     "id": "partL",
+     "yawDeg": 132,
+     "side": "left",
+     "floorDeg": -22,
+     "headDeg": 20,
+     "show": 0.45,
+     "note": "left edge of the same partition"
+    }
+   ]
   }
  },
  "voice": {
