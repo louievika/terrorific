@@ -1,4 +1,4 @@
-/* ART // LOGIN - ui.js (MIT). Screens, view control (gyro + natural drag), diegetic controls, camera monitor, transient HUD.
+/* Terrorific - ui.js (MIT). Screens, view control (gyro + natural drag), diegetic controls, camera monitor, transient HUD.
    No help text, no tips, no mute button: affordances are drawn in the scene (door button, side-wall panels, monitor lip). */
 (function (ART) {
   'use strict';
@@ -87,6 +87,9 @@
       window.addEventListener('deviceorientation', ui.onOri, true);
       setTimeout(function () { ART.S.hasGyro = V.gotEvt; ART.log('gyro ' + (ART.S.hasGyro ? 'on' : 'no events -> drag only')); }, 1500);
     },
+    /* camera lock for jump-scare payoffs: yaw (and drag pitch) ease to the door within ms, then hold until unlockView() */
+    lockView: function (ms) { V.lock = { t0: performance.now(), ms: ms || 260 }; },
+    unlockView: function () { V.lock = null; },
     updateView: function () {
       if (!cam) return;
       var sc = (screen.orientation && screen.orientation.angle) || window.orientation || 0, rad = sc * Math.PI / 180, yawAll = V.dragYaw + V.autoYaw;
@@ -98,7 +101,12 @@
       } else {
         V.e.set(V.dragPitch, yawAll, 0, 'YXZ'); cam.quaternion.setFromEuler(V.e);   // drag right -> view turns left (content follows finger)
       }
-      cam.getWorldDirection(V.d); V.yaw = Math.atan2(V.d.x, V.d.z);   // d = object +z = -(view dir); 0 = facing the door (-z); >0 = turned left
+      cam.getWorldDirection(V.d); V.yaw = Math.atan2(V.d.x, V.d.z);
+      if (V.lock && !V.inLock) {   // camera lock: ease (then hold) the view on the door so a jump scare always lands in front of the player
+        var kf = performance.now() - V.lock.t0 < V.lock.ms ? 0.45 : 1; V.dragYaw -= V.yaw * kf; V.dragPitch *= (1 - kf);
+        if (V.auto && V.auto.on) { V.autoYaw -= V.autoYaw * kf; }
+        V.inLock = true; ui.updateView(); V.inLock = false; return;
+      }   // d = object +z = -(view dir); 0 = facing the door (-z); >0 = turned left
     },
     /* gentle first-run auto-pan: the room sways left then right so the side-wall panels are discovered by sight, not by text */
     scheduleAutoPan: function () {

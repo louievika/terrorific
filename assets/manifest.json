@@ -1,308 +1,787 @@
 {
-  "_comment": "Swap any asset by dropping a file with the same name, or point a slot here. Missing optional files fall back gracefully.",
-  "version": 2,
-  "title": {
-    "image": "assets/art/art-title-m.jpg",
-    "blink": "assets/art/art-title-blink.png",
-    "animated": "assets/art/art-title.webp",
-    "enterDelayMs": 3500,
-    "nextUrl": "game.html",
-    "scare": {
-      "firstMs": 2800,
-      "minGapMs": 6500,
-      "maxGapMs": 11000,
-      "offMs": 1400,
-      "silenceMs": 500,
-      "closeStep": 0.035,
-      "slamAtLevel": 5
-    },
-    "breathGain": 0.15
+ "_comment": "Swap any asset by dropping a file with the same name, or point a slot here. Missing optional files fall back gracefully.",
+ "version": 2,
+ "title": {
+  "image": "assets/art/art-title-m.jpg",
+  "blink": "assets/art/art-title-blink.png",
+  "animated": "assets/art/art-title.webp",
+  "enterDelayMs": 3500,
+  "nextUrl": "game.html",
+  "scare": {
+   "firstMs": 2800,
+   "minGapMs": 6500,
+   "maxGapMs": 11000,
+   "offMs": 1400,
+   "silenceMs": 500,
+   "closeStep": 0.035,
+   "slamAtLevel": 5
   },
-  "art": "assets/art/art.png",
-  "rooms": {
-    "attic": "assets/rooms/attic.jpg",
-    "kitchen": "assets/rooms/kitchen.jpg",
-    "mortuary": "assets/rooms/mortuary.jpg",
-    "hallway": "assets/rooms/hallway.jpg",
-    "basement": "assets/rooms/basement.jpg",
-    "frontdoor": "assets/rooms/frontdoor.jpg"
-  },
-  "audio": {
-    "hum": "assets/audio/hum.wav",
-    "stinger": "assets/audio/stinger.wav",
-    "breathing": "assets/audio/breathing.wav",
-    "creak": "assets/audio/creak.wav",
-    "static": "assets/audio/static.wav",
-    "mix": {
-      "_comment": "output levels (0..1). breathing was 0.8; way down in Phase E",
-      "breathing": 0.15
-    }
-  },
-  "game": {
-    "sessionCapSec": 600,
-    "powerStartPct": 100,
-    "drain": {
-      "idle": 0.28,
-      "camera": 0.85,
-      "door": 0.55,
-      "doorHitPenaltyPct": 6
-    },
-    "lightsOutAtPct": 10,
-    "deadAttackDelaySec": [
-      10,
-      14
-    ],
-    "graph": {
-      "mortuary": [
-        "basement"
-      ],
-      "basement": [
-        "kitchen",
-        "frontdoor"
-      ],
-      "kitchen": [
-        "hallway",
-        "basement"
-      ],
-      "frontdoor": [
-        "hallway",
-        "basement"
-      ],
-      "hallway": []
-    },
-    "nights": [
-      {
-        "len": 60,
-        "start": "basement",
-        "moveMin": 6,
-        "moveMax": 10,
-        "aggro": 0.7,
-        "attackSec": 10,
-        "drainMul": 1,
-        "appearP": 0,
-        "peeks": 0
-      },
-      {
-        "len": 70,
-        "start": "basement",
-        "moveMin": 6,
-        "moveMax": 10,
-        "aggro": 0.72,
-        "attackSec": 9,
-        "drainMul": 1.05,
-        "appearP": 0,
-        "peeks": 1
-      },
-      {
-        "len": 80,
-        "start": "kitchen",
-        "moveMin": 6,
-        "moveMax": 11,
-        "aggro": 0.7,
-        "attackSec": 8,
-        "drainMul": 1.1,
-        "appearP": 0.4,
-        "peeks": 2
-      },
-      {
-        "len": 90,
-        "start": "frontdoor",
-        "moveMin": 5,
-        "moveMax": 9,
-        "aggro": 0.75,
-        "attackSec": 7,
-        "drainMul": 1.15,
-        "appearP": 0.3,
-        "peeks": 2
-      },
-      {
-        "len": 100,
-        "start": "kitchen",
-        "moveMin": 4,
-        "moveMax": 8,
-        "aggro": 0.85,
-        "attackSec": 6,
-        "drainMul": 1.2,
-        "appearP": 0.3,
-        "peeks": 3
-      }
-    ],
-    "clock": [
-      "12 AM",
-      "1 AM",
-      "2 AM",
-      "3 AM",
-      "4 AM",
-      "5 AM"
-    ],
-    "feeds": {
-      "hallway": {
-        "n": "CAM 1 - HALLWAY",
-        "yaw": 0,
-        "h": 110,
-        "bot": 205
-      },
-      "kitchen": {
-        "n": "CAM 2 - KITCHEN",
-        "yaw": 18,
-        "h": 190,
-        "bot": 280
-      },
-      "basement": {
-        "n": "CAM 3 - BASEMENT",
-        "yaw": -16,
-        "h": 180,
-        "bot": 285
-      },
-      "frontdoor": {
-        "n": "CAM 4 - FRONT DOOR",
-        "yaw": 4,
-        "h": 170,
-        "bot": 275
-      }
-    },
-    "lore": [
-      {
-        "title": "NIGHT 1 COMPLETE",
-        "cls": "",
-        "doc": "MILES COUNTY - NOTICE OF CONDEMNATION\n\nThe structure at 31 Halloran Lane is hereby closed to the public. Utilities to remain connected \"for inspection purposes only.\"\n\nRemote caretakers are reminded: do not enter the lower floors. Do not answer the door.\n\n- County Clerk",
-        "call": "INCOMING...  [CARETAKER LINE]\n\n\"You made it to six. Good. Most don't say that out loud.\nThe old lights buzz when HE is close. Listen for them.\nHe only moves when nobody is watching.\nSo watch.\""
-      },
-      {
-        "title": "NIGHT 2 COMPLETE",
-        "cls": "receipt",
-        "doc": "HALLORAN NOVELTY & PARTY SUPPLY\n--------------------------\n1x PIERROT HAT (BLACK)   $ 4.99\n1x WHITE GREASEPAINT     $ 3.49\n1x ROLL BUTCHER PAPER    $ 8.00\n1x MAGIC TRICK (BROKEN)  $ 2.00\n--------------------------\nCASH                    $18.48\nNO REFUNDS.\nTHANK YOU, MR. A.",
-        "call": "INCOMING...  [CARETAKER LINE]\n\n\"The camera in the kitchen keeps sticking.\nThat is not the camera.\nKeep the door locked when the hallway goes quiet.\nQuiet is the loud part.\"",
-        "voice": "lore_receipt",
-        "art": "Black paint, white powder, one hat. Every costume needs an audience."
-      },
-      {
-        "title": "NIGHT 3 COMPLETE",
-        "cls": "diary",
-        "doc": "dear diary,\n\ni saw him smile in the window again tonight.\nmom says the house has been empty for years.\nbut the cellar door was open and\nthere were little paper hearts on the stairs.\n\ni counted them. there are thirteen.\ni only found twelve.",
-        "call": "INCOMING...  [CARETAKER LINE]\n\n\"Did he turn up in a room you had just checked?\nThat is new. He is learning how you look.\nDon't be predictable. Don't be [[GLITCH]].\"",
-        "voice": "lore_diary",
-        "art": "Little girl, you counted wrong. The thirteenth heart is waiting for you."
-      },
-      {
-        "title": "NIGHT 4 COMPLETE",
-        "cls": "",
-        "doc": "INCIDENT REPORT 0-4-1\n\nSubject observed using ordinary door hardware to create a \"show\" for no audience.\nWitness statements disagree. All witnesses agree on the sound: a small bell, once, then laughter.\n\nRecommendation: do not try to bargain.\nRecommendation: do not run.\nRecommendation: [REDACTED]",
-        "call": "INCOMING...  [CARETAKER LINE]\n\n\"One more night. The power is thin.\nWhen the lights fail, he will know first.\nIf it goes dark, do not look for him.\nHe will find YOU.\"",
-        "voice": "lore_call",
-        "voiceMode": "call",
-        "art": "You should not have answered. Now I know your voice."
-      }
-    ],
-    "boot": [
-      "> MILES_HOUSE remote caretaker terminal",
-      "> link .......... ok",
-      "> cameras ........ 4 of 4",
-      "> door lock ...... armed",
-      "> power .......... 100%",
-      "> checking caretaker credentials",
-      "USER: caretaker",
-      "PASS: ********",
-      "",
-      "WARNING: subject \"ART\" is not in custody.",
-      "Session limit: 10:00. Do not exceed it."
-    ],
-    "text": {
-      "overDoor": "The door was open.",
-      "overPower": "The power died. So did the lock.",
-      "overDead": "Power failed. The lights died. He was already inside.",
-      "win": "You survived five nights.\nThe lights hum. The house is quiet.\nFor now.",
-      "bad": "SESSION LIMIT REACHED (10:00)\n\nYou lingered too long in the house.\nThe terminal logs you out.\nThe door does not."
-    },
-    "puzzles": {
-      "_comment": "type per night (index 0 = night 1): keypad | wires | tiles | any name registered with ART.puzzles.register(). Set a night to null to disable that hotspot.",
-      "hotspots": {
-        "fusebox": {
-          "yawDeg": -62,
-          "topPct": 50,
-          "effect": "power",
-          "amountPct": 25,
-          "restoreDeadPct": 15,
-          "cooldownSec": 35,
-          "types": [
-            "keypad",
-            "wires",
-            "tiles",
-            "wires",
-            "tiles"
-          ]
-        },
-        "doorbolt": {
-          "yawDeg": 62,
-          "topPct": 54,
-          "effect": "bolt",
-          "cooldownSec": 50,
-          "types": [
-            null,
-            "wires",
-            "keypad",
-            "tiles",
-            "tiles"
-          ]
-        }
-      },
-      "keypad": {
-        "digits": 4,
-        "memorizeMs": [
-          0,
-          0,
-          2500,
-          2000,
-          1500
-        ]
-      },
-      "wires": {
-        "count": [
-          3,
-          3,
-          4,
-          4,
-          5
-        ]
-      },
-      "tiles": {
-        "size": 3,
-        "scrambles": [
-          3,
-          4,
-          5,
-          6,
-          7
-        ]
-      }
-    },
-    "doorButton": {
-      "yawDeg": -12,
-      "topPct": 55
-    },
-    "autoPan": {
-      "startSec": 3.4,
-      "durSec": 7,
-      "ampDeg": 78
-    }
-  },
-  "voice": {
-    "_comment": "Art's voice (Phase D): lines.json is generated by scripts/make_voice.py. taunt = scare-payoff only, rare.",
-    "lines": "assets/voice/lines.json",
-    "gain": 0.95,
-    "duck": 0.45,
-    "taunt": {
-      "startNight": 2,
-      "chance": {
-        "peek": 0.18,
-        "lightsout": 0.32,
-        "attack": 0.3
-      },
-      "minGapSec": 75,
-      "delayMs": [
-        450,
-        950
-      ]
-    }
+  "breathGain": 0.15
+ },
+ "art": {
+  "src": "assets/art/art.png",
+  "run": {
+   "sheet": "assets/art/art-run.webp",
+   "frameW": 360,
+   "frameH": 576,
+   "cols": 4,
+   "frames": 12,
+   "fps": 24,
+   "durationMs": 1000,
+   "footfallFrames": [
+    0,
+    6
+   ]
   }
+ },
+ "rooms": {
+  "attic": "assets/rooms/attic.jpg",
+  "kitchen": "assets/rooms/kitchen.jpg",
+  "mortuary": "assets/rooms/mortuary.jpg",
+  "hallway": "assets/rooms/hallway.jpg",
+  "basement": "assets/rooms/basement.jpg",
+  "frontdoor": "assets/rooms/frontdoor.jpg"
+ },
+ "audio": {
+  "hum": "assets/audio/hum.wav",
+  "stinger": "assets/audio/stinger.wav",
+  "breathing": "assets/audio/breathing.wav",
+  "creak": "assets/audio/creak.wav",
+  "static": "assets/audio/static.wav",
+  "mix": {
+   "_comment": "output levels (0..1). breathing was 0.8; way down in Phase E",
+   "breathing": 0.15
+  }
+ },
+ "game": {
+  "sessionCapSec": 600,
+  "powerStartPct": 100,
+  "drain": {
+   "idle": 0.28,
+   "camera": 0.85,
+   "door": 0.55,
+   "doorHitPenaltyPct": 6
+  },
+  "lightsOutAtPct": 10,
+  "deadAttackDelaySec": [
+   10,
+   14
+  ],
+  "graph": {
+   "mortuary": [
+    "basement"
+   ],
+   "basement": [
+    "kitchen",
+    "frontdoor"
+   ],
+   "kitchen": [
+    "hallway",
+    "basement"
+   ],
+   "frontdoor": [
+    "hallway",
+    "basement"
+   ],
+   "hallway": []
+  },
+  "nights": [
+   {
+    "len": 60,
+    "start": "basement",
+    "moveMin": 6,
+    "moveMax": 10,
+    "aggro": 0.7,
+    "attackSec": 10,
+    "drainMul": 1,
+    "appearP": 0,
+    "peeks": 0
+   },
+   {
+    "len": 70,
+    "start": "basement",
+    "moveMin": 6,
+    "moveMax": 10,
+    "aggro": 0.72,
+    "attackSec": 9,
+    "drainMul": 1.05,
+    "appearP": 0,
+    "peeks": 1
+   },
+   {
+    "len": 80,
+    "start": "kitchen",
+    "moveMin": 6,
+    "moveMax": 11,
+    "aggro": 0.7,
+    "attackSec": 8,
+    "drainMul": 1.1,
+    "appearP": 0.4,
+    "peeks": 2
+   },
+   {
+    "len": 90,
+    "start": "frontdoor",
+    "moveMin": 5,
+    "moveMax": 9,
+    "aggro": 0.75,
+    "attackSec": 7,
+    "drainMul": 1.15,
+    "appearP": 0.3,
+    "peeks": 2
+   },
+   {
+    "len": 100,
+    "start": "kitchen",
+    "moveMin": 4,
+    "moveMax": 8,
+    "aggro": 0.85,
+    "attackSec": 6,
+    "drainMul": 1.2,
+    "appearP": 0.3,
+    "peeks": 3
+   }
+  ],
+  "clock": [
+   "12 AM",
+   "1 AM",
+   "2 AM",
+   "3 AM",
+   "4 AM",
+   "5 AM"
+  ],
+  "feeds": {
+   "hallway": {
+    "n": "CAM 1 - HALLWAY",
+    "yaw": 0,
+    "h": 110,
+    "bot": 205
+   },
+   "kitchen": {
+    "n": "CAM 2 - KITCHEN",
+    "yaw": 18,
+    "h": 190,
+    "bot": 280
+   },
+   "basement": {
+    "n": "CAM 3 - BASEMENT",
+    "yaw": -16,
+    "h": 180,
+    "bot": 285
+   },
+   "frontdoor": {
+    "n": "CAM 4 - FRONT DOOR",
+    "yaw": 4,
+    "h": 170,
+    "bot": 275
+   }
+  },
+  "lore": [
+   {
+    "title": "NIGHT 1 COMPLETE",
+    "cls": "",
+    "doc": "MILES COUNTY - NOTICE OF CONDEMNATION\n\nThe structure at 31 Halloran Lane is hereby closed to the public. Utilities to remain connected \"for inspection purposes only.\"\n\nRemote caretakers are reminded: do not enter the lower floors. Do not answer the door.\n\n- County Clerk",
+    "call": "INCOMING...  [CARETAKER LINE]\n\n\"You made it to six. Good. Most don't say that out loud.\nThe old lights buzz when HE is close. Listen for them.\nHe only moves when nobody is watching.\nSo watch.\""
+   },
+   {
+    "title": "NIGHT 2 COMPLETE",
+    "cls": "receipt",
+    "doc": "HALLORAN NOVELTY & PARTY SUPPLY\n--------------------------\n1x PIERROT HAT (BLACK)   $ 4.99\n1x WHITE GREASEPAINT     $ 3.49\n1x ROLL BUTCHER PAPER    $ 8.00\n1x MAGIC TRICK (BROKEN)  $ 2.00\n--------------------------\nCASH                    $18.48\nNO REFUNDS.\nTHANK YOU, MR. A.",
+    "call": "INCOMING...  [CARETAKER LINE]\n\n\"The camera in the kitchen keeps sticking.\nThat is not the camera.\nKeep the door locked when the hallway goes quiet.\nQuiet is the loud part.\"",
+    "voice": "lore_receipt",
+    "art": "Black paint, white powder, one hat. Every costume needs an audience."
+   },
+   {
+    "title": "NIGHT 3 COMPLETE",
+    "cls": "diary",
+    "doc": "dear diary,\n\ni saw him smile in the window again tonight.\nmom says the house has been empty for years.\nbut the cellar door was open and\nthere were little paper hearts on the stairs.\n\ni counted them. there are thirteen.\ni only found twelve.",
+    "call": "INCOMING...  [CARETAKER LINE]\n\n\"Did he turn up in a room you had just checked?\nThat is new. He is learning how you look.\nDon't be predictable. Don't be [[GLITCH]].\"",
+    "voice": "lore_diary",
+    "art": "Little girl, you counted wrong. The thirteenth heart is waiting for you."
+   },
+   {
+    "title": "NIGHT 4 COMPLETE",
+    "cls": "",
+    "doc": "INCIDENT REPORT 0-4-1\n\nSubject observed using ordinary door hardware to create a \"show\" for no audience.\nWitness statements disagree. All witnesses agree on the sound: a small bell, once, then laughter.\n\nRecommendation: do not try to bargain.\nRecommendation: do not run.\nRecommendation: [REDACTED]",
+    "call": "INCOMING...  [CARETAKER LINE]\n\n\"One more night. The power is thin.\nWhen the lights fail, he will know first.\nIf it goes dark, do not look for him.\nHe will find YOU.\"",
+    "voice": "lore_call",
+    "voiceMode": "call",
+    "art": "You should not have answered. Now I know your voice."
+   }
+  ],
+  "boot": [
+   "> MILES_HOUSE remote caretaker terminal",
+   "> link .......... ok",
+   "> cameras ........ 4 of 4",
+   "> door lock ...... armed",
+   "> power .......... 100%",
+   "> checking caretaker credentials",
+   "USER: caretaker",
+   "PASS: ********",
+   "",
+   "WARNING: subject \"ART\" is not in custody.",
+   "Session limit: 10:00. Do not exceed it."
+  ],
+  "text": {
+   "overDoor": "The door was open.",
+   "overPower": "The power died. So did the lock.",
+   "overDead": "Power failed. The lights died. He was already inside.",
+   "win": "You survived five nights.\nThe lights hum. The house is quiet.\nFor now.",
+   "bad": "SESSION LIMIT REACHED (10:00)\n\nYou lingered too long in the house.\nThe terminal logs you out.\nThe door does not."
+  },
+  "puzzles": {
+   "_comment": "hotspots[id].types per night (index 0 = night 1): a type name, null (disabled), or an ARRAY = multi-stage (solved in order). Types: keypad | wires | tiles | ledger | musicbox | any name registered with ART.puzzles.register(). Per-night numbers (arrays, index = night): timeSec (0 = untimed; a burning fuse, no numbers), strikes (wrong answers before the panel bites back; 0 = unlimited), wrongPowerPct (power lost per wrong answer), failScare (1 = Art comes after a failure). Per-type options below are also per-night arrays.",
+   "hotspots": {
+    "fusebox": {
+     "yawDeg": -62,
+     "topPct": 50,
+     "effect": "power",
+     "amountPct": 25,
+     "restoreDeadPct": 15,
+     "cooldownSec": 35,
+     "types": [
+      "keypad",
+      [
+       "wires",
+       "ledger"
+      ],
+      [
+       "ledger",
+       "musicbox"
+      ],
+      [
+       "musicbox",
+       "tiles",
+       "ledger"
+      ],
+      [
+       "ledger",
+       "musicbox",
+       "tiles",
+       "ledger"
+      ]
+     ],
+     "timeSec": [
+      0,
+      0,
+      150,
+      160,
+      185
+     ],
+     "strikes": [
+      0,
+      0,
+      5,
+      4,
+      3
+     ],
+     "wrongPowerPct": [
+      0,
+      0,
+      2,
+      3,
+      4
+     ],
+     "failScare": [
+      0,
+      1,
+      1,
+      1,
+      1
+     ]
+    },
+    "doorbolt": {
+     "yawDeg": 62,
+     "topPct": 54,
+     "effect": "bolt",
+     "cooldownSec": 50,
+     "types": [
+      null,
+      [
+       "wires",
+       "keypad"
+      ],
+      [
+       "ledger",
+       "wires"
+      ],
+      [
+       "musicbox",
+       "ledger"
+      ],
+      [
+       "tiles",
+       "musicbox",
+       "ledger"
+      ]
+     ],
+     "timeSec": [
+      0,
+      90,
+      100,
+      115,
+      140
+     ],
+     "strikes": [
+      0,
+      0,
+      5,
+      4,
+      3
+     ],
+     "wrongPowerPct": [
+      0,
+      0,
+      2,
+      3,
+      4
+     ],
+     "failScare": [
+      0,
+      1,
+      1,
+      1,
+      1
+     ]
+    }
+   },
+   "keypad": {
+    "digits": 4,
+    "memorizeMs": [
+     0,
+     0,
+     2500,
+     2000,
+     1500
+    ]
+   },
+   "wires": {
+    "count": [
+     3,
+     3,
+     4,
+     5,
+     5
+    ]
+   },
+   "tiles": {
+    "size": [
+     3,
+     3,
+     4,
+     4,
+     4
+    ],
+    "scrambles": [
+     3,
+     4,
+     6,
+     8,
+     10
+    ]
+   },
+   "ledger": {
+    "digits": [
+     3,
+     3,
+     4,
+     4,
+     5
+    ],
+    "liars": [
+     0,
+     1,
+     1,
+     2,
+     2
+    ],
+    "extra": [
+     0,
+     0,
+     1,
+     1,
+     2
+    ],
+    "minClues": [
+     3,
+     3,
+     3,
+     4,
+     4
+    ]
+   },
+   "musicbox": {
+    "pads": [
+     4,
+     4,
+     5,
+     5,
+     6
+    ],
+    "length": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "stepMs": [
+     620,
+     580,
+     540,
+     500,
+     460
+    ],
+    "silent": [
+     false,
+     false,
+     false,
+     true,
+     true
+    ],
+    "shuffle": true
+   },
+   "ledgerText": {
+    "_comment": "Original lore-fragment wording. {c} is the generated claim. 'liar' names the source that is allowed to be wrong; nothing in the UI says so.",
+    "ord": [
+     "first",
+     "second",
+     "third",
+     "fourth",
+     "fifth",
+     "sixth"
+    ],
+    "sources": {
+     "diary": {
+      "head": "VICKY'S DIARY — OCT 30",
+      "wrap": "He kept whispering that {c}. I wrote it down so I wouldn't forget."
+     },
+     "invoice": {
+      "head": "FUNERAL HOME RECEIPT #0831",
+      "wrap": "Scribbled in the margin: {c}. Paid in cash. Nobody asked why."
+     },
+     "flyer": {
+      "head": "TRICK-OR-TREAT FLYER (TORN)",
+      "wrap": "Over the candy, in marker: {c}!"
+     },
+     "tally": {
+      "head": "PUMPKIN TALLY CARD",
+      "wrap": "Chalked small: {c}."
+     },
+     "call": {
+      "head": "CARETAKER ON THE LINE (BAD CONNECTION)",
+      "wrap": "...kssh... listen close, {c}... kssh... don't let him..."
+     }
+    },
+    "reliable": [
+     "diary",
+     "invoice",
+     "flyer",
+     "tally"
+    ],
+    "liar": "call"
+   }
+  },
+  "doorButton": {
+   "yawDeg": -12,
+   "topPct": 55
+  },
+  "autoPan": {
+   "startSec": 3.4,
+   "durSec": 7,
+   "ampDeg": 78
+  },
+  "scares": {
+   "_comment": "Scare variety director. variants[kind] are pools; the director never repeats the previous id and down-weights recent ones. type: run | silhouette | mime | sound | knock | fakeout. Every variant is 3 beats (flicker, 500 ms silence, payoff) except fakeout (beats 1-2 only, then a real scare follows soon).",
+   "recency": 0.3,
+   "jitter": [
+    0.8,
+    1.35
+   ],
+   "doubleBeatP": [
+    0,
+    0.08,
+    0.12,
+    0.16,
+    0.2
+   ],
+   "fakeoutFollowSec": [
+    5,
+    10
+   ],
+   "variants": {
+    "peek": [
+     {
+      "id": "run-far",
+      "type": "run",
+      "from": 0.04,
+      "to": 0.34,
+      "ms": 900,
+      "side": 0,
+      "stop": true,
+      "stab": "horn",
+      "flash": [
+       [
+        0.25,
+        60
+       ]
+      ],
+      "shake": "none"
+     },
+     {
+      "id": "run-mid-left",
+      "type": "run",
+      "from": 0.05,
+      "to": 0.58,
+      "ms": 820,
+      "side": -0.28,
+      "stop": true,
+      "stab": "synth",
+      "flash": [
+       [
+        0.4,
+        70
+       ]
+      ],
+      "shake": "rattle"
+     },
+     {
+      "id": "run-mid-right",
+      "type": "run",
+      "from": 0.05,
+      "to": 0.58,
+      "ms": 820,
+      "side": 0.28,
+      "stop": true,
+      "stab": "scrape",
+      "flash": [
+       [
+        0.4,
+        70
+       ]
+      ],
+      "shake": "rattle"
+     },
+     {
+      "id": "run-near-fast",
+      "type": "run",
+      "from": 0.05,
+      "to": 0.95,
+      "ms": 620,
+      "side": 0.12,
+      "stop": true,
+      "stab": "balloon",
+      "flash": [
+       [
+        0.6,
+        60
+       ],
+       [
+        0,
+        40
+       ],
+       [
+        0.5,
+        80
+       ]
+      ],
+      "shake": "jolt"
+     },
+     {
+      "id": "silhouette",
+      "type": "silhouette",
+      "stab": "musicbox",
+      "w": 1
+     },
+     {
+      "id": "mime-hattilt",
+      "type": "mime",
+      "minNight": 2,
+      "stab": "musicbox",
+      "w": 0.9
+     },
+     {
+      "id": "sound-steps",
+      "type": "sound",
+      "stab": "horn",
+      "w": 0.8
+     },
+     {
+      "id": "knock-nothing",
+      "type": "knock",
+      "w": 0.7
+     },
+     {
+      "id": "fakeout",
+      "type": "fakeout",
+      "minNight": 2,
+      "w": 0.8
+     }
+    ],
+    "lightsout": [
+     {
+      "id": "lo-run-center",
+      "type": "run",
+      "from": 0.05,
+      "to": 1.55,
+      "ms": 1000,
+      "side": 0,
+      "stop": false,
+      "stab": "synth",
+      "flash": [
+       [
+        0.6,
+        90
+       ],
+       [
+        0,
+        50
+       ],
+       [
+        0.4,
+        70
+       ]
+      ],
+      "shake": "jolt"
+     },
+     {
+      "id": "lo-run-left",
+      "type": "run",
+      "from": 0.05,
+      "to": 1.5,
+      "ms": 900,
+      "side": -0.2,
+      "stop": false,
+      "stab": "scrape",
+      "flash": [
+       [
+        0.5,
+        120
+       ]
+      ],
+      "shake": "rattle"
+     },
+     {
+      "id": "lo-run-slow",
+      "type": "run",
+      "from": 0.05,
+      "to": 1.6,
+      "ms": 1350,
+      "side": 0.15,
+      "stop": false,
+      "stab": "horn",
+      "flash": [
+       [
+        0.5,
+        140
+       ]
+      ],
+      "shake": "sway",
+      "ease": 2.8
+     },
+     {
+      "id": "lo-closeup",
+      "type": "run",
+      "from": 0.7,
+      "to": 1.7,
+      "ms": 700,
+      "side": 0,
+      "stop": false,
+      "stab": "balloon",
+      "flash": [
+       [
+        0.7,
+        80
+       ]
+      ],
+      "shake": "jolt"
+     }
+    ],
+    "attack": [
+     {
+      "id": "at-run-center",
+      "type": "run",
+      "from": 0.05,
+      "to": 3.0,
+      "ms": 1000,
+      "side": 0,
+      "stop": false,
+      "stab": "synth",
+      "flash": [
+       [
+        0.9,
+        160
+       ]
+      ],
+      "shake": "jolt",
+      "slam": true
+     },
+     {
+      "id": "at-run-fast",
+      "type": "run",
+      "from": 0.06,
+      "to": 3.1,
+      "ms": 760,
+      "side": -0.1,
+      "stop": false,
+      "stab": "scrape",
+      "flash": [
+       [
+        0.9,
+        60
+       ],
+       [
+        0,
+        40
+       ],
+       [
+        0.9,
+        140
+       ]
+      ],
+      "shake": "rattle",
+      "slam": true
+     },
+     {
+      "id": "at-run-slow",
+      "type": "run",
+      "from": 0.05,
+      "to": 2.9,
+      "ms": 1300,
+      "side": 0.12,
+      "stop": false,
+      "stab": "horn",
+      "flash": [
+       [
+        0.9,
+        180
+       ]
+      ],
+      "shake": "sway",
+      "ease": 2.8,
+      "slam": true
+     }
+    ]
+   }
+  }
+ },
+ "voice": {
+  "_comment": "Art's voice (Phase D): lines.json is generated by scripts/make_voice.py. taunt = scare-payoff only, rare.",
+  "lines": "assets/voice/lines.json",
+  "gain": 0.95,
+  "duck": 0.45,
+  "taunt": {
+   "startNight": 2,
+   "chance": {
+    "peek": 0.18,
+    "lightsout": 0.32,
+    "attack": 0.3
+   },
+   "minGapSec": 75,
+   "delayMs": [
+    450,
+    950
+   ]
+  }
+ }
 }

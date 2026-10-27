@@ -1,4 +1,4 @@
-/* ART // LOGIN - nights.js (MIT). Game state, night flow, power, attack resolution, endings, save.
+/* Terrorific - nights.js (MIT). Game state, night flow, power, attack resolution, endings, save.
    Phases: login -> play (night 1..5) -> lore -> ... -> win | over (retry) | bad (session cap). */
 (function (ART) {
   'use strict';
@@ -17,6 +17,7 @@
     clearSave: function () { try { localStorage.removeItem(ART.SAVE_KEY); } catch (e) {} },
 
     start: function (n) {
+      ART.ui.unlockView();
       S.gen++; S.night = n; S.nightCfg = CFG.nights[n - 1] || CFG.nights[CFG.nights.length - 1]; var c = S.nightCfg;
       S.t = 0; S.len = c.len; S.power = CFG.powerStartPct; S.cam = false; S.door = false; S.bolt = false; S.cool = { fusebox: 0, doorbolt: 0 }; S.powerDead = false; S.deadT = -1; S.lo10 = false;
       S.artRoom = c.start; S.attackT = -1; S.knockT = 0; S.phase = 'play'; S.moveT = rnd(c.moveMin, c.moveMax);
@@ -45,7 +46,7 @@
     },
     skipLore: function () { clearTimeout(callTimer); if (ART.voice) ART.voice.stop(); $('loreDoc').classList.remove('hidden'); N.start(S.night); },
     gameOver: function (reason) {
-      if (S.phase === 'over') return; S.phase = 'over'; S.deaths++; ART.ui.closeMonitor(true); ART.puzzles.close(true); A.stopMusic();
+      if (S.phase === 'over') return; S.phase = 'over'; S.deaths++; ART.ui.unlockView(); ART.ui.closeMonitor(true); ART.puzzles.close(true); A.stopMusic();
       $('goReason').textContent = reason; ART.ui.show('gameover'); ART.art.lightsBack(false); ART.art.busy(false); ART.log('GAME OVER ' + reason);
     },
     capBad: function () {

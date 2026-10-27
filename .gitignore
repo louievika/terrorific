@@ -1,2 +1,12 @@
 screenshots/
 __pycache__/
+
+# Reference imagery (copyright-owned, study only) must never be committed
+reference/
+references/
+terrifier-game-reference/
+assets/reference/
+assets/references/
+*reference*/
+*.whl
+terrifier-game-supplied/

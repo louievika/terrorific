@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>ART // LOGIN</title>
+<title>Terrorific</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="ART // LOGIN - a horror game for mobile. MIT licensed.">
+<meta name="description" content="Terrorific - a horror game for mobile. MIT licensed.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23000'/%3E%3Ccircle cx='8' cy='8' r='4' fill='%23c4161d'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/ui/style.css">
 <!-- A-Frame 1.8.0 pinned (official release URL, verified HTTP 200) -->
@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<!-- ============ 2. ART // LOGIN terminal ============ -->
+<!-- ============ 2. Terrorific terminal ============ -->
 <section id="login" class="screen active" aria-label="Login">
   <div class="term">
     <div class="term-bar"><i></i><i></i><i></i><span>MILES_HOUSE // NIGHT-SHIFT TERMINAL</span></div>
@@ -51,6 +51,7 @@
 
   <!-- transparent Art overlay -->
   <img id="art" alt="" draggable="false" src="assets/art/art.png">
+  <div id="artRun" aria-hidden="true"></div>
   <div id="flash" class="layer"></div>
 
   <!-- HUD -->
@@ -154,6 +155,7 @@
 <script src="js/audio.js"></script>
 <script src="js/voice.js"></script>
 <script src="js/rooms.js"></script>
+<script src="js/director.js"></script>
 <script src="js/art.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/puzzles.js"></script>

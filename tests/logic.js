@@ -34,15 +34,17 @@ const shotDir=process.argv[3]||'screenshots';
  // light-out scare at 10%
  await ev(()=>{const g=__game;g.startNight(1);g.S.power=9.5;g.tick(0.1)});
  await sl(250); await pg.screenshot({path:shotDir+'/a-scare-beat1.png'}); 
- const b2=await ev(()=>({busy:__game.S.scareBusy,lo:document.body.classList.contains('lightsout')}));
+ await ev(()=>{window.__loSeen=false;window.__loIv=setInterval(()=>{if(document.body.classList.contains('lightsout'))window.__loSeen=true},15)});
+ await sl(500); const b2=await ev(()=>({busy:__game.S.scareBusy,lo:window.__loSeen}));   // the bulb flickers: sample over the window, not one instant
  T('lights-out scare at 10%: flicker/dark beat', b2.busy&&b2.lo, JSON.stringify(b2));
- await sl(1400);  await pg.screenshot({path:shotDir+'/a-scare-payoff.png'});
+ await sl(1150);  await pg.screenshot({path:shotDir+'/a-scare-payoff.png'}); await ev(()=>clearInterval(window.__loIv));
  await sl(1500);
  T('scare ends, game continues', await ev(()=>!__game.S.scareBusy&&__game.S.phase==='play'), await ev(()=>JSON.stringify({b:__game.S.scareBusy,ph:__game.S.phase,l:__game.S.log.slice(-4),art:__game.S.artRoom,t:__game.S.t})));
  // attack: door open
  await ev(()=>{const g=__game;g.startNight(2);g.S.door=false;g.S.artRoom='hallway';g.S.attackT=0.1;g.tick(0.5)});
  await sl(900); await pg.screenshot({path:shotDir+'/a-jumpscare.png'});
  await sl(2500);
+ for(let i=0;i<40&&await ev(()=>__game.S.phase!=='over');i++) await sl(250);
  T('open door -> jumpscare -> game over', await ev(()=>__game.S.phase==='over'));
  await pg.screenshot({path:shotDir+'/a-gameover.png'});
  await pg.tap('#goRetry'); await sl(500);
@@ -51,7 +53,7 @@ const shotDir=process.argv[3]||'screenshots';
  await ev(()=>{const g=__game;g.S.power=0.1;g.S.lo10=true;g.tick(1)});
  T('power 0 -> dead', await ev(()=>__game.S.powerDead));
  await sl(300); await pg.screenshot({path:shotDir+'/a-powerdead.png'});
- await ev(()=>{__game.S.deadT=0.1;__game.tick(0.5)}); await sl(2800);
+ await ev(()=>{__game.S.deadT=0.1;__game.tick(0.5)}); for(let i=0;i<40&&(await ev(()=>__game.S.phase))!=='over';i++) await sl(250);
  T('power dead -> Art attacks -> game over', await ev(()=>__game.S.phase==='over'));
  // full progression
  await pg.tap('#goRetry'); await sl(300);

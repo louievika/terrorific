@@ -1,4 +1,4 @@
-/* ART // LOGIN - config.js (MIT). Shared namespace, URL flags, defaults, manifest loader.
+/* Terrorific - config.js (MIT). Shared namespace, URL flags, defaults, manifest loader.
    Everything tunable lives in assets/manifest.json; these are only fallbacks. Load order:
    config, audio, rooms, art, ui, puzzles, nights, main. */
 window.ART = window.ART || {};
@@ -29,6 +29,7 @@ window.ART = window.ART || {};
   ART.MIX = { breathing: 0.15 };                                   // output levels; manifest audio.mix overrides
   ART.ROOMS = { attic: 'assets/rooms/attic.jpg' };
   ART.ART_SRC = 'assets/art/art.png';
+  ART.ART_RUN = null;                                              // manifest art.run: the run-cycle sprite sheet slot
 
   ART.config = {
     ready: false,
@@ -37,7 +38,7 @@ window.ART = window.ART || {};
       return fetch('assets/manifest.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (m) {
         if (m.game) Object.keys(m.game).forEach(function (k) { if (k.charAt(0) !== '_') CFG[k] = m.game[k]; });
         if (m.rooms) Object.keys(m.rooms).forEach(function (k) { ART.ROOMS[k] = m.rooms[k]; });
-        if (m.art) ART.ART_SRC = m.art;
+        if (m.art) { if (typeof m.art === 'string') ART.ART_SRC = m.art; else { if (m.art.src) ART.ART_SRC = m.art.src; ART.ART_RUN = m.art.run || null; } }
         if (m.audio && m.audio.mix) Object.keys(m.audio.mix).forEach(function (k) { if (k.charAt(0) !== '_') ART.MIX[k] = m.audio.mix[k]; });
         ART.config.ready = true; ART.manifest = m;
       }).catch(function (e) { console.warn('manifest missing - using defaults', e); });

@@ -1,4 +1,4 @@
-# TEST.md - ART // LOGIN
+# TEST.md - Terrorific
 
 ## 1. Headless self-tests (run on every push)
 ```

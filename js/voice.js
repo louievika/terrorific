@@ -1,4 +1,4 @@
-/* ART // LOGIN - voice.js (MIT). Art's voice (Phase D). Lines are pre-rendered offline (scripts/make_voice.py: Piper en_US-joe-medium, CC0 voice,
+/* Terrorific - voice.js (MIT). Art's voice (Phase D). Lines are pre-rendered offline (scripts/make_voice.py: Piper en_US-joe-medium, CC0 voice,
    post-processed deep) -> assets/voice/*.mp3 + lines.json (text, file, duration, per-word timings). No runtime TTS.
    Same Web Audio context + unlock path as everything else: ART.audio.unlockInTap() -> ART.voice.unlock() (fetch + decode inside/after the tap).
    Voice bus -> A.master directly (it is NOT on the ambient duck bus, so the 500 ms silence beat never mutes it); while a line plays, the ambient bus is

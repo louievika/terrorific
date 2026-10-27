@@ -1,4 +1,4 @@
-/* ART // LOGIN - shared synthesized audio engine (original, no samples). MIT.
+/* Terrorific - shared synthesized audio engine (original, no samples). MIT.
    Same engine as the title screen (copied so the title page stays untouched; Phase B de-duplicates).
    iOS: call ArtAudio.unlock() inside a tap. */
 (function () {

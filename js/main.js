@@ -1,4 +1,4 @@
-/* ART // LOGIN - main.js (MIT). Boot: manifest -> login terminal -> preload -> tap-to-authenticate (audio + motion unlock) -> loop. */
+/* Terrorific - main.js (MIT). Boot: manifest -> login terminal -> preload -> tap-to-authenticate (audio + motion unlock) -> loop. */
 (function (ART) {
   'use strict';
   var $ = ART.$, A = ART.A, S, last = performance.now(), hudAcc = 0, feedAcc = 0;

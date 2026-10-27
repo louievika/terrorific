@@ -1,4 +1,4 @@
-/* ART // LOGIN - mobile-first UI. MIT. */
+/* Terrorific - mobile-first UI. MIT. */
 :root{--red:#b3141b;--bone:#e8e2d4;--ink:#050505;--green:#7dff9b;
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
   --sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px);}
@@ -254,3 +254,62 @@ body.lightsout #spots{z-index:9}
 .artline.term{font:13px/1.5 ui-monospace,Menlo,monospace;font-style:normal;text-transform:uppercase;letter-spacing:.06em}
 .artline .aw{opacity:0;filter:blur(3px);transition:opacity .55s ease,filter .55s ease}
 .artline .aw.on{opacity:1;filter:none}
+
+/* ---- phase E: run-cycle sprite (2D sheet, transform + steps only) ---- */
+#artRun{position:absolute;left:50%;bottom:0;height:78%;aspect-ratio:360/576;background-repeat:no-repeat;transform-origin:50% 100%;opacity:0;pointer-events:none;z-index:4;
+  will-change:transform;filter:contrast(1.12) brightness(.92) saturate(.95);transform:translate3d(-50%,0,0) scale(.05)}
+#artRun.sil{filter:brightness(0) contrast(1)}
+#artRun.fade{transition:opacity .28s ease-out}
+body.camshake.jolt #scene{animation:cs-jolt .32s linear}
+body.camshake.jolt #artRun{animation:cs-jolt-t .32s linear}   /* individual `translate` property: composes with the inline transform instead of replacing it */
+body.camshake.rattle #scene{animation:cs-rattle .4s linear}
+body.camshake.sway #scene{animation:cs-sway .6s ease-out}
+@keyframes cs-jolt{0%{transform:translate(0,0)}15%{transform:translate(-14px,9px)}35%{transform:translate(12px,-10px)}55%{transform:translate(-8px,6px)}80%{transform:translate(4px,-3px)}100%{transform:translate(0,0)}}
+@keyframes cs-jolt-t{0%{translate:0 0}15%{translate:-14px 9px}35%{translate:12px -10px}55%{translate:-8px 6px}80%{translate:4px -3px}100%{translate:0 0}}
+@keyframes cs-rattle{0%,100%{transform:translate(0)}10%{transform:translate(-5px,2px)}20%{transform:translate(6px,-2px)}30%{transform:translate(-6px,1px)}40%{transform:translate(5px,-1px)}55%{transform:translate(-3px,2px)}70%{transform:translate(3px,0)}}
+@keyframes cs-sway{0%{transform:rotate(-1.8deg) scale(1.04)}40%{transform:rotate(1.2deg) scale(1.02)}100%{transform:rotate(0) scale(1)}}
+#artRun.mime{transition:transform .5s ease-in-out}
+
+/* ---- Phase F: horror-themed puzzle UI (stained paper, rust, blood; a burning fuse for time) ---- */
+#puzzle{background:radial-gradient(ellipse at 50% 40%,rgba(30,4,4,.78),rgba(0,0,0,.94) 75%)}
+#puzzleCard{position:relative;max-width:360px;max-height:calc(100% - 8px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  background:radial-gradient(ellipse at 20% 0,rgba(110,18,12,.25),transparent 60%),linear-gradient(#1d1a18,#0d0b0a);border:2px solid #000;border-radius:3px;
+  box-shadow:0 0 0 3px #2a2220,0 0 0 4px #000,0 18px 60px #000,inset 0 0 40px rgba(0,0,0,.8);padding:18px 16px 22px}
+#puzzleCard::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background:radial-gradient(circle at 88% 8%,rgba(90,8,6,.9) 0 6px,transparent 7px),radial-gradient(ellipse at 90% 14%,rgba(90,8,6,.7) 0 3px,transparent 4px),radial-gradient(ellipse at 8% 96%,rgba(70,10,8,.8),transparent 38%)}
+#puzzle.good #puzzleCard{box-shadow:0 0 0 3px #7a6a2a,0 0 38px 4px rgba(190,160,60,.35),0 18px 60px #000}
+#puzzle.bad #puzzleCard{box-shadow:0 0 0 3px #a01010,0 0 46px 10px rgba(200,10,10,.55),0 18px 60px #000;animation:shake .3s}
+.pz-disp{background:#0a0606;border:1px solid #4a1210;color:#d8c9a3;text-shadow:0 0 8px rgba(160,20,10,.6);font-family:"Courier New",ui-monospace,monospace}
+.pz-disp.bad{color:#ff3b30}
+.pz-key{background:linear-gradient(#34302d,#1b1816);color:#cdbf9e;border:1px solid #000;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 2px 0 #000}
+.pz-key:active{background:#4a1210}
+.pz-note{background:#c9b76a;color:#2a1c0c;box-shadow:0 4px 10px #000,inset 0 0 18px rgba(80,40,0,.45)}
+.pz-tile{background:#120f0e;box-shadow:inset 0 0 0 2px #2a2220}
+.pz-tile.lit{background:#c9371f;box-shadow:0 0 20px 3px rgba(210,40,20,.65),inset 0 0 0 2px #ff8a6a}
+.pz-wire.sel{box-shadow:0 0 0 4px #d8c9a3,0 0 16px var(--c)}
+/* the fuse: a line that burns away, no numbers */
+.pz-fuse{display:block;position:relative;height:5px;margin:16px 2px 0;background:#1a0f0c;border-radius:3px;overflow:visible}
+.pz-fuse::before{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--burn,100%);background:linear-gradient(90deg,#4a2a14,#a8431a);border-radius:3px;transition:width .12s linear}
+.pz-fuse::after{content:"";position:absolute;top:-4px;left:var(--burn,100%);width:10px;height:13px;margin-left:-5px;border-radius:50%;background:radial-gradient(#fff3b0,#ff9a2a 45%,transparent 70%);filter:blur(.4px);animation:flick .13s infinite alternate}
+.pz-fuse.hot::before{background:linear-gradient(90deg,#5a1410,#e02a1a)}
+@keyframes flick{from{opacity:.65;transform:scale(.8)}to{opacity:1;transform:scale(1.25)}}
+/* ledger: torn, stained scraps */
+.pz-ledger{display:flex;flex-direction:column}
+.pz-scraps{display:flex;flex-direction:column;gap:10px;max-height:46vh;overflow-y:auto;padding:4px 4px 10px;margin-bottom:10px;-webkit-overflow-scrolling:touch}
+.pz-scrap{position:relative;padding:10px 12px 11px;transform:rotate(var(--r,0deg));color:#2a1d12;background:#cdbb86;font:italic 15px/1.3 Georgia,"Times New Roman",serif;
+  box-shadow:0 3px 8px #000,inset 0 0 22px rgba(95,55,10,.5);clip-path:polygon(0 3%,6% 0,14% 4%,31% 0,52% 3%,70% 0,88% 4%,100% 1%,99% 40%,100% 96%,86% 100%,63% 97%,40% 100%,18% 97%,3% 100%,1% 60%)}
+.pz-scrap b{display:block;font:700 10px/1.2 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:#6b1410;margin-bottom:4px}
+.pz-scrap p{margin:0}
+.pz-scrap.s-invoice{background:#b9b3a2;font-style:normal;font-family:"Courier New",monospace;font-size:13px}
+.pz-scrap.s-flyer{background:#d09a3a;font-style:normal;font-weight:700;font-family:Impact,"Arial Narrow",sans-serif;letter-spacing:.03em}
+.pz-scrap.s-tally{background:#2c3a30;color:#cfd8c8;font-style:normal;font-family:"Comic Sans MS","Chalkboard SE",cursive}
+.pz-scrap.s-tally b{color:#9fb59a}
+.pz-scrap.s-call{background:#a8a39a;color:#22201e;font-style:normal;font-family:"Courier New",monospace;filter:contrast(1.1);animation:garble 3.4s infinite steps(1)}
+@keyframes garble{0%,92%,100%{transform:rotate(var(--r,0deg))}94%{transform:rotate(var(--r,0deg)) translateX(2px)}96%{transform:rotate(var(--r,0deg)) translateX(-3px) skewX(4deg)}}
+.pz-pad-s .pz-key{height:50px;font-size:22px}
+/* music box */
+.pz-mbgrid{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;padding:8px 0;opacity:.55;transition:opacity .2s}
+.pz-mbgrid.in{opacity:1}
+.pz-mb{order:0;flex:0 0 calc(33.3% - 10px);aspect-ratio:1;border-radius:50%;border:2px solid #000;background:radial-gradient(circle at 35% 30%,var(--c),#0b0a09 120%);filter:brightness(.42) saturate(.8);box-shadow:inset 0 0 0 3px rgba(0,0,0,.5),0 4px 10px #000;transition:filter .08s,transform .08s}
+.pz-mb.on{filter:brightness(1.5) saturate(1.1);transform:scale(1.08);box-shadow:0 0 28px 4px var(--c),inset 0 0 0 3px rgba(0,0,0,.4)}
+.pz-mbgrid.in .pz-mb:active{filter:brightness(1.3)}

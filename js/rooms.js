@@ -1,4 +1,4 @@
-/* ART // LOGIN - rooms.js (MIT). Room plates (equirect JPGs from the manifest), camera feeds, room graph. */
+/* Terrorific - rooms.js (MIT). Room plates (equirect JPGs from the manifest), camera feeds, room graph. */
 (function (ART) {
   'use strict';
   var $ = ART.$, plates = {}, burstUntil = 0;

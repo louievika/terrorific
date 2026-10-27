@@ -53,11 +53,11 @@ async function open(block, fast) {
     const s = ART.voice.say; ART.voice.say = function (id) { if (/^taunt/.test(id)) __tl.push(['taunt', performance.now(), id]); return s.apply(this, arguments); };
     const st = A.sting; A.sting = function () { __tl.push(['payoff', performance.now()]); return st.apply(A, arguments); }; });
   await sl(2500);
-  await pg.evaluate(() => { ART.art.scare('peek', () => {}); }); await sl(2600);
+  await pg.evaluate(() => { ART.art.scare('peek', () => {}, 'run-near-fast'); }); await sl(4200);
   let tl = await pg.evaluate(() => __tl); const t = k => (tl.find(x => x[0] === k) || [])[1];
   T('scare: silence -> 500 ms -> payoff order', t('silence') && t('payoff') - t('silence') >= 495, tl.map(x => x[0] + ':' + Math.round(x[1] - tl[0][1])).join(' '));
   T('taunt is requested in the payoff beat, after the silence', t('taunt') && t('taunt') >= t('payoff') - 5 && t('taunt') - t('silence') >= 500, JSON.stringify(tl.map(x => x[0])));
-  o = await pg.evaluate(() => ART.voice.said()); T('a taunt actually played after the scare', /^taunt/.test(o[o.length - 1]), o[o.length - 1]);
+  o = await pg.evaluate(() => ART.voice.said()); T('a taunt actually played after the scare', o.slice(-3).some(x => /^taunt/.test(x)), o.slice(-3).join(','));
   // never before night 2, rate-limited, and rare with the shipped numbers
   const rare = await pg.evaluate(() => {
     const m = ART.manifest.voice.taunt; m.chance = { peek: 0.18, lightsout: 0.32, attack: 0.3 }; m.minGapSec = 75; const V = ART.voice, S = ART.S, r = {};
